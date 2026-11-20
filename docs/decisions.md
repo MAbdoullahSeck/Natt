@@ -132,3 +132,13 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Edge Functions déployées** sur natt-dev (regroupement côté serveur, `--use-api`), avec `verify_jwt = false` : le projet signe les jetons en ES256 (clés asymétriques), et chaque fonction vérifie déjà son appelant.
 - **Appels système** (`push`, `relances`) : la clé reçue est vérifiée par la base (appel à une fonction réservée à `service_role`) au lieu d'être comparée à `SUPABASE_SERVICE_ROLE_KEY` : sur natt-dev, la clé « legacy » stockée dans Vault et la clé fournie aux fonctions n'ont pas le même format.
 - **Vault** : `project_url` et `service_role_key` (clé service « legacy ») renseignés. Vérifié : `natt-push` réussit chaque minute (HTTP 200), `relances` répond via Vault, la clé publique est refusée.
+
+
+# Améliorations V1.1
+
+## Point 1 — Edge Functions, Vault, relance planifiée de bout en bout
+
+- Les trois fonctions sont (re)déployées sur natt-dev ; Vault contient `project_url` et `service_role_key` ; pg_cron appelle `relances` à 9 h UTC (= 9 h à Dakar) et `push` chaque minute.
+- **Test de bout en bout** : `python3 scripts/supabase_api.py relance-e2e [jour]` passe exactement par le chemin de pg_cron (Vault → pg_net → `relances` → `preparer_relances` → `push` → API Expo), avec une **date simulée** (`relances` accepte `{ "jour": … }` pour un appel système) et un jeton Expo factice posé puis retiré. Résultat le 20 novembre 2026 : 4 relances créées pour le J-3 puis le jour J du tour 4 de « Tontine des sœurs », push envoyé à Expo (HTTP 200).
+- Conséquence : ces relances de test restent dans l'historique de natt-dev (journal en ajout seul) ; les vraies relances du 2 et du 5 décembre ne seront pas renvoyées (idempotence).
+- `appeler_fonction(nom, corps)` renvoie l'identifiant de la requête pg_net (pour suivre la réponse dans `net._http_response`).

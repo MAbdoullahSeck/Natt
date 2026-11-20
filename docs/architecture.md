@@ -202,6 +202,16 @@ create table notifications (
 | `relancer_cycle(tontine_id)` | gérante | Crée le cycle suivant (mêmes paramètres, nouveau code, `cycle_precedent_id`) et invite les mêmes membres. |
 | `suggestions_calendrier(date_debut, frequence, nb_membres)` | utilisatrice | Retourne les événements qui tombent pendant le cycle et une date de début ajustée proposée. |
 
+## 5 bis. Planification (pg_cron → Vault → Edge Functions)
+
+| Tâche pg_cron | Horaire (UTC = heure de Dakar) | Appel |
+|---|---|---|
+| `natt-relances-9h` | `0 9 * * *` | `appeler_fonction('relances')` → `preparer_relances()` puis envoi des push |
+| `natt-push` | chaque minute | `appeler_fonction('push')` → notifications en attente vers l'API Expo |
+| `natt-expiration-abonnements` | `5 0 * * *` | `expirer_abonnements()` |
+
+`appeler_fonction(nom, corps)` lit `project_url` et `service_role_key` dans Vault et appelle l'Edge Function avec pg_net. Les fonctions `push` et `relances` n'acceptent que la clé service (vérifiée par la base). `relances` accepte un corps `{ "jour": "AAAA-MM-JJ" }` (date simulée) pour les tests de bout en bout : `python3 scripts/supabase_api.py relance-e2e [jour]`.
+
 ## 6. Paiement (rappel de la règle n°1)
 
 Natt ne reçoit, ne garde et ne transfère jamais l'argent des cotisations. « Payer » ouvre l'application Wave ou Orange Money du téléphone avec les informations de la gérante. Points à vérifier pendant le développement : liens profonds disponibles (schéma d'URL de chaque application), possibilité de préremplir le numéro et le montant ; à défaut, afficher et copier en un geste le numéro et le montant.

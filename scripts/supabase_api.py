@@ -13,6 +13,7 @@ Projet : variable SUPABASE_PROJECT_REF (par défaut natt-dev).
                                                # dans supabase_migrations.schema_migrations, comme le CLI)
   python3 scripts/supabase_api.py seed         # charge supabase/seed.sql (base vide seulement)
   python3 scripts/supabase_api.py tests        # tests pgTAP dans des transactions annulées
+  python3 scripts/supabase_api.py relance-e2e  # test de bout en bout d'une relance planifiée (voir plus bas)
   python3 scripts/supabase_api.py sql "select 1"
 """
 import glob
@@ -104,6 +105,43 @@ def tests():
     raise SystemExit(1 if echecs else 0)
 
 
+def relance_e2e(jour='2026-12-02', telephone='221770000003'):
+    """
+    Test de bout en bout d'une relance planifiée, par le même chemin que pg_cron :
+    Vault (URL + clé service) → pg_net → Edge Function « relances » → preparer_relances → notifications
+    → Edge Function push → API Expo.
+    - jour : date simulée (par défaut J-3 du tour 4 de « Tontine des sœurs » dans le seed) ;
+    - un jeton Expo factice est posé sur le profil testé puis retiré ;
+    les relances créées restent dans l'historique (journal en ajout seul), comme en vrai.
+    """
+    import time
+    profil = sql(f"select id from public.profils where telephone = '{telephone}'")[0]['id']
+    sql(f"update public.profils set expo_push_token = 'ExponentPushToken[natt-test-e2e]' where id = '{profil}'")
+    try:
+        debut = sql('select now() as t')[0]['t']
+        avant = sql(f"select count(*) as n from public.notifications where profil_id = '{profil}' and type = 'relance'")[0]['n']
+        requete = sql(f"select public.appeler_fonction('relances', '{{\"jour\": \"{jour}\"}}'::jsonb) as id")[0]['id']
+        for _ in range(30):
+            time.sleep(2)
+            r = sql(f"select status_code, content::text as contenu from net._http_response where id = {requete}")
+            if r:
+                break
+        else:
+            raise SystemExit('ÉCHEC : pas de réponse de la fonction relances')
+        reponse = json.loads(r[0]['contenu'] or '{}')
+        print('HTTP', r[0]['status_code'], json.dumps(reponse, ensure_ascii=False))
+        nouvelles = sql(f"""select count(*) as n, count(push_envoye_at) as poussees from public.notifications
+                            where profil_id = '{profil}' and type = 'relance' and created_at >= '{debut}'""")[0]
+        ok = (r[0]['status_code'] == 200 and nouvelles['n'] >= 1
+              and (reponse.get('push') or {}).get('envoyees', 0) >= 1 and nouvelles['poussees'] == nouvelles['n'])
+        print(f"Nouvelles relances pour le profil testé : {nouvelles['n']} (avant : {avant}), envoyées en push : {nouvelles['poussees']}")
+        print('RÉUSSI' if ok else 'ÉCHEC')
+        if not ok:
+            raise SystemExit(1)
+    finally:
+        sql(f"update public.profils set expo_push_token = null where id = '{profil}'")
+
+
 if __name__ == '__main__':
     commande = sys.argv[1] if len(sys.argv) > 1 else ''
     if commande == 'migrations':
@@ -112,6 +150,8 @@ if __name__ == '__main__':
         seed()
     elif commande == 'tests':
         tests()
+    elif commande == 'relance-e2e':
+        relance_e2e(*sys.argv[2:4])
     elif commande == 'sql' and len(sys.argv) > 2:
         print(json.dumps(sql(sys.argv[2]), ensure_ascii=False, indent=2))
     else:

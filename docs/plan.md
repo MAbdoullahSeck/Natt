@@ -65,3 +65,12 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] États vides, erreurs réseau, chargements sur tous les écrans.
 - [ ] Vérification sur un Android d'entrée de gamme (taille de texte système agrandie comprise). → **à faire sur téléphone** (impossible dans l'environnement de développement) ; tests e2e web en attendant.
 - [ ] Build interne EAS (APK) pour 10 à 20 gérantes testeuses. → configuration prête (`eas.json`, profil `preview`) ; **build à lancer avec le compte EAS** (voir `docs/deploiement.md`).
+
+## Améliorations V1.1 (après l'étape 11)
+- [x] 1. Edge Functions déployées sur natt-dev, Vault configuré, relance planifiée vérifiée de bout en bout (`python3 scripts/supabase_api.py relance-e2e`).
+- [ ] 2. Paiement des abonnements avec PayTech (paiements_abonnement, paytech-checkout, paytech-ipn, lien envoyé hors de l'app).
+- [ ] 3. Prix barré sur l'abonnement annuel.
+- [ ] 4. Export du rapport du cycle en PDF.
+- [ ] 5. Rejoindre une tontine avec un lien d'invitation.
+- [ ] 6. Retirer un membre (gérante).
+- [ ] 7. Mode sombre.
