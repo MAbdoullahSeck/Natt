@@ -52,9 +52,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Pénalités appliquées et annulables. Push + écran Notifications.
 
 ## Étape 9 — Fin de cycle (19, 19b)
-- [ ] Clôture automatique au dernier tour versé.
-- [ ] Rapport du cycle et partage WhatsApp.
-- [ ] Relancer le cycle avec les mêmes membres.
+- [x] Clôture automatique au dernier tour versé.
+- [x] Rapport du cycle et partage WhatsApp.
+- [x] Relancer le cycle avec les mêmes membres.
 
 ## Étape 10 — Abonnement et profil (20, 21, 23)
 - [ ] Paliers mensuels et annuels, limites appliquées à la création, alerte d'upsell.

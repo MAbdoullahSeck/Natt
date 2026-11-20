@@ -159,6 +159,8 @@ export const fr = {
       deja_relance_aujourdhui: 'Déjà relancée aujourd’hui. Réessaie demain.',
       rien_a_relancer: 'Rien à relancer : ce membre est à jour ou a déjà payé.',
       deja_annulee: 'Cette pénalité est déjà annulée.',
+      cycle_non_termine: 'Le cycle n’est pas encore terminé.',
+      cycle_deja_relance: 'Le cycle suivant est déjà créé.',
     } as Record<string, string>,
   },
   inscription: {
@@ -379,6 +381,37 @@ export const fr = {
     vide: 'Pas de notification pour le moment.',
     aujourdhui: 'Aujourd’hui',
     hier: 'Hier',
+  },
+  finCycle: {
+    titre: 'Cycle terminé',
+    bilan: (n: number, total: string) =>
+      `${n} cagnottes remises, ${total} au total. Bravo à toutes !`,
+    bilanAchat: (n: number, bien: string) =>
+      `${n} membres ont reçu leur bien (${bien}). Bravo à toutes !`,
+    voirRapport: 'Voir le rapport du cycle',
+    relancer: 'Relancer le cycle avec les mêmes membres',
+    dejaRelance: 'Le cycle suivant est déjà créé.',
+    relance: {
+      titre: 'Quand commence le nouveau cycle ?',
+      aide: 'Mêmes montant, fréquence et nombre de membres. Les membres recevront le nouveau code pour confirmer.',
+      bouton: 'Relancer le cycle',
+    },
+  },
+  rapport: {
+    titre: 'Rapport du cycle',
+    totalVerse: 'Total versé',
+    tours: 'Nombre de tours',
+    periode: 'Période',
+    periodeValeur: (debut: string, fin: string) => `${debut} → ${fin}`,
+    aLHeure: 'Paiements à l’heure',
+    pourcentage: (n: number) => `${n} %`,
+    retards: 'Retards',
+    penalites: 'Pénalités',
+    ponctualite: 'Ponctualité par membre',
+    ligneMembre: (aLHeure: number, enRetard: number) =>
+      `${aLHeure} à l’heure · ${enRetard} en retard`,
+    partager: 'Partager sur WhatsApp',
+    message: (nom: string, lignes: string) => `Rapport du cycle « ${nom} » (Natt)\\n${lignes}`,
   },
   demo: {
     titre: 'Composants Natt',

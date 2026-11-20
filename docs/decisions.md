@@ -86,3 +86,11 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Règles libres** : 10 au plus, 200 caractères chacune, ajoutées après les lignes générées.
 - **Écran Notifications (22)** : les 100 dernières, par jour (« Aujourd'hui », « Hier », date) ; tout est marqué comme lu à l'ouverture de l'onglet. Appui → la tontine concernée.
 - **Push** : jeton Expo enregistré à la connexion (téléphone réel uniquement, il faut un `projectId` EAS : variable `EXPO_PUBLIC_EAS_PROJECT_ID`). Canal Android « natt ». L'appui sur une notification push ouvre la tontine.
+
+## Étape 9 — Fin de cycle
+
+- **Clôture** : au moment où la gérante remet la dernière cagnotte (`marquer_verse`), la tontine passe en « terminée », un événement `cycle_termine` est enregistré, les membres sont notifiés et la gérante arrive sur l'écran 19.
+- **Rapport (19b)** : calculé dans l'app (`src/domain/rapport.ts`) à partir des cotisations et des événements : total versé, nombre de tours, période (premier et dernier tour), % de paiements à l'heure (règle P5), nombre de retards, pénalités non annulées, ponctualité par membre.
+- **Partage du rapport** : en **texte** sur WhatsApp (pas d'image ni de PDF en V1 : cela demanderait une bibliothèque de capture ou de génération de PDF ; à ajouter si besoin).
+- **Relancer le cycle (F3)** : la gérante choisit la date de début (pas de suggestion de calendrier sur cet écran pour l'instant), puis `relancer_cycle` crée une nouvelle tontine avec les mêmes paramètres et réglages (pénalité, rappels, règles libres), un nouveau code, `cycle_precedent_id`, la gérante au rang 1. La limite du palier s'applique. Les anciens membres reçoivent une notification avec le nouveau code ; un appui ouvre l'écran Rejoindre avec le code prérempli, pour reconfirmer participation et règlement. Le nouvel ordre suit l'ordre d'arrivée ; un tirage reste possible.
+- **Notifications** : nouvelle colonne `donnees` (ex. le code du nouveau cycle).

@@ -38,8 +38,21 @@ const ICONES: Record<string, LucideIcon> = {
   membre_rejoint: UserPlus,
   reglement: FileText,
   cycle_termine: CircleCheck,
+  nouveau_cycle: UserPlus,
 };
 const CONFIRMATIONS = new Set(['confirmation', 'versement', 'penalite_annulee', 'cycle_termine']);
+
+type Notif = { type: string; tontine_id: string | null; donnees: unknown };
+
+/** Appui sur une notification : la tontine, ou l'écran Rejoindre pour un nouveau cycle. */
+function ouvrir(n: Notif) {
+  const code = (n.donnees as { code?: string } | null)?.code;
+  if (n.type === 'nouveau_cycle' && code) {
+    router.push({ pathname: '/rejoindre', params: { code } });
+  } else if (n.tontine_id) {
+    router.push({ pathname: '/tontine/[id]', params: { id: n.tontine_id } });
+  }
+}
 
 /** Écran 22 — Notifications, par jour. */
 export default function Notifications() {
@@ -81,10 +94,7 @@ export default function Notifications() {
             <Pressable
               key={n.id}
               disabled={!n.tontine_id}
-              onPress={() =>
-                n.tontine_id &&
-                router.push({ pathname: '/tontine/[id]', params: { id: n.tontine_id } })
-              }
+              onPress={() => ouvrir(n)}
               accessibilityRole="button"
             >
               <Notification

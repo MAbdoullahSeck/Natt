@@ -161,14 +161,14 @@ isOneToOne: false
                   ]
                 },"notifications": {
                   Row: {
-                    "corps": string,"created_at": string,"id": string,"lu_at": string | null,"profil_id": string,"push_envoye_at": string | null,"titre": string,"tontine_id": string | null,"type": string
+                    "corps": string,"created_at": string,"donnees": NonNullable<Json>,"id": string,"lu_at": string | null,"profil_id": string,"push_envoye_at": string | null,"titre": string,"tontine_id": string | null,"type": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "corps": string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id": string,"push_envoye_at"?: string | null,"titre": string,"tontine_id"?: string | null,"type": string
+                    "corps": string,"created_at"?: string,"donnees"?: NonNullable<Json>,"id"?: string,"lu_at"?: string | null,"profil_id": string,"push_envoye_at"?: string | null,"titre": string,"tontine_id"?: string | null,"type": string
                   }
                   Update: {
-                    "corps"?: string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id"?: string,"push_envoye_at"?: string | null,"titre"?: string,"tontine_id"?: string | null,"type"?: string
+                    "corps"?: string,"created_at"?: string,"donnees"?: NonNullable<Json>,"id"?: string,"lu_at"?: string | null,"profil_id"?: string,"push_envoye_at"?: string | null,"titre"?: string,"tontine_id"?: string | null,"type"?: string
                   }
                   Relationships: [
                     {
@@ -502,6 +502,33 @@ isOneToOne: false
 "relancer":
 { Args: { "p_membre_id"?: string,"p_tontine_id": string }; Returns: number
                            },
+"relancer_cycle":
+{ Args: { "p_date_debut": string,"p_tontine_id": string }; Returns: {
+              "bien_prevu": string | null,
+"code": string,
+"created_at": string,
+"cycle_precedent_id": string | null,
+"date_debut": string,
+"frequence": Database["public"]['Enums']["frequence"],
+"gerante_id": string,
+"id": string,
+"montant": number,
+"nb_membres": number,
+"nom": string,
+"penalite_retard": number,
+"reglement_libres": (string)[],
+"relance_j_moins_3": boolean,
+"relance_j_plus_1": boolean,
+"relance_jour_j": boolean,
+"statut": Database["public"]['Enums']["statut_tontine"],
+"type": Database["public"]['Enums']["type_tontine"]
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "tontines"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "suggestions_calendrier":
 { Args: { "p_date_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_nb_membres": number }; Returns: {
               "created_at": string,
