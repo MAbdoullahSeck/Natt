@@ -30,3 +30,13 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Suggestion de calendrier** : le serveur renvoie les événements du cycle (`suggestions_calendrier`), l'app calcule la date ajustée (`src/domain/calendrier.ts`) : on décale le début (jamais en arrière) pour que le dernier tour avant l'événement tombe la veille. Pas de suggestion pour les tontines quotidiennes.
 - **Partage WhatsApp** : ouvre `whatsapp://send?text=…`, sinon la feuille de partage du téléphone. Le lien du message est `natt://rejoindre?code=XXXXXX` (ouvre l'app si elle est installée).
 - **Textes des écrans 05 à 11** : rédigés d'après le cahier des charges (Figma inaccessible).
+
+## Étape 4 — Rejoindre
+
+- **Vérification du code** : automatique au 6e chiffre (comme le code SMS). Les erreurs (code inconnu, tontine complète, terminée, déjà membre) utilisent l'écran 12b avec un message adapté.
+- **Règlement modifié entre l'aperçu et la validation** : refus `reglement_change`, l'aperçu est rechargé pour relire la nouvelle version.
+- **Passage en cours (T3)** : dès que la tontine est complète et que la date de début est atteinte (`demarrer_tontines`, appelée à chaque arrivée et chaque jour par pg_cron).
+- **Mode d'attribution affiché** : « Tirage au sort » si un tirage a eu lieu, sinon « Ordre d'arrivée ».
+- **Lien profond** `natt://rejoindre?code=…` : code prérempli et vérifié automatiquement (si la personne est connectée).
+- **Textes des notifications** : rédigés côté serveur (SQL) en français, car ils sont aussi envoyés en push. À déplacer dans des modèles traduisibles quand le wolof arrivera.
+- **Non fait** : limitation des essais de code (force brute sur 1 million de codes). À prévoir avant le lancement public (ex. 10 essais par heure et par compte).

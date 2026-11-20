@@ -28,8 +28,8 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Partage WhatsApp du code.
 
 ## Étape 4 — Rejoindre (12, 12b, 12c)
-- [ ] Saisie du code, erreurs (code inconnu, tontine complète ou terminée).
-- [ ] Aperçu + acceptation du règlement obligatoire, puis `rejoindre_tontine`.
+- [x] Saisie du code, erreurs (code inconnu, tontine complète ou terminée).
+- [x] Aperçu + acceptation du règlement obligatoire, puis `rejoindre_tontine`.
 
 ## Étape 5 — Vues tontine (13, 13c, 14, 16)
 - [ ] Vue gérante : cagnotte, bénéficiaire, compte des paiements, liste des membres et statuts (dont « En retard » calculé).

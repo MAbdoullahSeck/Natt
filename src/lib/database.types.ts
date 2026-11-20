@@ -306,6 +306,11 @@ isOneToOne: false
             "ajouter_membre":
 { Args: { "p_profil_id": string,"p_tontine_id": string }; Returns: string
                            },
+"apercu_tontine":
+{ Args: { "p_code": string }; Returns: {
+              "bien_prevu": string,"date_debut": string,"frequence": Database["public"]['Enums']["frequence"],"gerante_prenom": string,"id": string,"montant": number,"nb_inscrits": number,"nb_membres": number,"nom": string,"ordre_tirage": boolean,"reglement_lignes": (string)[],"reglement_version": number,"type": Database["public"]['Enums']["type_tontine"]
+            }[]
+                           },
 "aujourdhui_dakar":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
@@ -354,6 +359,9 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"demarrer_tontines":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
 "echeance_tour":
 { Args: { "p_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_numero": number }; Returns: string
                            },
@@ -380,8 +388,14 @@ isOneToOne: false
               "bien_prevu": string,"date_debut": string,"est_gerante": boolean,"frequence": Database["public"]['Enums']["frequence"],"gerante_prenom": string,"id": string,"ma_cotisation_statut": Database["public"]['Enums']["statut_cotisation"],"ma_declare_at": string,"ma_paye_at": string,"montant": number,"nb_inscrits": number,"nb_membres": number,"nom": string,"statut": Database["public"]['Enums']["statut_tontine"],"tour_echeance": string,"tour_numero": number,"type": Database["public"]['Enums']["type_tontine"]
             }[]
                            },
+"notifier":
+{ Args: { "p_corps": string,"p_profil_id": string,"p_titre": string,"p_tontine_id": string,"p_type": string }; Returns: string
+                           },
 "partage_une_tontine":
 { Args: { "p_profil_id": string }; Returns: boolean
+                           },
+"rejoindre_tontine":
+{ Args: { "p_code": string,"p_version_reglement": number }; Returns: string
                            },
 "suggestions_calendrier":
 { Args: { "p_date_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_nb_membres": number }; Returns: {
@@ -396,6 +410,33 @@ isOneToOne: false
         to: "evenements_calendrier"
         isOneToOne: false
         isSetofReturn: true
+      } },
+"tontine_par_code":
+{ Args: { "p_code": string }; Returns: {
+              "bien_prevu": string | null,
+"code": string,
+"created_at": string,
+"cycle_precedent_id": string | null,
+"date_debut": string,
+"frequence": Database["public"]['Enums']["frequence"],
+"gerante_id": string,
+"id": string,
+"montant": number,
+"nb_membres": number,
+"nom": string,
+"penalite_retard": number,
+"reglement_libres": (string)[],
+"relance_j_moins_3": boolean,
+"relance_j_plus_1": boolean,
+"relance_jour_j": boolean,
+"statut": Database["public"]['Enums']["statut_tontine"],
+"type": Database["public"]['Enums']["type_tontine"]
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "tontines"
+        isOneToOne: true
+        isSetofReturn: false
       } }
           }
           Enums: {

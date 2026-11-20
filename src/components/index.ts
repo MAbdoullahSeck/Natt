@@ -24,3 +24,4 @@ export { ChoixDate } from './ChoixDate';
 export { EtatErreur } from './EtatErreur';
 export { EnTeteEtape } from './EnTeteEtape';
 export { SaisieNombre } from './SaisieNombre';
+export { LigneInfo } from './LigneInfo';
