@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { ListOrdered, Settings, Share2 } from 'lucide-react-native';
+import { BellRing, ListOrdered, Settings, Share2 } from 'lucide-react-native';
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -14,6 +14,7 @@ import {
   Texte,
 } from '@/components';
 import { useMarquerVerse } from '@/data/actions';
+import { useRelancer } from '@/data/reglages';
 import { type DonneesTontine, prenomDe } from '@/data/tontine';
 import { resumeTour, statutMembre, tourEnCours } from '@/domain/tontine';
 import { textes } from '@/i18n';
@@ -26,17 +27,14 @@ import { CarteCagnotte } from './CarteCagnotte';
 
 const t = textes.tontine;
 
-type Props = {
-  donnees: DonneesTontine;
-  /** Action principale de remplacement (ex. « Relancer les retardataires », étape 8). */
-  actionRelance?: ReactNode;
-};
+type Props = { donnees: DonneesTontine };
 
 /** Écran 13 — Tontine · Gérante. */
-export function VueGerante({ donnees, actionRelance }: Props) {
+export function VueGerante({ donnees }: Props) {
   const { tontine, membres, tours, cotisations } = donnees;
   const tour = tourEnCours(tours);
   const verse = useMarquerVerse(tontine.id);
+  const relancer = useRelancer(tontine.id);
   const id = tontine.id;
   const places = tontine.nb_membres - membres.length;
 
@@ -64,8 +62,16 @@ export function VueGerante({ donnees, actionRelance }: Props) {
         testID="bouton-verse"
       />
     );
-  } else if (actionRelance) {
-    pied = actionRelance;
+  } else if (tour) {
+    pied = (
+      <BoutonPrincipal
+        libelle={textes.relances.retardataires}
+        icone={BellRing}
+        desactive={relancer.isPending}
+        onPress={() => relancer.mutate(undefined)}
+        testID="bouton-relancer"
+      />
+    );
   }
 
   return (
@@ -159,7 +165,14 @@ export function VueGerante({ donnees, actionRelance }: Props) {
           );
         })}
       </View>
-      {verse.error ? <Texte couleur="terracotta">{messageErreur(verse.error)}</Texte> : null}
+      {relancer.data !== undefined ? (
+        <Texte variante="corpsFort" couleur="vert">
+          {textes.relances.envoyees(relancer.data)}
+        </Texte>
+      ) : null}
+      {verse.error || relancer.error ? (
+        <Texte couleur="terracotta">{messageErreur(verse.error ?? relancer.error)}</Texte>
+      ) : null}
     </Ecran>
   );
 }

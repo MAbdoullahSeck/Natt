@@ -195,7 +195,9 @@ from unnest(array['Fatou', 'Aminata']) prenom;
 select pg_temp.paiement('b0000000-0000-4000-8000-000000000002', 2, 'Coumba', 'orange_money', '2026-11-15 20:00+00', false);
 insert into public.evenements (tontine_id, membre_id, auteur_id, type, donnees, created_at)
 select 'b0000000-0000-4000-8000-000000000002', m.id, null, 'penalite',
-       jsonb_build_object('montant', 1000, 'tour', 2), '2026-11-16 09:00+00'
+       jsonb_build_object('montant', 1000, 'tour', 2, 'tour_id',
+         (select id from public.tours where tontine_id = 'b0000000-0000-4000-8000-000000000002' and numero = 2)),
+       '2026-11-16 09:00+00'
 from public.membres m
 where m.tontine_id = 'b0000000-0000-4000-8000-000000000002' and m.profil_id = 'a0000000-0000-4000-8000-000000000005';
 

@@ -161,14 +161,14 @@ isOneToOne: false
                   ]
                 },"notifications": {
                   Row: {
-                    "corps": string,"created_at": string,"id": string,"lu_at": string | null,"profil_id": string,"titre": string,"tontine_id": string | null,"type": string
+                    "corps": string,"created_at": string,"id": string,"lu_at": string | null,"profil_id": string,"push_envoye_at": string | null,"titre": string,"tontine_id": string | null,"type": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "corps": string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id": string,"titre": string,"tontine_id"?: string | null,"type": string
+                    "corps": string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id": string,"push_envoye_at"?: string | null,"titre": string,"tontine_id"?: string | null,"type": string
                   }
                   Update: {
-                    "corps"?: string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id"?: string,"titre"?: string,"tontine_id"?: string | null,"type"?: string
+                    "corps"?: string,"created_at"?: string,"id"?: string,"lu_at"?: string | null,"profil_id"?: string,"push_envoye_at"?: string | null,"titre"?: string,"tontine_id"?: string | null,"type"?: string
                   }
                   Relationships: [
                     {
@@ -335,13 +335,22 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "ajouter_membre":
+            "accepter_reglement":
+{ Args: { "p_tontine_id": string,"p_version": number }; Returns: undefined
+                           },
+"ajouter_membre":
 { Args: { "p_profil_id": string,"p_tontine_id": string }; Returns: string
+                           },
+"annuler_penalite":
+{ Args: { "p_evenement_id": string }; Returns: undefined
                            },
 "apercu_tontine":
 { Args: { "p_code": string }; Returns: {
               "bien_prevu": string,"date_debut": string,"frequence": Database["public"]['Enums']["frequence"],"gerante_prenom": string,"id": string,"montant": number,"nb_inscrits": number,"nb_membres": number,"nom": string,"ordre_tirage": boolean,"reglement_lignes": (string)[],"reglement_version": number,"type": Database["public"]['Enums']["type_tontine"]
             }[]
+                           },
+"appeler_fonction":
+{ Args: { "p_nom": string }; Returns: undefined
                            },
 "appliquer_ordre":
 { Args: { "p_ordre": (string)[],"p_tontine_id": string }; Returns: undefined
@@ -360,6 +369,11 @@ isOneToOne: false
                            },
 "confirmer_paiement":
 { Args: { "p_cotisation_id": string }; Returns: undefined
+                           },
+"cotisations_dues":
+{ Args: { "p_tontine_id": string }; Returns: {
+              "cotisation_id": string,"echeance": string,"membre_id": string,"profil_id": string,"statut": Database["public"]['Enums']["statut_cotisation"],"tour_id": string
+            }[]
                            },
 "creer_profil":
 { Args: { "p_consentement_version": string,"p_prenom": string }; Returns: {
@@ -439,8 +453,14 @@ isOneToOne: false
 "joindre_capture":
 { Args: { "p_capture_path": string,"p_cotisation_id": string }; Returns: undefined
                            },
+"jour_dakar":
+{ Args: { "p": string }; Returns: string
+                           },
 "limite_tontines":
 { Args: { "p_profil_id": string }; Returns: number
+                           },
+"marquer_pousses":
+{ Args: { "p_ids": (string)[] }; Returns: undefined
                            },
 "marquer_tirage_vu":
 { Args: { "p_tontine_id": string }; Returns: undefined
@@ -453,14 +473,34 @@ isOneToOne: false
               "bien_prevu": string,"date_debut": string,"est_gerante": boolean,"frequence": Database["public"]['Enums']["frequence"],"gerante_prenom": string,"id": string,"ma_cotisation_statut": Database["public"]['Enums']["statut_cotisation"],"ma_declare_at": string,"ma_paye_at": string,"montant": number,"nb_inscrits": number,"nb_membres": number,"nom": string,"statut": Database["public"]['Enums']["statut_tontine"],"tour_echeance": string,"tour_numero": number,"type": Database["public"]['Enums']["type_tontine"]
             }[]
                            },
+"modifier_reglages":
+{ Args: { "p_j_moins_3": boolean,"p_j_plus_1": boolean,"p_jour_j": boolean,"p_penalite": number,"p_tontine_id": string }; Returns: undefined
+                           },
+"modifier_reglement":
+{ Args: { "p_lignes_libres": (string)[],"p_tontine_id": string }; Returns: number
+                           },
+"notifications_a_pousser":
+{ Args: { "p_limite"?: number }; Returns: {
+              "corps": string,"id": string,"jeton": string,"titre": string,"tontine_id": string
+            }[]
+                           },
 "notifier":
 { Args: { "p_corps": string,"p_profil_id": string,"p_titre": string,"p_tontine_id": string,"p_type": string }; Returns: string
+                           },
+"nouvelle_version_reglement":
+{ Args: { "p_tontine_id": string }; Returns: number
                            },
 "partage_une_tontine":
 { Args: { "p_profil_id": string }; Returns: boolean
                            },
+"preparer_relances":
+{ Args: { "p_jour"?: string }; Returns: Json
+                           },
 "rejoindre_tontine":
 { Args: { "p_code": string,"p_version_reglement": number }; Returns: string
+                           },
+"relancer":
+{ Args: { "p_membre_id"?: string,"p_tontine_id": string }; Returns: number
                            },
 "suggestions_calendrier":
 { Args: { "p_date_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_nb_membres": number }; Returns: {

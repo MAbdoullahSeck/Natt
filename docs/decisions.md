@@ -74,3 +74,15 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Dates des tours** : « Janv. 2027 » pour une tontine mensuelle, « 5 décembre » pour une tontine quotidienne ou hebdomadaire.
 - **Échange (15b)** : on part du membre appuyé longuement (tour à déplacer), puis on choisit l'autre membre parmi les tours non versés. Les deux membres sont notifiés (sauf la gérante si elle est l'une des deux).
 - **Les membres** voient aussi l'ordre des tours (lien « Ordre des tours » sur l'écran 16), sans pouvoir le modifier.
+
+## Étape 8 — Réglages, relances, notifications
+
+- **Relances automatiques** : seulement aux membres dont la cotisation est « à payer » (pas à ceux qui ont déjà déclaré leur paiement), jamais à la gérante. J-3, J et J+1 selon les réglages ; une seule relance par moment et par tour (idempotent).
+- **Calcul en SQL, déclenché par une Edge Function** : pg_cron appelle chaque jour à 9 h UTC (= 9 h à Dakar, pas d'heure d'été) l'Edge Function `relances`, qui exécute `preparer_relances()` puis envoie les push. pg_cron appelle aussi `push` chaque minute pour les notifications immédiates (confirmation, échange…). Les appels HTTP lisent l'URL du projet et la clé service dans **Vault** (`project_url`, `service_role_key`) ; sans ces secrets, rien n'est appelé (cas du développement local).
+- **Récapitulatif J+1 à la gérante (A3)** : une notification par tontine et par jour, avec les prénoms des retardataires.
+- **Relance manuelle (A4)** : « Relancer les retardataires » vise les membres qui n'ont rien déclaré alors que l'échéance est passée ; « Relancer [prénom] » vise un membre dont la cotisation est à payer (même avant l'échéance). Au plus une relance manuelle par membre et par jour (heure de Dakar).
+- **Pénalités (P5)** : calculées chaque matin pour les tours échus ; une par membre et par tour, seulement si la déclaration est faite après l'échéance (ou s'il n'y a rien de déclaré). Affichées au membre (total à régler à la gérante, en dehors de Natt) et à la gérante (écran 13c, avec « Annuler »). La gérante n'a jamais de pénalité.
+- **Règlement versionné (R2)** : changer la pénalité ou les règles libres crée une nouvelle version. La gérante l'accepte d'office ; chaque membre doit l'accepter à sa prochaine ouverture de la tontine (écran intermédiaire). Les rappels J-3 / J / J+1 ne changent pas le règlement.
+- **Règles libres** : 10 au plus, 200 caractères chacune, ajoutées après les lignes générées.
+- **Écran Notifications (22)** : les 100 dernières, par jour (« Aujourd'hui », « Hier », date) ; tout est marqué comme lu à l'ouverture de l'onglet. Appui → la tontine concernée.
+- **Push** : jeton Expo enregistré à la connexion (téléphone réel uniquement, il faut un `projectId` EAS : variable `EXPO_PUBLIC_EAS_PROJECT_ID`). Canal Android « natt ». L'appui sur une notification push ouvre la tontine.

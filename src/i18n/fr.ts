@@ -154,6 +154,11 @@ export const fr = {
       tontine_incomplete: 'Tous les membres doivent avoir rejoint avant le tirage.',
       ordre_invalide: 'L’ordre des tours est invalide. Réessaie.',
       echange_invalide: 'Cet échange n’est pas possible.',
+      penalite_invalide: 'Montant de pénalité invalide.',
+      reglement_invalide: '10 règles au plus, de 200 lettres au plus.',
+      deja_relance_aujourdhui: 'Déjà relancée aujourd’hui. Réessaie demain.',
+      rien_a_relancer: 'Rien à relancer : ce membre est à jour ou a déjà payé.',
+      deja_annulee: 'Cette pénalité est déjà annulée.',
     } as Record<string, string>,
   },
   inscription: {
@@ -315,6 +320,65 @@ export const fr = {
       message: (nom: string, lignes: string) => `Tirage au sort de « ${nom} » :\\n${lignes}`,
       ligne: (numero: number, prenom: string, date: string) => `${numero}. ${prenom} — ${date}`,
     },
+  },
+  reglages: {
+    titre: 'Réglages',
+    rappels: 'Rappels automatiques',
+    rappelsAide: 'Envoyés à 9 h aux membres qui n’ont pas encore payé.',
+    jMoins3: '3 jours avant',
+    jourJ: 'Le jour même',
+    jPlus1: '1 jour après',
+    penalite: 'Pénalité de retard',
+    aucune: 'Aucune',
+    modifier: 'Modifier',
+    reglement: 'Règlement',
+    voirReglement: 'Voir ou modifier le règlement',
+    enregistre: 'Enregistré',
+    penaliteEcran: {
+      titre: 'Pénalité par retard',
+      aide: '0 F = pas de pénalité. Les membres devront accepter le nouveau règlement.',
+      bouton: 'Enregistrer',
+    },
+    reglementEcran: {
+      titre: 'Le règlement',
+      version: (v: number) => `Version ${v}`,
+      ajoutees: 'Tes règles en plus',
+      placeholder: 'Ex. Rendez-vous chez Awa le samedi',
+      ajouter: 'Ajouter cette règle',
+      retirer: 'Retirer',
+      bouton: 'Enregistrer le règlement',
+      aide: 'Les membres devront accepter la nouvelle version.',
+    },
+  },
+  relances: {
+    retardataires: 'Relancer les retardataires',
+    membre: (prenom: string) => `Relancer ${prenom}`,
+    envoyees: (n: number) =>
+      n === 0
+        ? 'Personne n’est en retard.'
+        : n > 1
+          ? `${n} relances envoyées`
+          : '1 relance envoyée',
+    envoyee: 'Relance envoyée',
+  },
+  penalites: {
+    titre: 'Pénalités',
+    ligne: (montant: string, tour: number) => `${montant} · tour ${tour}`,
+    annuler: 'Annuler',
+    annulee: 'Annulée',
+    total: (montant: string) => `Pénalités à régler à ta gérante : ${montant}`,
+  },
+  reglementAccepter: {
+    titre: 'Nouveau règlement',
+    aide: 'Ta gérante a modifié le règlement. Lis-le et accepte-le pour continuer.',
+    accepter: 'J’accepte le règlement',
+    bouton: 'Continuer',
+  },
+  notifications: {
+    titre: 'Notifications',
+    vide: 'Pas de notification pour le moment.',
+    aujourdhui: 'Aujourd’hui',
+    hier: 'Hier',
   },
   demo: {
     titre: 'Composants Natt',

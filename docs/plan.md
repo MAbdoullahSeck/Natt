@@ -47,9 +47,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Tests de la logique d'ordre et d'échange.
 
 ## Étape 8 — Réglages, relances, notifications (13b, 22)
-- [ ] Réglages : relances J-3 / J / J+1, pénalité, règlement (nouvelle version à accepter).
-- [ ] Relances planifiées (pg_cron 9 h Dakar) + relance manuelle limitée à 1 par jour et par membre.
-- [ ] Pénalités appliquées et annulables. Push + écran Notifications.
+- [x] Réglages : relances J-3 / J / J+1, pénalité, règlement (nouvelle version à accepter).
+- [x] Relances planifiées (pg_cron 9 h Dakar) + relance manuelle limitée à 1 par jour et par membre.
+- [x] Pénalités appliquées et annulables. Push + écran Notifications.
 
 ## Étape 9 — Fin de cycle (19, 19b)
 - [ ] Clôture automatique au dernier tour versé.

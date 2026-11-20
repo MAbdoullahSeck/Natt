@@ -1,7 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { Chargement, Ecran, EnTete, EtatErreur, Texte } from '@/components';
+import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Texte } from '@/components';
+import { useRelancer } from '@/data/reglages';
+import { Penalites } from '@/features/tontine/Penalites';
+import { messageErreur } from '@/lib/erreurs';
+import { BellRing } from 'lucide-react-native';
 import { prenomDe, useEvenementsMembre, useTontine } from '@/data/tontine';
 import { bilanMembre } from '@/domain/tontine';
 import { libelleEvenement } from '@/features/tontine/evenements';
@@ -16,6 +20,7 @@ export default function HistoriqueMembre() {
   const { id, membreId } = useLocalSearchParams<{ id: string; membreId: string }>();
   const tontine = useTontine(id);
   const evenements = useEvenementsMembre(id, membreId);
+  const relancer = useRelancer(id);
 
   if (tontine.isLoading || evenements.isLoading) return <Chargement />;
   if (tontine.error || evenements.error || !tontine.data)
@@ -34,13 +39,23 @@ export default function HistoriqueMembre() {
 
   const d = tontine.data;
   const bilan = bilanMembre(d.tours, d.cotisations, membreId);
+  const prenom = prenomDe(d.membres, membreId);
+  const estMoi = d.monMembre?.id === membreId;
   return (
-    <Ecran>
-      <EnTete
-        titre={prenomDe(d.membres, membreId)}
-        filAriane={d.tontine.nom}
-        onRetour={() => router.back()}
-      />
+    <Ecran
+      pied={
+        d.estGerante && !estMoi ? (
+          <BoutonPrincipal
+            libelle={relancer.isSuccess ? textes.relances.envoyee : textes.relances.membre(prenom)}
+            icone={BellRing}
+            desactive={relancer.isPending || relancer.isSuccess}
+            onPress={() => relancer.mutate(membreId)}
+            testID="bouton-relancer-membre"
+          />
+        ) : null
+      }
+    >
+      <EnTete titre={prenom} filAriane={d.tontine.nom} onRetour={() => router.back()} />
       <View style={styles.bilan}>
         <View style={[styles.case, { backgroundColor: couleurs.vertPuce }]}>
           <Texte variante="sousTitre" couleur="vert">
@@ -53,6 +68,8 @@ export default function HistoriqueMembre() {
           </Texte>
         </View>
       </View>
+      {relancer.error ? <Texte couleur="terracotta">{messageErreur(relancer.error)}</Texte> : null}
+      <Penalites tontineId={id} membreId={membreId} gerante={d.estGerante} />
       <Texte variante="sousTitre">{t.titreListe}</Texte>
       {(evenements.data ?? []).length === 0 ? <Texte>{t.vide}</Texte> : null}
       {(evenements.data ?? []).map((e) => (
