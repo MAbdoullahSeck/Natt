@@ -9,6 +9,7 @@ import {
   Ecran,
   EnTete,
   LigneInfo,
+  Lien,
   PuceStatut,
   Texte,
 } from '@/components';
@@ -81,6 +82,10 @@ export function VueMembre({ donnees, complement }: Props) {
           <Texte variante="corpsFort">{formatTelephoneComplet(gerante.profil.telephone)}</Texte>
         </CarteInfo>
       ) : null}
+      <Lien
+        libelle={textes.tours.titre}
+        onPress={() => router.push({ pathname: '/tontine/[id]/tours', params: { id: tontine.id } })}
+      />
       {complement}
     </Ecran>
   );

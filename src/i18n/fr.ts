@@ -93,10 +93,6 @@ export const fr = {
   membre: {
     marquerPaye: 'Marquer payé',
   },
-  tours: {
-    tour: (n: number) => `Tour ${n}`,
-    verse: 'Versé',
-  },
   etapes: {
     progression: (etape: number, total: number) => `Étape ${etape} sur ${total}`,
   },
@@ -153,6 +149,11 @@ export const fr = {
       deja_declare: 'Ce paiement est déjà déclaré.',
       moyen_invalide: 'Choisis Wave ou Orange Money.',
       chemin_invalide: 'La capture n’a pas pu être enregistrée.',
+      tirage_deja_fait: 'Le tirage au sort a déjà été fait pour ce cycle.',
+      tour_deja_verse: 'Un des tours a déjà été versé.',
+      tontine_incomplete: 'Tous les membres doivent avoir rejoint avant le tirage.',
+      ordre_invalide: 'L’ordre des tours est invalide. Réessaie.',
+      echange_invalide: 'Cet échange n’est pas possible.',
     } as Record<string, string>,
   },
   inscription: {
@@ -287,6 +288,33 @@ export const fr = {
   moyens: {
     wave: 'Wave',
     orange_money: 'Orange Money',
+  },
+  tours: {
+    titre: 'Ordre des tours',
+    aideEchange: 'Appuie longtemps sur un membre pour échanger son tour.',
+    verse: 'Versé',
+    personne: 'Place libre',
+    tirage: 'Tirage au sort',
+    tirageEnCours: 'Tirage en cours…',
+    tirageImpossible: 'Le tirage au sort sera possible quand tous les membres auront rejoint.',
+    voirTirage: 'Voir le résultat du tirage',
+    echanger: {
+      titre: 'Échanger un tour',
+      aDeplacer: 'Tour à déplacer',
+      avecQui: 'Échanger avec',
+      aucun: 'Aucun autre tour ne peut être échangé.',
+      bouton: 'Échanger les tours',
+      ligne: (numero: number, prenom: string, date: string) =>
+        `Tour ${numero} · ${prenom} · ${date}`,
+    },
+    resultat: {
+      titre: 'Résultat du tirage',
+      quand: (date: string, heure: string) => `Tiré le ${date} à ${heure}`,
+      vuPar: (n: number) => (n > 1 ? `Vu par ${n} membres` : `Vu par ${n} membre`),
+      envoyer: 'Envoyer au groupe',
+      message: (nom: string, lignes: string) => `Tirage au sort de « ${nom} » :\\n${lignes}`,
+      ligne: (numero: number, prenom: string, date: string) => `${numero}. ${prenom} — ${date}`,
+    },
   },
   demo: {
     titre: 'Composants Natt',

@@ -283,6 +283,38 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"vues_tirage": {
+                  Row: {
+                    "evenement_id": string,"profil_id": string,"vu_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "evenement_id": string,"profil_id": string,"vu_at"?: string
+                  }
+                  Update: {
+                    "evenement_id"?: string,"profil_id"?: string,"vu_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "vues_tirage_evenement_id_fkey"
+      columns: ["evenement_id"]
+isOneToOne: false
+      referencedRelation: "evenements"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "vues_tirage_profil_id_fkey"
+      columns: ["profil_id"]
+isOneToOne: false
+      referencedRelation: "profils"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "vues_tirage_profil_id_fkey"
+      columns: ["profil_id"]
+isOneToOne: false
+      referencedRelation: "profils_publics"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -310,6 +342,12 @@ isOneToOne: false
 { Args: { "p_code": string }; Returns: {
               "bien_prevu": string,"date_debut": string,"frequence": Database["public"]['Enums']["frequence"],"gerante_prenom": string,"id": string,"montant": number,"nb_inscrits": number,"nb_membres": number,"nom": string,"ordre_tirage": boolean,"reglement_lignes": (string)[],"reglement_version": number,"type": Database["public"]['Enums']["type_tontine"]
             }[]
+                           },
+"appliquer_ordre":
+{ Args: { "p_ordre": (string)[],"p_tontine_id": string }; Returns: undefined
+                           },
+"appliquer_tirage":
+{ Args: { "p_algorithme": string,"p_auteur_id": string,"p_graine": string,"p_ordre": (string)[],"p_tontine_id": string }; Returns: string
                            },
 "aujourdhui_dakar":
 { Args: Record<PropertyKey, never>; Returns: string
@@ -374,6 +412,9 @@ isOneToOne: false
 "demarrer_tontines":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
+"echanger_tours":
+{ Args: { "p_membre_a": string,"p_membre_b": string }; Returns: undefined
+                           },
 "echeance_tour":
 { Args: { "p_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_numero": number }; Returns: string
                            },
@@ -400,6 +441,9 @@ isOneToOne: false
                            },
 "limite_tontines":
 { Args: { "p_profil_id": string }; Returns: number
+                           },
+"marquer_tirage_vu":
+{ Args: { "p_tontine_id": string }; Returns: undefined
                            },
 "marquer_verse":
 { Args: { "p_tour_id": string }; Returns: Database["public"]['Enums']["statut_tontine"]

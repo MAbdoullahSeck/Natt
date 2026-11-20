@@ -42,9 +42,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] **Aucun portefeuille, aucun solde.**
 
 ## Étape 7 — Tours (15, 15b, 15c)
-- [ ] Ordre des tours ; tirage au sort serveur (une fois par cycle) ; résultat partagé.
-- [ ] Échange de tour par la gérante (tours non versés uniquement), notifications aux deux membres.
-- [ ] Tests de la logique d'ordre et d'échange.
+- [x] Ordre des tours ; tirage au sort serveur (une fois par cycle) ; résultat partagé.
+- [x] Échange de tour par la gérante (tours non versés uniquement), notifications aux deux membres.
+- [x] Tests de la logique d'ordre et d'échange.
 
 ## Étape 8 — Réglages, relances, notifications (13b, 22)
 - [ ] Réglages : relances J-3 / J / J+1, pénalité, règlement (nouvelle version à accepter).

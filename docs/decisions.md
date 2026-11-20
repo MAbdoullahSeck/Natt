@@ -62,3 +62,15 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Choix de l'application** : Wave présélectionné. Composant « Moyen de paiement » (Figma 6:537) non lu : options avec icône téléphone.
 - **Captures** : bucket privé `captures`, chemin `{tontine}/{cotisation}/{horodatage}.jpg`, 5 Mo maximum (JPEG, PNG, WebP). Le membre dépose, la gérante et le membre lisent (lien signé de 10 minutes). La capture s'affiche sur l'écran 14 « Marquer payé ».
 - **Gérante qui paie sa propre part** : elle déclare comme les autres membres et confirme elle-même.
+
+## Étape 7 — Tours
+
+- **Tirage au sort** : possible une seule fois par cycle, **quand tous les membres ont rejoint** et **avant toute remise de cagnotte** (sinon des membres arrivés plus tard ou déjà servis fausseraient le tirage).
+- **Algorithme** : Fisher–Yates alimenté par un flux HMAC-SHA256 d'une graine aléatoire de 32 octets (`supabase/functions/_shared/melange.ts`). La graine, l'ordre et l'algorithme sont enregistrés dans l'événement `tirage` : le tirage est vérifiable (même graine → même ordre).
+- **Edge Functions sans dépendance** : elles appellent directement Auth et PostgREST avec `fetch` (`_shared/api.ts`), au lieu d'importer `supabase-js` (impossible à télécharger dans l'environnement local, et plus léger en production).
+- **Vérifications du tirage en SQL** (`appliquer_tirage`, réservée à `service_role`) : gérante, une fois par cycle, tontine complète, ordre = permutation exacte des membres.
+- **« Vu par N membres »** : table `vues_tirage` ; une personne est comptée quand elle ouvre l'écran 15c (la gérante est comptée d'office).
+- **Écran 15c** : montre l'ordre tel qu'il a été tiré, même si des échanges ont eu lieu ensuite. L'écran 15 montre l'ordre actuel.
+- **Dates des tours** : « Janv. 2027 » pour une tontine mensuelle, « 5 décembre » pour une tontine quotidienne ou hebdomadaire.
+- **Échange (15b)** : on part du membre appuyé longuement (tour à déplacer), puis on choisit l'autre membre parmi les tours non versés. Les deux membres sont notifiés (sauf la gérante si elle est l'une des deux).
+- **Les membres** voient aussi l'ordre des tours (lien « Ordre des tours » sur l'écran 16), sans pouvoir le modifier.
