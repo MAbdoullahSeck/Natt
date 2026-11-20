@@ -1,7 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Texte } from '@/components';
+import {
+  ApercuCapture,
+  BoutonPrincipal,
+  Chargement,
+  Ecran,
+  EnTete,
+  EtatErreur,
+  Texte,
+} from '@/components';
 import { useConfirmerPaiement } from '@/data/actions';
 import { prenomDe, useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
@@ -59,6 +67,7 @@ export default function ConfirmerPaiement() {
             : t.pasDeclare}
         </Texte>
       </View>
+      {cotisation.capture_path ? <ApercuCapture chemin={cotisation.capture_path} /> : null}
       {confirmer.error ? (
         <Texte couleur="terracotta">{messageErreur(confirmer.error)}</Texte>
       ) : null}

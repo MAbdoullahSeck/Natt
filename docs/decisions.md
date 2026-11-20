@@ -50,3 +50,15 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Bilan 13c** : « à l'heure » / « en retard » selon la règle de pénalité P5 (date de déclaration), en ne comptant que les tours échus ou réglés.
 - **Prochain paiement (16)** : la plus ancienne cotisation non payée du membre. Le bouton « Payer » n'apparaît que si elle est « à payer » (pas si elle est déjà déclarée).
 - **Nouveaux types d'événements** : `versement` (cagnotte remise) et `reglement_modifie` (étape 8).
+
+## Étape 6 — Paiement
+
+- **Wave / Orange Money** : aucun lien profond public pour un transfert entre particuliers avec numéro et montant préremplis n'a été trouvé. Tout est isolé dans `src/lib/paiementMobile.ts` :
+  1. le numéro de la gérante est copié dans le presse-papiers ;
+  2. on essaie d'ouvrir l'application (`wave://`, `orangemoney://` : **schémas non confirmés, à tester sur téléphone**) ;
+  3. sinon : Orange Money → composeur avec `#144#` ; Wave → page de l'application dans le Play Store / App Store.
+  Le montant est affiché en gros sur l'écran 17 (il ne peut pas être prérempli).
+- **Retour de l'application de paiement** : détecté quand l'app Natt revient au premier plan ; la cotisation passe alors en « déclaré » et l'écran 18 s'affiche (P2). Un lien « J'ai déjà payé » permet aussi de déclarer sans passer par l'application (paiement fait avant, ou application non détectée).
+- **Choix de l'application** : Wave présélectionné. Composant « Moyen de paiement » (Figma 6:537) non lu : options avec icône téléphone.
+- **Captures** : bucket privé `captures`, chemin `{tontine}/{cotisation}/{horodatage}.jpg`, 5 Mo maximum (JPEG, PNG, WebP). Le membre dépose, la gérante et le membre lisent (lien signé de 10 minutes). La capture s'affiche sur l'écran 14 « Marquer payé ».
+- **Gérante qui paie sa propre part** : elle déclare comme les autres membres et confirme elle-même.

@@ -314,6 +314,12 @@ isOneToOne: false
 "aujourdhui_dakar":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
+"capture_de_ma_tontine":
+{ Args: { "p_nom": string }; Returns: boolean
+                           },
+"capture_du_membre":
+{ Args: { "p_nom": string }; Returns: boolean
+                           },
 "confirmer_paiement":
 { Args: { "p_cotisation_id": string }; Returns: undefined
                            },
@@ -362,6 +368,9 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"declarer_paiement":
+{ Args: { "p_capture_path"?: string,"p_cotisation_id": string,"p_moyen": string }; Returns: undefined
+                           },
 "demarrer_tontines":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -385,6 +394,9 @@ isOneToOne: false
                            },
 "generer_lignes_reglement":
 { Args: { "p_tontine_id": string }; Returns: (string)[]
+                           },
+"joindre_capture":
+{ Args: { "p_capture_path": string,"p_cotisation_id": string }; Returns: undefined
                            },
 "limite_tontines":
 { Args: { "p_profil_id": string }; Returns: number

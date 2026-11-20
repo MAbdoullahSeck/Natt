@@ -37,9 +37,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Vue membre : prochain paiement, statut, son tour, bien prévu si achat groupé.
 
 ## Étape 6 — Paiement (17, 18)
-- [ ] Ouverture de Wave / Orange Money (liens profonds vérifiés, sinon copie numéro + montant).
-- [ ] `declarer_paiement` au retour, capture facultative (Storage).
-- [ ] **Aucun portefeuille, aucun solde.**
+- [x] Ouverture de Wave / Orange Money (liens profonds vérifiés, sinon copie numéro + montant).
+- [x] `declarer_paiement` au retour, capture facultative (Storage).
+- [x] **Aucun portefeuille, aucun solde.**
 
 ## Étape 7 — Tours (15, 15b, 15c)
 - [ ] Ordre des tours ; tirage au sort serveur (une fois par cycle) ; résultat partagé.

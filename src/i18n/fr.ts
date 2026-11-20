@@ -108,6 +108,23 @@ export const fr = {
   },
   paiement: {
     directement: (gerante: string) => `Directement à ${gerante}. Natt ne garde pas l’argent.`,
+    titre: 'Payer ma part',
+    montant: 'Montant à envoyer',
+    a: (prenom: string) => `À ${prenom}`,
+    choisir: 'Avec quelle application ?',
+    payerAvec: (moyen: string) => `Payer avec ${moyen}`,
+    numeroCopie: (numero: string) =>
+      `Le numéro ${numero} est copié. Colle-le dans l’application et envoie le montant.`,
+    dejaPaye: 'J’ai déjà payé',
+    envoye: {
+      titre: 'Paiement envoyé',
+      texte: (gerante: string) =>
+        `${gerante} va vérifier et confirmer ton paiement. Tu recevras une notification.`,
+      capture: 'Ajouter une capture (facultatif)',
+      captureAjoutee: 'Capture ajoutée',
+      captureEnCours: 'Envoi de la capture…',
+      terminer: 'Terminer',
+    },
   },
   erreurs: {
     reseau: 'Pas de connexion. Vérifie ton internet.',
@@ -133,6 +150,9 @@ export const fr = {
       tour_precedent_non_verse: 'Remets d’abord la cagnotte du tour précédent.',
       sans_beneficiaire: 'Ce tour n’a pas encore de bénéficiaire.',
       introuvable: 'Introuvable. Actualise et réessaie.',
+      deja_declare: 'Ce paiement est déjà déclaré.',
+      moyen_invalide: 'Choisis Wave ou Orange Money.',
+      chemin_invalide: 'La capture n’a pas pu être enregistrée.',
     } as Record<string, string>,
   },
   inscription: {
