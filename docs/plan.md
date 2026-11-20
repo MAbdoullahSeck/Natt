@@ -10,10 +10,10 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Commandes réelles renseignées dans `CLAUDE.md`.
 
 ## Étape 1 — Supabase
-- [ ] `supabase init`, migrations du schéma de `architecture.md`, RLS sur toutes les tables.
-- [ ] Données de démonstration (seed) : Aminata, Fatou, Moussa… et 3 tontines comme sur Figma.
-- [ ] Types générés dans `src/lib/database.types.ts`.
-- [ ] Tests SQL ou d'intégration : un membre ne voit pas une tontine dont il ne fait pas partie ; personne ne peut modifier `evenements`.
+- [x] `supabase init`, migrations du schéma de `architecture.md`, RLS sur toutes les tables.
+- [x] Données de démonstration (seed) : Aminata, Fatou, Moussa… et 3 tontines comme sur Figma.
+- [x] Types générés dans `src/lib/database.types.ts`.
+- [x] Tests SQL ou d'intégration : un membre ne voit pas une tontine dont il ne fait pas partie ; personne ne peut modifier `evenements`.
 
 ## Étape 2 — Inscription (écrans 01 à 04)
 - [ ] Connexion par téléphone + code SMS (fournisseur SMS configuré : **signaler si absent**).

@@ -63,9 +63,10 @@ npm test                  # tests Jest (jest-expo)
 npm run lint              # ESLint (expo lint) + typecheck (tsc --noEmit)
 npm run format            # Prettier
 npx expo install <paquet> # ajouter une dépendance (versions compatibles avec le SDK)
-supabase start            # Supabase local (à partir de l'étape 1)
-supabase db reset         # rejouer les migrations
-supabase gen types typescript --local > src/lib/database.types.ts
+npm run db:start          # Supabase local (Docker requis)
+npm run db:reset          # rejouer les migrations + supabase/seed.sql
+npm run db:test           # tests SQL pgTAP (supabase/tests)
+npm run db:types          # régénérer src/lib/database.types.ts
 ```
 
 ## Conventions de code (étape 0)
@@ -78,3 +79,13 @@ supabase gen types typescript --local > src/lib/database.types.ts
 - Icônes : `lucide-react-native`, taille 24, `strokeWidth={2}`.
 - Logique métier pure et testée : `src/domain`.
 - Démonstration interne des composants : route `/demo`.
+
+## Conventions base de données (étape 1)
+
+- Une migration par changement dans `supabase/migrations/`, jamais de modification manuelle.
+- Chaque nouvelle table : RLS activée, `revoke all ... from anon`, aucune écriture directe pour `authenticated` (écritures via fonctions `security definer` avec `set search_path = ''`).
+- Appartenance : utiliser `public.est_membre(tontine_id)` / `public.est_gerante(tontine_id)` dans les politiques.
+- Prénom et téléphone des autres membres : vue `profils_publics` (la table `profils` ne montre que son propre profil).
+- `evenements` est en ajout seul : un déclencheur bloque update, delete et truncate pour tout le monde.
+- Après chaque migration : `npm run db:reset && npm run db:test && npm run db:types`.
+- Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`).
