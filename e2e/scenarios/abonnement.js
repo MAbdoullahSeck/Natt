@@ -1,0 +1,21 @@
+module.exports = async (p, { connexion, chiffres, S }) => {
+  const vis = (sel) => p.locator(sel + ':visible');
+  const continuer = async () => { await p.waitForTimeout(500); await p.getByRole('button', { name: 'Continuer' }).locator('visible=true').click(); };
+  await connexion(p, '770000016');
+  await vis('input').waitFor({ timeout: 15000 });
+  await vis('input').fill('Ndèye');
+  await continuer();
+  await vis('[data-testid="case-consentement"]').click();
+  await vis('[data-testid="bouton-creer-compte"]').click();
+  await vis('[data-testid="bouton-creer"]').click();
+  await vis('input').fill('Ma première');
+  await continuer(); await continuer();
+  await chiffres(p, '1000'); await continuer(); await continuer();
+  await chiffres(p, '4'); await continuer();
+  await vis('[data-testid="bouton-creer-tontine"]').click();
+  await vis('[data-testid="bouton-choisir-palier"]').waitFor({ timeout: 15000 });
+  await p.screenshot({ path: `${S}/e2e-abonnement.png`, fullPage: true });
+  await vis('[data-testid="bouton-choisir-palier"]').click();
+  await p.getByText('Demande enregistrée').locator('visible=true').waitFor({ timeout: 15000 });
+  console.log('OK upsell + demande');
+};

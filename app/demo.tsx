@@ -1,4 +1,5 @@
 import { Bell, CircleCheck, Grid3x3, Info, Package, Users } from 'lucide-react-native';
+import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -31,6 +32,11 @@ const t = textes.demo;
 
 /** Page de démonstration interne des composants de base (étape 0). */
 export default function Demo() {
+  if (!__DEV__) return <Redirect href="/" />;
+  return <ContenuDemo />;
+}
+
+function ContenuDemo() {
   const [code, setCode] = useState('');
   const [option, setOption] = useState<'classique' | 'achat'>('classique');
   const [relance, setRelance] = useState(true);

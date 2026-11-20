@@ -1,0 +1,23 @@
+module.exports = async (p, { connexion, chiffres, S }) => {
+  const vis = (sel) => p.locator(sel + ':visible');
+  const continuer = () => p.getByRole('button', { name: 'Continuer' }).locator('visible=true').click();
+  await connexion(p, '770000001');
+  await p.getByText('Tontine des sœurs').waitFor({ timeout: 15000 });
+  await vis('[data-testid="bouton-creer"]').click();
+  await vis('input').fill('Les voisines');
+  await continuer();
+  await p.getByText('Achat groupé').locator('visible=true').click();
+  await vis('input').fill('Machine à coudre');
+  await continuer();
+  await chiffres(p, '5000');
+  await continuer();
+  await p.getByText('Chaque semaine').locator('visible=true').click();
+  await continuer();
+  await chiffres(p, '8');
+  await p.screenshot({ path: `${S}/e2e-membres.png` });
+  await continuer();
+  await vis('[data-testid="bouton-creer-tontine"]').click();
+  await vis('[data-testid="code-invitation"]').waitFor({ timeout: 15000 });
+  await p.screenshot({ path: `${S}/e2e-cree.png` });
+  console.log('OK création, code', await vis('[data-testid="code-invitation"]').textContent());
+};

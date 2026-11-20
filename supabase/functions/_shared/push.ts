@@ -8,7 +8,15 @@ import { rpc } from './api.ts';
 const URL_EXPO = 'https://exp.host/--/api/v2/push/send';
 const TAILLE_LOT = 100;
 
-type ANotifier = { id: string; jeton: string | null; titre: string; corps: string; tontine_id: string | null };
+type ANotifier = {
+  id: string;
+  jeton: string | null;
+  titre: string;
+  corps: string;
+  tontine_id: string | null;
+  type: string;
+  donnees: Record<string, unknown> | null;
+};
 
 export function estJetonExpo(jeton: string | null): jeton is string {
   return !!jeton && /^Expo(nent)?PushToken\[.+\]$/.test(jeton);
@@ -34,7 +42,7 @@ export async function envoyerPushEnAttente(): Promise<{ envoyees: number; sansJe
           body: n.corps,
           sound: 'default',
           channelId: 'natt',
-          data: { tontine_id: n.tontine_id, notification_id: n.id },
+          data: { ...(n.donnees ?? {}), type: n.type, tontine_id: n.tontine_id, notification_id: n.id },
         })),
       ),
     });

@@ -24,6 +24,7 @@ export function ChampSaisie({ prefixe, lectureSeule, ...props }: Props) {
         editable={!lectureSeule}
         showSoftInputOnFocus={!lectureSeule}
         style={styles.input}
+        maxFontSizeMultiplier={1.5}
         {...props}
       />
     </View>

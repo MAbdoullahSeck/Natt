@@ -13,7 +13,8 @@
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
-    "db:types": "supabase gen types typescript --local > src/lib/database.types.ts"
+    "db:types": "supabase gen types typescript --local > src/lib/database.types.ts",
+    "e2e": "node e2e/lancer.js"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",

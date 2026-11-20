@@ -517,7 +517,7 @@ isOneToOne: false
                            },
 "notifications_a_pousser":
 { Args: { "p_limite"?: number }; Returns: {
-              "corps": string,"id": string,"jeton": string,"titre": string,"tontine_id": string
+              "corps": string,"donnees": Json,"id": string,"jeton": string,"titre": string,"tontine_id": string,"type": string
             }[]
                            },
 "notifier":

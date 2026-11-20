@@ -103,3 +103,21 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Gérante fondatrice (B4)** : indicateur `profils.fondatrice` (à cocher à la main en base) : badge « Gérante fondatrice » sur le profil, mention « prix bloqué » sur l'écran abonnement, limite Starter même sans abonnement. Le prix bloqué lui-même n'est pas encore géré (il dépendra de la décision B5).
 - **Profil (23)** : prénom, numéro, badge fondatrice, Mon abonnement (palier + prix), Mes données, Langue (Français seulement, pas d'interaction tant que le wolof n'existe pas), Aide sur WhatsApp (**masquée tant que `EXPO_PUBLIC_NUMERO_AIDE` n'est pas renseigné**), Se déconnecter.
 - **Retrait du consentement (D2)** : écran de confirmation avec case à cocher. Le profil devient « Ancien membre », le numéro est effacé (profil et compte Auth), le compte est bloqué, les notifications sont supprimées, l'historique des tontines est conservé. Les tontines dont la personne est gérante continuent d'exister (à traiter : transfert à une autre gérante ?).
+
+## Étape 11 — Finition
+
+- **États de chargement et d'erreur** : chaque écran qui charge des données affiche un indicateur, puis un message (« Pas de connexion. Vérifie ton internet. ») avec « Réessayer ». Les états vides ont un texte (accueil, notifications, historique).
+- **Taille de texte système** : respectée jusqu'à 1,5 fois (`maxFontSizeMultiplier`) pour que les écrans restent utilisables. **Non vérifié sur téléphone.**
+- **Démonstration des composants** (`/demo`) : accessible seulement en développement.
+- **Permissions Android** : galerie (capture de paiement) avec un texte en français ; caméra et micro désactivés ; canal de notifications « natt » en terracotta.
+- **Build EAS** : `eas.json` prêt (profil `preview` = APK interne). Le build demande un compte EAS : non lancé.
+- **Tests de bout en bout** : `npm run e2e` rejoue 12 parcours sur l'export web contre la base locale (inscription, création, rejoindre, paiement, confirmation, tours, tirage, échange, réglages, nouveau règlement, notifications, fin de cycle, abonnement, profil). Ils demandent Playwright et la stack locale.
+
+## Ce qui reste cassé ou non vérifié
+
+- **Rien d'échoue** dans les tests automatiques au moment du dernier commit : Jest, lint + typecheck, pgTAP et e2e passent.
+- **Non vérifié** : comportement sur un vrai téléphone Android (performances, sélecteur de date natif, ouverture de Wave / Orange Money et retour dans l'app, notifications push réelles, taille de texte agrandie). Les tests e2e tournent sur la version web.
+- **Edge Functions** : testées en local (`tirage-au-sort` de bout en bout, `push` et `relances` par appel direct), pas déployées.
+- **pg_cron** : les tâches sont créées, mais leurs appels HTTP sont ignorés tant que les secrets Vault ne sont pas renseignés (production).
+- **Notification push « nouveau cycle »** : corrigé à l'étape 11 (le push transporte le code ; un appui ouvre « Rejoindre » avec le code prérempli).
+- **Écrans non comparés au Figma** (accès MCP bloqué) : textes, mises en page et composants « Offre d'abonnement », « Moyen de paiement », « Notification », « Membre · Statut et validation » à vérifier.

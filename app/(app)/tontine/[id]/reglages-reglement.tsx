@@ -10,6 +10,7 @@ import {
   ChampSaisie,
   Ecran,
   EnTete,
+  EtatErreur,
   Texte,
 } from '@/components';
 import { useModifierReglement } from '@/data/reglages';
@@ -23,12 +24,19 @@ const t = textes.reglages.reglementEcran;
 /** Règlement : lignes générées + règles ajoutées par la gérante (R1) ; nouvelle version (R2). */
 export default function ReglageReglement() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data, isLoading } = useTontine(id);
+  const { data, isLoading, error, refetch } = useTontine(id);
   const modifier = useModifierReglement(id);
   const [libres, setLibres] = useState<string[] | null>(null);
   const [nouvelle, setNouvelle] = useState('');
 
-  if (isLoading || !data) return <Chargement />;
+  if (isLoading) return <Chargement />;
+  if (error || !data)
+    return (
+      <Ecran>
+        <EnTete titre={t.titre} onRetour={() => router.back()} />
+        <EtatErreur erreur={error} onReessayer={refetch} />
+      </Ecran>
+    );
   const lignesLibres = libres ?? data.tontine.reglement_libres;
   const generees = (data.reglement?.lignes ?? []).slice(
     0,

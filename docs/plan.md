@@ -62,6 +62,6 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Profil complet (abonnement, données, langue, aide, déconnexion, retrait du consentement).
 
 ## Étape 11 — Finition et test terrain
-- [ ] États vides, erreurs réseau, chargements sur tous les écrans.
-- [ ] Vérification sur un Android d'entrée de gamme (taille de texte système agrandie comprise).
-- [ ] Build interne EAS (APK) pour 10 à 20 gérantes testeuses.
+- [x] États vides, erreurs réseau, chargements sur tous les écrans.
+- [ ] Vérification sur un Android d'entrée de gamme (taille de texte système agrandie comprise). → **à faire sur téléphone** (impossible dans l'environnement de développement) ; tests e2e web en attendant.
+- [ ] Build interne EAS (APK) pour 10 à 20 gérantes testeuses. → configuration prête (`eas.json`, profil `preview`) ; **build à lancer avec le compte EAS** (voir `docs/deploiement.md`).

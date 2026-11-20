@@ -57,9 +57,12 @@ export async function enregistrerPush(profilId: string): Promise<string | null> 
 export function ecouterOuvertureNotifications(): () => void {
   if (Platform.OS === 'web') return () => undefined;
   const abonnement = Notifications.addNotificationResponseReceivedListener((reponse) => {
-    const tontineId = reponse.notification.request.content.data?.tontine_id;
-    if (typeof tontineId === 'string') {
-      router.push({ pathname: '/tontine/[id]', params: { id: tontineId } });
+    const donnees = reponse.notification.request.content.data ?? {};
+    // Nouveau cycle : la membre n'en fait pas encore partie → écran Rejoindre avec le code.
+    if (donnees.type === 'nouveau_cycle' && typeof donnees.code === 'string') {
+      router.push({ pathname: '/rejoindre', params: { code: donnees.code } });
+    } else if (typeof donnees.tontine_id === 'string') {
+      router.push({ pathname: '/tontine/[id]', params: { id: donnees.tontine_id } });
     }
   });
   return () => abonnement.remove();

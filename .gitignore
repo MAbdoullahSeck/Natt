@@ -48,3 +48,7 @@ coverage/
 supabase/.temp/
 .env
 
+
+# tests e2e
+e2e/.dist/
+e2e/captures/

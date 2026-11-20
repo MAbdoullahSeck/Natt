@@ -68,7 +68,11 @@ npm run db:start          # Supabase local (Docker requis)
 npm run db:reset          # rejouer les migrations + supabase/seed.sql
 npm run db:test           # tests SQL pgTAP (supabase/tests)
 npm run db:types          # régénérer src/lib/database.types.ts
+npx supabase functions serve  # Edge Functions en local (tirage au sort, push, relances)
+npm run e2e               # tests de bout en bout (export web + Playwright, base locale)
 ```
+
+Mise en production (projet Supabase, SMS, secrets, Edge Functions, EAS) : voir `docs/deploiement.md`.
 
 ## Conventions de code (étape 0)
 
@@ -79,7 +83,12 @@ npm run db:types          # régénérer src/lib/database.types.ts
 - Composants de base : `src/components` (importer depuis `@/components`). Toujours utiliser `Texte` plutôt que `Text`.
 - Icônes : `lucide-react-native`, taille 24, `strokeWidth={2}`.
 - Logique métier pure et testée : `src/domain`.
-- Démonstration interne des composants : route `/demo`.
+- Démonstration interne des composants : route `/demo` (en développement seulement).
+- Accès aux données : hooks react-query dans `src/data` ; morceaux d'écrans réutilisés dans `src/features`.
+- Chaque écran qui charge des données affiche `Chargement`, puis `EtatErreur` (avec « Réessayer ») en cas d'échec.
+- Les erreurs métier SQL sont des codes courts (`raise exception 'limite_atteinte'`) traduits dans `textes.erreurs.codes`.
+- Wave / Orange Money : tout passe par `src/lib/paiementMobile.ts`.
+- Réglages publics (numéros d'aide, Wave de Natt) : `src/config.ts`, via variables `EXPO_PUBLIC_*`.
 
 ## Conventions base de données (étape 1)
 
@@ -89,4 +98,6 @@ npm run db:types          # régénérer src/lib/database.types.ts
 - Prénom et téléphone des autres membres : vue `profils_publics` (la table `profils` ne montre que son propre profil).
 - `evenements` est en ajout seul : un déclencheur bloque update, delete et truncate pour tout le monde.
 - Après chaque migration : `npm run db:reset && npm run db:test && npm run db:types`.
-- Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`).
+- Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`, code SMS de test `123456`).
+- Fonctions réservées au système (`appliquer_tirage`, `preparer_relances`, `activer_abonnement`…) : `grant execute … to service_role` seulement.
+- Edge Functions (`supabase/functions`) : sans dépendance externe, accès à Supabase par `fetch` (`_shared/api.ts`).

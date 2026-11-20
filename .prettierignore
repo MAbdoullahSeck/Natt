@@ -5,3 +5,5 @@ coverage
 src/lib/database.types.ts
 docs
 *.md
+e2e/.dist
+e2e/captures

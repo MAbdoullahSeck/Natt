@@ -8,3 +8,5 @@ Application mobile de gestion de tontines au Sénégal : la gérante crée sa to
 - Architecture : [`docs/architecture.md`](docs/architecture.md)
 - Design system : [`docs/design-system.md`](docs/design-system.md)
 - Plan de développement : [`docs/plan.md`](docs/plan.md)
+- Décisions prises en cours de route : [`docs/decisions.md`](docs/decisions.md)
+- Mise en production : [`docs/deploiement.md`](docs/deploiement.md)

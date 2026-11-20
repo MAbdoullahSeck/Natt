@@ -7,6 +7,7 @@ import {
   ClavierNumerique,
   Ecran,
   EnTete,
+  EtatErreur,
   SaisieNombre,
   Texte,
 } from '@/components';
@@ -22,11 +23,18 @@ const MAXIMUM = 1_000_000;
 /** Montant de la pénalité de retard (0 = aucune), au pavé numérique. */
 export default function ReglagePenalite() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data, isLoading } = useTontine(id);
+  const { data, isLoading, error, refetch } = useTontine(id);
   const modifier = useModifierReglages(id);
   const [montant, setMontant] = useState<number | null>(null);
 
-  if (isLoading || !data) return <Chargement />;
+  if (isLoading) return <Chargement />;
+  if (error || !data)
+    return (
+      <Ecran>
+        <EnTete titre={t.titre} onRetour={() => router.back()} />
+        <EtatErreur erreur={error} onReessayer={refetch} />
+      </Ecran>
+    );
   const tt = data.tontine;
   const valeur = montant ?? tt.penalite_retard;
 

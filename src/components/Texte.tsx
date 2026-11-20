@@ -24,6 +24,7 @@ export function Texte({
         centre && { textAlign: 'center' },
         style,
       ]}
+      maxFontSizeMultiplier={1.5}
       {...props}
     />
   );
