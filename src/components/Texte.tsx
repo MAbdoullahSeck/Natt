@@ -1,6 +1,6 @@
 import { Text, type TextProps } from 'react-native';
 
-import { couleurs, typographie, type Couleur, type StyleTexte } from '@/theme';
+import { type Couleur, type StyleTexte, typographie, useCouleurs } from '@/theme';
 
 export type TexteProps = TextProps & {
   variante?: StyleTexte;
@@ -16,6 +16,7 @@ export function Texte({
   style,
   ...props
 }: TexteProps) {
+  const couleurs = useCouleurs();
   return (
     <Text
       style={[

@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { textes } from '@/i18n';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -15,6 +15,7 @@ type Props = {
 
 /** Cases du code à 6 chiffres (code SMS, code d'invitation). Saisie via ClavierNumerique. */
 export function CaseCode({ valeur, longueur = 6, erreur = false }: Props) {
+  const styles = useStyles();
   const chiffres = valeur.slice(0, longueur).split('');
   return (
     <View
@@ -40,7 +41,7 @@ export function CaseCode({ valeur, longueur = 6, erreur = false }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   rangee: { flexDirection: 'row', gap: espacements.s },
   case: {
     flex: 1,
@@ -54,4 +55,4 @@ const styles = StyleSheet.create({
   },
   active: { borderColor: couleurs.bordureChamp },
   erreur: { borderColor: couleurs.terracotta, backgroundColor: couleurs.terracottaPuce },
-});
+}));

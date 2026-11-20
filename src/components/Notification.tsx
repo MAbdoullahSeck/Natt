@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -17,6 +17,8 @@ type Props = {
 
 /** Élément de la liste des notifications — Figma « Notification » (6:546). */
 export function Notification({ icone: Icone, titre, texte, heure, confirmation }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <View style={styles.carte}>
       <View style={[styles.pastille, confirmation && styles.pastilleConfirmation]}>
@@ -39,7 +41,7 @@ export function Notification({ icone: Icone, titre, texte, heure, confirmation }
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     flexDirection: 'row',
     gap: espacements.m,
@@ -61,4 +63,4 @@ const styles = StyleSheet.create({
   textes: { flex: 1, gap: espacements.xs },
   haut: { flexDirection: 'row', gap: espacements.s },
   titre: { flex: 1 },
-});
+}));

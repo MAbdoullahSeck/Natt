@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { CircleCheck } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Lien, Texte } from '@/components';
 import { textes } from '@/i18n';
@@ -9,12 +9,14 @@ import { formatDate, formatMontant } from '@/lib/format';
 import { lienInvitation } from '@/lib/invitation';
 import { partagerWhatsApp } from '@/lib/partage';
 import { supabase } from '@/lib/supabase';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 const t = textes.creation.cree;
 
 /** Écran 11 — Tontine créée : code d'invitation, récapitulatif, partage WhatsApp. */
 export default function TontineCreee() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tontine-creee', id],
@@ -80,7 +82,7 @@ export default function TontineCreee() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   centre: { alignItems: 'center' },
   rond: {
     width: 96,
@@ -98,4 +100,4 @@ const styles = StyleSheet.create({
   },
   chiffres: { letterSpacing: 8 },
   recap: { gap: espacements.s },
-});
+}));

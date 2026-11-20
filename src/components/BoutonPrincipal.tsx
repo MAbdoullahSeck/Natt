@@ -1,7 +1,7 @@
 import { ChevronRight, type LucideIcon } from 'lucide-react-native';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable } from 'react-native';
 
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -22,6 +22,8 @@ export function BoutonPrincipal({
   icone: Icone = ChevronRight,
   testID,
 }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const couleurTexte = desactive ? 'texteSecondaire' : 'blanc';
   return (
     <Pressable
@@ -44,11 +46,11 @@ export function BoutonPrincipal({
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bouton: {
     minHeight: tailles.bouton,
     borderRadius: rayons.bouton,
-    backgroundColor: couleurs.terracotta,
+    backgroundColor: couleurs.fondAccent,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -57,4 +59,4 @@ const styles = StyleSheet.create({
   },
   desactive: { backgroundColor: couleurs.desactive },
   appuye: { opacity: 0.85 },
-});
+}));

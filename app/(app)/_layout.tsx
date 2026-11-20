@@ -4,10 +4,11 @@ import { useEffect } from 'react';
 import { codeInvitation, memoriserInvitation } from '@/lib/invitation';
 import { ecouterOuvertureNotifications, enregistrerPush } from '@/lib/notificationsPush';
 import { useSession } from '@/lib/session';
-import { couleurs } from '@/theme';
+import { useCouleurs } from '@/theme';
 
 /** Espace connecté : session et profil obligatoires. */
 export default function LayoutApp() {
+  const couleurs = useCouleurs();
   const { session, profil } = useSession();
   const profilId = profil?.id;
   const chemin = usePathname();

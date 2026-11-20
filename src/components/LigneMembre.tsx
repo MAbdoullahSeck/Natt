@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { StatutAffiche } from '@/domain/statuts';
 import { textes } from '@/i18n';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 import { PuceStatut } from './PuceStatut';
 import { Texte } from './Texte';
@@ -17,6 +17,7 @@ type Props = {
 
 /** Ligne de la liste des membres — Figma « Membre · Statut et validation » (6:226). */
 export function LigneMembre({ prenom, statut, onMarquerPaye, onPress }: Props) {
+  const styles = useStyles();
   const initiale = prenom.charAt(0).toUpperCase();
   return (
     <Pressable
@@ -49,7 +50,7 @@ export function LigneMembre({ prenom, statut, onMarquerPaye, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ligne: {
     minHeight: 72,
     flexDirection: 'row',
@@ -71,10 +72,10 @@ const styles = StyleSheet.create({
   marquer: {
     minHeight: 48,
     borderRadius: rayons.touche,
-    backgroundColor: couleurs.terracotta,
+    backgroundColor: couleurs.fondAccent,
     paddingHorizontal: espacements.l,
     alignItems: 'center',
     justifyContent: 'center',
   },
   appuye: { opacity: 0.85 },
-});
+}));

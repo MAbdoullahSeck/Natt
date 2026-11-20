@@ -1,9 +1,9 @@
 import { Bell, House, User, type LucideIcon } from 'lucide-react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { textes } from '@/i18n';
-import { couleurs, espacements, tailles } from '@/theme';
+import { creerStyles, espacements, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -19,6 +19,8 @@ type Props = { actif: Onglet; onChange: (onglet: Onglet) => void };
 
 /** Navigation du bas — Figma « Navigation · Accueil actif » (2:44). */
 export function NavigationBas({ actif, onChange }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { bottom } = useSafeAreaInsets();
   return (
     <View style={[styles.barre, { paddingBottom: Math.max(bottom, espacements.s) }]}>
@@ -52,7 +54,7 @@ export function NavigationBas({ actif, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   barre: {
     flexDirection: 'row',
     backgroundColor: couleurs.fond,
@@ -61,4 +63,4 @@ const styles = StyleSheet.create({
     paddingTop: espacements.m,
   },
   onglet: { flex: 1, minHeight: 56, alignItems: 'center', gap: espacements.xs },
-});
+}));

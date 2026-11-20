@@ -6,9 +6,10 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "natt",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "sn.natt.app"
+      "bundleIdentifier": "sn.natt.app",
+      "userInterfaceStyle": "automatic"
     },
     "android": {
       "package": "sn.natt.app",
@@ -20,9 +21,8 @@
       },
       "predictiveBackGestureEnabled": false,
       "permissions": [],
-      "blockedPermissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "userInterfaceStyle": "automatic"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

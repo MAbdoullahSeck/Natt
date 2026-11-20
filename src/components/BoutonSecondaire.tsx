@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react-native';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable } from 'react-native';
 
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -13,8 +13,10 @@ type Props = {
   testID?: string;
 };
 
-/** Bouton secondaire — Figma « Bouton secondaire » (2:7) : fond blanc, bordure #BDB8B1. */
+/** Bouton secondaire — Figma « Bouton secondaire » (2:7) : fond de l'écran, bordure `bordureBoutonSecondaire`. */
 export function BoutonSecondaire({ libelle, onPress, icone: Icone, desactive, testID }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <Pressable
       accessibilityRole="button"
@@ -36,7 +38,7 @@ export function BoutonSecondaire({ libelle, onPress, icone: Icone, desactive, te
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bouton: {
     minHeight: tailles.bouton,
     borderRadius: rayons.bouton,
@@ -51,4 +53,4 @@ const styles = StyleSheet.create({
   },
   appuye: { backgroundColor: couleurs.surface },
   desactive: { opacity: 0.5 },
-});
+}));

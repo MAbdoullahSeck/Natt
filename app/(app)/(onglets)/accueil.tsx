@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Grid3x3, Plus } from 'lucide-react-native';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -15,7 +15,7 @@ import {
 import { type LigneMesTontines, useMesTontines } from '@/data/tontines';
 import { statutAffiche, type StatutAffiche } from '@/domain/statuts';
 import { textes } from '@/i18n';
-import { couleurs, espacements } from '@/theme';
+import { creerStyles, espacements, useCouleurs } from '@/theme';
 
 const t = textes.accueil;
 
@@ -29,6 +29,8 @@ function statutCarte(l: LigneMesTontines): StatutAffiche {
 
 /** Écrans 05 et 05b — Accueil (liste ou vide). */
 export default function Accueil() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { data, isLoading, error, refetch, isRefetching } = useMesTontines();
 
   const actions = (
@@ -99,9 +101,9 @@ export default function Accueil() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ecran: { flex: 1, backgroundColor: couleurs.fond },
   contenu: { padding: espacements.marge, gap: espacements.l, flexGrow: 1 },
   actions: { gap: espacements.m, marginTop: espacements.s },
   vide: { gap: espacements.m, paddingVertical: espacements.xxl },
-});
+}));

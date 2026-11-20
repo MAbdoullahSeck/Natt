@@ -93,7 +93,7 @@ Mise en production (fournisseur SMS, secrets, Edge Functions, EAS) : voir `docs/
 ## Conventions de code (étape 0)
 
 - Écrans dans `app/` (expo-router), tout le reste dans `src/`. Alias d'import `@/` → `src/`.
-- Thème : `src/theme` (`couleurs`, `typographie`, `espacements`, `rayons`, `tailles`). Jamais de couleur ou de taille en dur dans un écran.
+- Thème : `src/theme` (palettes `clair` / `sombre`, `typographie`, `espacements`, `rayons`, `tailles`). Couleurs **toujours** via `useCouleurs()` ou `const useStyles = creerStyles((couleurs) => ({ … }))` puis `const styles = useStyles()` (mode sombre). Une règle ESLint interdit toute couleur hexadécimale en dur hors de `src/theme`. Fond plein sous un texte blanc : `fondAccent` (pas `terracotta`).
 - Textes : `src/i18n/fr.ts`, importés via `textes` depuis `@/i18n`.
 - Formats : `formatMontant`, `formatDate`, `formatMoisAnnee`, `formatHeure` dans `src/lib/format.ts`.
 - Composants de base : `src/components` (importer depuis `@/components`). Toujours utiliser `Texte` plutôt que `Text`.

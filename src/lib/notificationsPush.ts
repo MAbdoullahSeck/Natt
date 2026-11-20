@@ -4,7 +4,7 @@ import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { Linking, Platform } from 'react-native';
 
-import { couleurs } from '@/theme';
+import { palettes } from '@/theme';
 
 import { supabase } from './supabase';
 
@@ -39,7 +39,7 @@ export async function enregistrerPush(profilId: string): Promise<string | null> 
       name: 'Natt',
       // eslint-disable-next-line import/namespace -- exporté via « export * », mal résolu par eslint-plugin-import
       importance: Notifications.AndroidImportance.HIGH,
-      lightColor: couleurs.terracotta,
+      lightColor: palettes.clair.terracotta,
     });
   }
   let { status } = await Notifications.getPermissionsAsync();

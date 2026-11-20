@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
-import { couleurs, espacements, tailles } from '@/theme';
+import { creerStyles, espacements, tailles } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -13,6 +13,7 @@ type Props = {
 
 /** Ligne avec libellé et interrupteur (réglages des relances). */
 export function Interrupteur({ libelle, valeur, onChange, testID }: Props) {
+  const styles = useStyles();
   return (
     <Pressable
       accessibilityRole="switch"
@@ -32,7 +33,7 @@ export function Interrupteur({ libelle, valeur, onChange, testID }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ligne: {
     minHeight: tailles.bouton,
     flexDirection: 'row',
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: couleurs.desactive,
     padding: 3,
   },
-  pisteActive: { backgroundColor: couleurs.terracotta },
+  pisteActive: { backgroundColor: couleurs.fondAccent },
   pouce: { width: 26, height: 26, borderRadius: 13, backgroundColor: couleurs.blanc },
   pouceActif: { alignSelf: 'flex-end' },
-});
+}));

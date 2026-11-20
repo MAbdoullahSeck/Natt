@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronRight, FileText } from 'lucide-react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { Chargement, Ecran, EnTete, EtatErreur, Interrupteur, Texte } from '@/components';
 import { useModifierReglages } from '@/data/reglages';
@@ -8,12 +8,13 @@ import { useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
 import { formatMontant } from '@/lib/format';
-import { couleurs, espacements, tailles } from '@/theme';
+import { creerStyles, espacements, tailles, useCouleurs } from '@/theme';
 
 const t = textes.reglages;
 
 /** Écran 13b — Tontine · Réglages. */
 export default function Reglages() {
+  const styles = useStyles();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isLoading, error, refetch } = useTontine(id);
   const modifier = useModifierReglages(id);
@@ -84,6 +85,8 @@ function LigneReglage({
   valeur: string;
   onPress: () => void;
 }) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <Pressable onPress={onPress} style={styles.ligne} accessibilityRole="button">
       <FileText size={tailles.icone} color={couleurs.terracotta} strokeWidth={2} />
@@ -96,7 +99,7 @@ function LigneReglage({
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   section: { gap: espacements.s },
   ligne: {
     minHeight: 72,
@@ -107,4 +110,4 @@ const styles = StyleSheet.create({
     borderBottomColor: couleurs.separateur,
   },
   textes: { flex: 1, gap: espacements.xs },
-});
+}));

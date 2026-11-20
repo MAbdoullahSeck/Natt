@@ -1,19 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Camera, CircleCheck } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { BoutonPrincipal, BoutonSecondaire, Ecran, EnTete, Texte } from '@/components';
 import { prenomDe, useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { choisirEtEnvoyerCapture } from '@/lib/captures';
 import { messageErreur } from '@/lib/erreurs';
-import { couleurs, tailles } from '@/theme';
+import { creerStyles, tailles, useCouleurs } from '@/theme';
 
 const t = textes.paiement.envoye;
 
 /** Écran 18 — Paiement envoyé (capture facultative). */
 export default function PaiementEnvoye() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { id, cotisation } = useLocalSearchParams<{ id: string; cotisation: string }>();
   const { data } = useTontine(id);
   const gerante = data
@@ -59,7 +61,7 @@ export default function PaiementEnvoye() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   centre: { alignItems: 'center' },
   rond: {
     width: 96,
@@ -69,4 +71,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}));

@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { StatutAffiche } from '@/domain/statuts';
 import { formatMontant } from '@/lib/format';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 import { PuceStatut } from './PuceStatut';
 import { Texte } from './Texte';
@@ -20,6 +20,7 @@ type Props = {
 
 /** Carte d'une tontine sur l'accueil (écran 05). */
 export function CarteTontine({ nom, montant, statut, details, bienPrevu, onPress }: Props) {
+  const styles = useStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -39,7 +40,7 @@ export function CarteTontine({ nom, montant, statut, details, bienPrevu, onPress
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     borderRadius: rayons.carteGrande,
     borderWidth: 1,
@@ -51,4 +52,4 @@ const styles = StyleSheet.create({
   appuye: { backgroundColor: couleurs.surface },
   haut: { flexDirection: 'row', alignItems: 'flex-start', gap: espacements.m },
   nom: { flex: 1 },
-});
+}));

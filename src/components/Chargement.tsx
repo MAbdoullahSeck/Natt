@@ -1,9 +1,10 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { couleurs } from '@/theme';
+import { useCouleurs } from '@/theme';
 
 /** Indicateur de chargement centré. */
 export function Chargement() {
+  const couleurs = useCouleurs();
   return (
     <View style={styles.centre} accessibilityRole="progressbar">
       <ActivityIndicator size="large" color={couleurs.terracotta} />

@@ -1,9 +1,10 @@
 import { Stack } from 'expo-router';
 
 import { BrouillonProvider } from '@/lib/brouillonCreation';
-import { couleurs } from '@/theme';
+import { useCouleurs } from '@/theme';
 
 export default function LayoutCreation() {
+  const couleurs = useCouleurs();
   return (
     <BrouillonProvider>
       <Stack

@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FileDown } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -21,12 +21,13 @@ import { partagerPdf } from '@/features/rapport/pdf';
 import { textes } from '@/i18n';
 import { formatMoisAnnee, formatMontant } from '@/lib/format';
 import { partagerWhatsApp } from '@/lib/partage';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.rapport;
 
 /** Écran 19b — Rapport du cycle, partageable sur WhatsApp. */
 export default function RapportDuCycle() {
+  const styles = useStyles();
   const { id } = useLocalSearchParams<{ id: string }>();
   const tontine = useTontine(id);
   const evenements = useEvenementsPenalites(id);
@@ -126,11 +127,11 @@ export default function RapportDuCycle() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     backgroundColor: couleurs.terracottaClair,
     borderRadius: rayons.carteGrande,
     padding: espacements.xl,
     gap: espacements.s,
   },
-});
+}));

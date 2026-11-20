@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Crown, Gem, Info, Star } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { CarteInfo, Ecran, EnTete, OptionSelection, PrixAbonnement, Texte } from '@/components';
 import { usePalierActif } from '@/data/abonnement';
@@ -12,7 +12,7 @@ import { textes } from '@/i18n';
 import { formatDate } from '@/lib/format';
 import { useProfil } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 const t = textes.abonnement;
 const ICONES = { starter: Star, pro: Gem, illimite: Crown };
@@ -22,6 +22,8 @@ const ICONES = { starter: Star, pro: Gem, illimite: Crown };
  * (règles du Play Store) : le lien PayTech est envoyé hors de l'app (notification push).
  */
 export default function Abonnement() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const params = useLocalSearchParams<{
     palier?: Palier;
     paiement?: 'succes' | 'annule' | 'erreur';
@@ -134,7 +136,7 @@ export default function Abonnement() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   statut: {
     backgroundColor: couleurs.terracottaClair,
     borderRadius: rayons.carteGrande,
@@ -152,4 +154,4 @@ const styles = StyleSheet.create({
     borderColor: couleurs.bordure,
   },
   offreActuelle: { borderColor: couleurs.terracotta, backgroundColor: couleurs.terracottaClair },
-});
+}));

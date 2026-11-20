@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   ApercuCapture,
@@ -15,12 +15,13 @@ import { prenomDe, useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
 import { formatDate, formatMontant } from '@/lib/format';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.confirmer;
 
 /** Écran 14 — Membre · Marquer payé. */
 export default function ConfirmerPaiement() {
+  const styles = useStyles();
   const { id, cotisation: cotisationId } = useLocalSearchParams<{
     id: string;
     cotisation: string;
@@ -75,11 +76,11 @@ export default function ConfirmerPaiement() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     backgroundColor: couleurs.surface,
     borderRadius: rayons.carteGrande,
     padding: espacements.xl,
     gap: espacements.s,
   },
-});
+}));

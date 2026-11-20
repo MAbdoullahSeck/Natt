@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-import { couleurs, espacements } from '@/theme';
+import { creerStyles, espacements } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -8,6 +8,7 @@ type Props = { libelle: string; valeur: string };
 
 /** Ligne « libellé … valeur » d'un récapitulatif (aperçu, rapport). */
 export function LigneInfo({ libelle, valeur }: Props) {
+  const styles = useStyles();
   return (
     <View style={styles.ligne}>
       <Texte couleur="texteSecondaire" style={styles.libelle}>
@@ -20,7 +21,7 @@ export function LigneInfo({ libelle, valeur }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ligne: {
     flexDirection: 'row',
     gap: espacements.m,
@@ -30,4 +31,4 @@ const styles = StyleSheet.create({
   },
   libelle: { flex: 1 },
   valeur: { flexShrink: 1, textAlign: 'right' },
-});
+}));

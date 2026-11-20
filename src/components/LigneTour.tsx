@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
-import { couleurs, espacements } from '@/theme';
+import { creerStyles, espacements } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -16,6 +16,7 @@ type Props = {
 
 /** Ligne de l'ordre des tours : numéro → membre → mois. */
 export function LigneTour({ numero, prenom, periode, onLongPress, mention }: Props) {
+  const styles = useStyles();
   return (
     <Pressable
       onLongPress={onLongPress}
@@ -41,7 +42,7 @@ export function LigneTour({ numero, prenom, periode, onLongPress, mention }: Pro
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ligne: {
     minHeight: 64,
     flexDirection: 'row',
@@ -60,4 +61,4 @@ const styles = StyleSheet.create({
   },
   prenom: { flex: 1 },
   droite: { alignItems: 'flex-end' },
-});
+}));

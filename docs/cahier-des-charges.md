@@ -74,7 +74,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | 21 | Abonnement · Annuel | `6:296` | Même écran en annuel : prix plein barré puis prix réel (~~12 000 F~~ 10 000 F, ~~30 000 F~~ 25 000 F, ~~60 000 F~~ 50 000 F) et mention « 2 mois offerts », partout où un prix annuel apparaît. |
 | — | Pages web de paiement | — | Pages simples (hors de l'app) de retour de PayTech : « Paiement reçu », « Paiement annulé », « Lien plus valable », en français, aux couleurs de Natt. |
 | 22 | Notifications | `6:303` | Liste par jour : rappels de paiement, paiements reçus, tours à venir, échanges, tirage. |
-| 23 | Profil | `13:523` | Prénom, numéro. Mon abonnement (palier + prix → écrans 20/21), Mes données, Langue, Aide sur WhatsApp, Se déconnecter. |
+| 23 | Profil | `13:523` | Prénom, numéro. Mon abonnement (statut → écrans 20/21), Mes données, Langue, **Apparence** (Automatique / Clair / Sombre, mémorisée ; par défaut, l'app suit le réglage du téléphone), Aide sur WhatsApp, Se déconnecter. |
 
 ---
 

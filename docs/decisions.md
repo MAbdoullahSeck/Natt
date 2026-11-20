@@ -192,3 +192,12 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Argent déjà payé pour des tours à venir** : la cotisation est supprimée et le montant est noté dans l'événement (`a_rembourser`) ; la gérante le rend en dehors de Natt (Natt ne détient jamais l'argent). Les cotisations des tours déjà versés restent dans l'historique.
 - **Interface** : lien « Retirer [prénom] » en bas de l'historique du membre (13c, action secondaire), puis écran de confirmation avec, pendant le cycle, les deux choix et la cagnotte recalculée. Si le retrait est impossible, l'écran explique pourquoi, sans bouton.
 - **Accord** : les textes de retrait sont au féminin (« retirée », « elle »), comme le reste de l'app destinée en majorité à des femmes ; à revoir avec le wolof et les prénoms masculins (Moussa).
+
+## Point 7 — Mode sombre
+
+- **Mécanique** : `ThemeProvider` (préférence Automatique / Clair / Sombre dans AsyncStorage, `useColorScheme` du téléphone), `useCouleurs()` et `creerStyles((couleurs) => …)` (styles recalculés une fois par palette). Les 47 fichiers qui utilisaient les couleurs ont été convertis par script ; une règle ESLint interdit désormais toute couleur hexadécimale en dur hors de `src/theme`.
+- **Nouveau jeton `fondAccent`** : fond des éléments pleins sous un texte ou une icône blanche (bouton principal, « Marquer payé », case cochée, interrupteur actif). En sombre, le terracotta des textes est éclairci (`#E8896A`) mais le fond des boutons reste foncé (`#B5532F`) pour garder le texte blanc lisible.
+- **Contraste** : toute la palette sombre atteint WCAG AA (≥ 4,5:1), statuts compris (test automatique). **La palette claire du Figma n'atteint pas AA pour deux paires** : « En retard » (terracotta sur puce, 3,67:1) et terracotta sur blanc (4,17:1, liens). Le Figma faisant foi, ces couleurs n'ont pas été changées ; proposition à valider : `#B24E2C` pour le texte terracotta.
+- **`userInterfaceStyle: automatic`** dans `app.json` (nécessaire pour que le téléphone transmette son mode).
+- **Non couverts par le mode sombre** : le sélecteur de date natif (il suit le téléphone, pas le choix fait dans Natt) ; le PDF reste en clair (voulu) ; les pages web suivent le réglage du navigateur.
+- **Vérifié** : captures web en sombre de l'inscription (pavé numérique), de l'accueil, de la vue gérante (puces de statut), des notifications et du profil ; pages web d'invitation et de paiement en clair et en sombre. **Non vérifié sur téléphone.**

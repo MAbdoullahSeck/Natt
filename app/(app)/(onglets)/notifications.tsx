@@ -13,7 +13,7 @@ import {
   Wallet2,
 } from 'lucide-react-native';
 import { useCallback } from 'react';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Chargement, EnTete, EtatErreur, Notification, Texte } from '@/components';
@@ -22,7 +22,7 @@ import { marquerNotificationsLues, useNotifications } from '@/data/reglages';
 import { grouperParJour, jourRelatif } from '@/domain/notifications';
 import { textes } from '@/i18n';
 import { formatDate, formatHeure } from '@/lib/format';
-import { couleurs, espacements } from '@/theme';
+import { creerStyles, espacements, useCouleurs } from '@/theme';
 
 const t = textes.notifications;
 
@@ -67,6 +67,8 @@ function ouvrir(n: Notif) {
 
 /** Écran 22 — Notifications, par jour. */
 export default function Notifications() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { data, isLoading, error, refetch, isRefetching } = useNotifications();
   const client = useQueryClient();
 
@@ -140,8 +142,8 @@ export default function Notifications() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ecran: { flex: 1, backgroundColor: couleurs.fond },
   contenu: { padding: espacements.marge, gap: espacements.xl, flexGrow: 1 },
   groupe: { gap: espacements.m },
-});
+}));

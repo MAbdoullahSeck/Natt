@@ -1,6 +1,6 @@
-import { StyleSheet, TextInput, type TextInputProps, View } from 'react-native';
+import { TextInput, type TextInputProps, View } from 'react-native';
 
-import { couleurs, espacements, polices, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, polices, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -16,6 +16,8 @@ type Props = Omit<TextInputProps, 'style'> & {
 
 /** Champ de saisie — hauteur 64, bordure `bordureChamp`, rayon 16. */
 export function ChampSaisie({ prefixe, lectureSeule, ...props }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <View style={styles.champ}>
       {prefixe ? <Texte variante="sousTitre">{prefixe}</Texte> : null}
@@ -31,7 +33,7 @@ export function ChampSaisie({ prefixe, lectureSeule, ...props }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   champ: {
     minHeight: tailles.champ,
     borderRadius: rayons.champ,
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
     color: couleurs.texte,
     paddingVertical: espacements.m,
   },
-});
+}));

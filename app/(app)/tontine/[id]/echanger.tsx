@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeftRight, User } from 'lucide-react-native';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -18,12 +18,13 @@ import { partenairesPossibles } from '@/domain/tours';
 import { textes } from '@/i18n';
 import { dateDuTour } from '@/lib/datesTour';
 import { messageErreur } from '@/lib/erreurs';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.tours.echanger;
 
 /** Écran 15b — Tours · Échanger (tours non versés uniquement). */
 export default function Echanger() {
+  const styles = useStyles();
   const { id, membre } = useLocalSearchParams<{ id: string; membre: string }>();
   const { data, isLoading, error, refetch } = useTontine(id);
   const echanger = useEchangerTours(id);
@@ -93,11 +94,11 @@ export default function Echanger() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     backgroundColor: couleurs.terracottaClair,
     borderRadius: rayons.carte,
     padding: espacements.l,
     gap: espacements.xs,
   },
-});
+}));

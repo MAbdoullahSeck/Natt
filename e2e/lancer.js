@@ -32,6 +32,7 @@ const SCENARIOS = [
   ['abonnement'],
   ['invitation'],
   ['retrait'],
+  ['sombre', null, { sombre: true }],
   ['profil'],
 ];
 
@@ -72,7 +73,10 @@ async function main() {
       if (!options.pasDeReset) execSync('npx supabase db reset', { cwd: RACINE, stdio: 'ignore' });
       if (preparation)
         execSync(`psql ${DB} -q -f ${path.join(__dirname, 'preparations', preparation)}`, { stdio: 'ignore' });
-      const page = await navigateur.newPage({ viewport: { width: 390, height: 844 } });
+      const page = await navigateur.newPage({
+        viewport: { width: 390, height: 844 },
+        colorScheme: options.sombre ? 'dark' : 'light',
+      });
       const erreurs = [];
       page.on('pageerror', (e) => erreurs.push(e.message));
       try {

@@ -7,8 +7,9 @@ import {
   LogOut,
   type LucideIcon,
   MessageCircle,
+  SunMoon,
 } from 'lucide-react-native';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, View } from 'react-native';
 
 import { Ecran, EnTete, Texte } from '@/components';
 import { config } from '@/config';
@@ -17,14 +18,17 @@ import { formatTelephoneComplet } from '@/domain/telephone';
 import { textes } from '@/i18n';
 import { formatDate } from '@/lib/format';
 import { useProfil, useSession } from '@/lib/session';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs, useTheme } from '@/theme';
 
 const t = textes.profilEcran;
 
 /** Écran 23 — Profil. */
 export default function Profil() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const profil = useProfil();
   const { deconnecter } = useSession();
+  const { apparence } = useTheme();
   const { palier, data: abonnements } = usePalierActif();
   const actif = abonnements?.find((a) => a.statut === 'actif' && a.palier === palier);
   const abonnement =
@@ -60,6 +64,13 @@ export default function Profil() {
         />
         <Ligne icone={Database} libelle={t.donnees} onPress={() => router.push('/mes-donnees')} />
         <Ligne icone={Languages} libelle={t.langue} valeur={t.francais} />
+        <Ligne
+          icone={SunMoon}
+          libelle={t.apparence}
+          valeur={textes.apparence[apparence]}
+          onPress={() => router.push('/apparence')}
+          testID="ligne-apparence"
+        />
         {config.numeroAideWhatsApp ? (
           <Ligne
             icone={MessageCircle}
@@ -87,6 +98,8 @@ type PropsLigne = {
 };
 
 function Ligne({ icone: Icone, libelle, valeur, onPress, testID }: PropsLigne) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <Pressable
       onPress={onPress}
@@ -107,7 +120,7 @@ function Ligne({ icone: Icone, libelle, valeur, onPress, testID }: PropsLigne) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -127,4 +140,4 @@ const styles = StyleSheet.create({
     borderBottomColor: couleurs.separateur,
   },
   textes: { flex: 1, gap: espacements.xs },
-});
+}));

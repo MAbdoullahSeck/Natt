@@ -7,5 +7,6 @@ module.exports = {
     '^lucide-react-native$':
       '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/.expo/'],
+  setupFiles: ['<rootDir>/jest.setup.js'],
+  testPathIgnorePatterns: ['/node_modules/', '/.expo/', '/e2e/'],
 };

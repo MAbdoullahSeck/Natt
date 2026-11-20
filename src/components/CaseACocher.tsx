@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -14,6 +14,8 @@ type Props = {
 
 /** Case à cocher (consentement, acceptation du règlement). Jamais cochée par défaut. */
 export function CaseACocher({ libelle, coche, onChange, testID }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <Pressable
       accessibilityRole="checkbox"
@@ -32,7 +34,7 @@ export function CaseACocher({ libelle, coche, onChange, testID }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ligne: {
     minHeight: tailles.bouton,
     flexDirection: 'row',
@@ -48,6 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cochee: { backgroundColor: couleurs.terracotta, borderColor: couleurs.terracotta },
+  cochee: { backgroundColor: couleurs.fondAccent, borderColor: couleurs.fondAccent },
   libelle: { flex: 1 },
-});
+}));

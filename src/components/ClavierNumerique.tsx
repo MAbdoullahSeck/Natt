@@ -1,8 +1,8 @@
 import { Delete } from 'lucide-react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { textes } from '@/i18n';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -19,6 +19,8 @@ const RANGEES = [
 
 /** Pavé numérique intégré — Figma « Clavier numérique » (2:13). */
 export function ClavierNumerique({ onChiffre, onEffacer }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <View style={styles.clavier}>
       {RANGEES.map((rangee) => (
@@ -46,6 +48,7 @@ export function ClavierNumerique({ onChiffre, onEffacer }: Props) {
 }
 
 function Touche({ chiffre, onPress }: { chiffre: string; onPress: () => void }) {
+  const styles = useStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -59,7 +62,7 @@ function Touche({ chiffre, onPress }: { chiffre: string; onPress: () => void }) 
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   clavier: { gap: espacements.s },
   rangee: { flexDirection: 'row', gap: espacements.m },
   touche: {
@@ -72,4 +75,4 @@ const styles = StyleSheet.create({
   },
   vide: { flex: 1, height: tailles.touche },
   appuye: { backgroundColor: couleurs.desactive },
-});
+}));

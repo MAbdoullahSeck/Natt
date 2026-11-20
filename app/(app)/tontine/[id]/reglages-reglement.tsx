@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { Plus, X } from 'lucide-react-native';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -17,12 +17,14 @@ import { useModifierReglement } from '@/data/reglages';
 import { useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 const t = textes.reglages.reglementEcran;
 
 /** Règlement : lignes générées + règles ajoutées par la gérante (R1) ; nouvelle version (R2). */
 export default function ReglageReglement() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isLoading, error, refetch } = useTontine(id);
   const modifier = useModifierReglement(id);
@@ -107,7 +109,7 @@ export default function ReglageReglement() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bloc: {
     gap: espacements.s,
     padding: espacements.l,
@@ -116,4 +118,4 @@ const styles = StyleSheet.create({
   },
   ligneLibre: { flexDirection: 'row', alignItems: 'center', gap: espacements.m },
   flex: { flex: 1 },
-});
+}));

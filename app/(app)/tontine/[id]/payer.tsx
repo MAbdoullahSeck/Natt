@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Info, Smartphone } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
-import { AppState, StyleSheet, View } from 'react-native';
+import { AppState, View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -23,12 +23,13 @@ import { messageErreur } from '@/lib/erreurs';
 import { formatMontant } from '@/lib/format';
 import { type Moyen, MOYENS, numeroPourPaiement, ouvrirPaiement } from '@/lib/paiementMobile';
 import { supabase } from '@/lib/supabase';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.paiement;
 
 /** Écran 17 — Paiement · Choisir. L'argent va directement du membre à la gérante. */
 export default function Payer() {
+  const styles = useStyles();
   const { id, cotisation } = useLocalSearchParams<{ id: string; cotisation: string }>();
   const { data, isLoading, error, refetch } = useTontine(id);
   const client = useQueryClient();
@@ -137,7 +138,7 @@ export default function Payer() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     backgroundColor: couleurs.terracottaClair,
     borderRadius: rayons.carteGrande,
@@ -145,4 +146,4 @@ const styles = StyleSheet.create({
     gap: espacements.s,
   },
   centre: { alignItems: 'center' },
-});
+}));

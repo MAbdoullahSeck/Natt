@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { couleurs, espacements } from '@/theme';
+import { creerStyles, espacements } from '@/theme';
 
 type Props = {
   children: ReactNode;
@@ -16,6 +16,7 @@ type Props = {
 
 /** Gabarit d'écran : marges de 24, fond blanc, zone d'action en bas. */
 export function Ecran({ children, pied, defilement = true, avecOnglets = false }: Props) {
+  const styles = useStyles();
   const contenu = defilement ? (
     <ScrollView
       contentContainerStyle={styles.contenu}
@@ -40,7 +41,7 @@ export function Ecran({ children, pied, defilement = true, avecOnglets = false }
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   ecran: { flex: 1, backgroundColor: couleurs.fond },
   contenu: { padding: espacements.marge, gap: espacements.xl, flexGrow: 1 },
   fixe: { flex: 1 },
@@ -50,4 +51,4 @@ const styles = StyleSheet.create({
     paddingTop: espacements.s,
     gap: espacements.m,
   },
-});
+}));

@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { Lien, Texte } from '@/components';
 import { useAnnulerPenalite, useEvenementsPenalites } from '@/data/reglages';
@@ -6,7 +6,7 @@ import { penalitesDuMembre, totalPenalites } from '@/domain/notifications';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
 import { formatMontant } from '@/lib/format';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.penalites;
 
@@ -14,6 +14,7 @@ type Props = { tontineId: string; membreId: string; gerante: boolean };
 
 /** P5 : pénalités d'un membre, affichées au membre et à la gérante (qui peut les annuler). */
 export function Penalites({ tontineId, membreId, gerante }: Props) {
+  const styles = useStyles();
   const { data } = useEvenementsPenalites(tontineId);
   const annuler = useAnnulerPenalite(tontineId);
   const penalites = penalitesDuMembre(data ?? [], membreId);
@@ -44,7 +45,7 @@ export function Penalites({ tontineId, membreId, gerante }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bloc: {
     gap: espacements.s,
     padding: espacements.l,
@@ -53,4 +54,4 @@ const styles = StyleSheet.create({
   },
   ligne: { flexDirection: 'row', alignItems: 'center', gap: espacements.m, minHeight: 48 },
   flex: { flex: 1 },
-});
+}));

@@ -1,18 +1,19 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { BoutonPrincipal, CaseACocher, Ecran, EnTete, Texte } from '@/components';
 import { useAccepterReglement } from '@/data/reglages';
 import type { DonneesTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.reglementAccepter;
 
 /** R2 : nouvelle version du règlement à accepter à l'ouverture de la tontine. */
 export function AccepterReglement({ donnees }: { donnees: DonneesTontine }) {
+  const styles = useStyles();
   const [accepte, setAccepte] = useState(false);
   const accepter = useAccepterReglement(donnees.tontine.id);
   const reglement = donnees.reglement!;
@@ -40,11 +41,11 @@ export function AccepterReglement({ donnees }: { donnees: DonneesTontine }) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bloc: {
     gap: espacements.s,
     padding: espacements.l,
     borderRadius: rayons.carte,
     backgroundColor: couleurs.terracottaClair,
   },
-});
+}));

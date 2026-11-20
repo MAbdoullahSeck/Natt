@@ -1,11 +1,11 @@
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { CalendarDays } from 'lucide-react-native';
 import { useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { textes } from '@/i18n';
 import { formatDate } from '@/lib/format';
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { BoutonSecondaire } from './BoutonSecondaire';
 import { Texte } from './Texte';
@@ -19,6 +19,8 @@ type Props = {
 
 /** Date en gros + bouton « Changer la date » (sélecteur natif du téléphone). */
 export function ChoixDate({ valeur, onChange, minimum, libelleBouton }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const [ouvert, setOuvert] = useState(false);
 
   function ouvrir() {
@@ -64,7 +66,7 @@ export function ChoixDate({ valeur, onChange, minimum, libelleBouton }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bloc: { gap: espacements.m },
   carte: {
     flexDirection: 'row',
@@ -74,4 +76,4 @@ const styles = StyleSheet.create({
     borderRadius: rayons.carte,
     backgroundColor: couleurs.surface,
   },
-});
+}));

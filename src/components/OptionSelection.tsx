@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react-native';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
-import { couleurs, espacements, rayons, tailles } from '@/theme';
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -23,6 +23,8 @@ export function OptionSelection({
   onPress,
   testID,
 }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   return (
     <Pressable
       accessibilityRole="radio"
@@ -49,7 +51,7 @@ export function OptionSelection({
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   option: {
     minHeight: 80,
     borderRadius: rayons.carte,
@@ -74,4 +76,4 @@ const styles = StyleSheet.create({
   },
   rondSelectionne: { borderColor: couleurs.terracotta },
   point: { width: 12, height: 12, borderRadius: 6, backgroundColor: couleurs.terracotta },
-});
+}));

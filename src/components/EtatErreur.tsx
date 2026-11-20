@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
-import { couleurs, espacements, tailles } from '@/theme';
+import { espacements, tailles, useCouleurs } from '@/theme';
 
 import { BoutonSecondaire } from './BoutonSecondaire';
 import { Texte } from './Texte';
@@ -12,6 +12,7 @@ type Props = { erreur: unknown; onReessayer?: () => void };
 
 /** Erreur de chargement (souvent le réseau) avec « Réessayer ». */
 export function EtatErreur({ erreur, onReessayer }: Props) {
+  const couleurs = useCouleurs();
   return (
     <View style={styles.bloc}>
       <WifiOff size={tailles.icone * 2} color={couleurs.texteSecondaire} strokeWidth={2} />

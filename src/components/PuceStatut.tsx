@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import type { StatutAffiche } from '@/domain/statuts';
 import { textes } from '@/i18n';
-import { couleurs, espacements, rayons, type Couleur } from '@/theme';
+import { type Couleur, espacements, rayons, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -14,6 +14,7 @@ const APPARENCE: Record<StatutAffiche, { fond: Couleur; texte: Couleur; libelle:
 
 /** Statut toujours en couleur + mot (CLAUDE.md, règle 3). */
 export function PuceStatut({ statut }: { statut: StatutAffiche }) {
+  const couleurs = useCouleurs();
   const a = APPARENCE[statut];
   return (
     <View style={[styles.puce, { backgroundColor: couleurs[a.fond] }]} testID={`puce-${statut}`}>

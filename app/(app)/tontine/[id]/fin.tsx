@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FileBarChart, PartyPopper } from 'lucide-react-native';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -16,12 +16,14 @@ import { useTontine } from '@/data/tontine';
 import { textes } from '@/i18n';
 import { formatMontant } from '@/lib/format';
 import { supabase } from '@/lib/supabase';
-import { couleurs, tailles } from '@/theme';
+import { creerStyles, tailles, useCouleurs } from '@/theme';
 
 const t = textes.finCycle;
 
 /** Écran 19 — Fin de cycle (gérante). */
 export default function FinDeCycle() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isLoading, error, refetch } = useTontine(id);
   const suivant = useQuery({
@@ -85,7 +87,7 @@ export default function FinDeCycle() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   centre: { alignItems: 'center' },
   rond: {
     width: 96,
@@ -95,4 +97,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}));

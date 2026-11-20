@@ -73,4 +73,4 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] 4. Export du rapport du cycle en PDF.
 - [x] 5. Rejoindre une tontine avec un lien d'invitation.
 - [x] 6. Retirer un membre (gérante).
-- [ ] 7. Mode sombre.
+- [x] 7. Mode sombre.

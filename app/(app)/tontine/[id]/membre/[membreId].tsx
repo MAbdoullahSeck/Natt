@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Lien, Texte } from '@/components';
 import { useRelancer } from '@/data/reglages';
@@ -11,12 +11,14 @@ import { bilanMembre } from '@/domain/tontine';
 import { libelleEvenement } from '@/features/tontine/evenements';
 import { textes } from '@/i18n';
 import { formatDate, formatHeure } from '@/lib/format';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons, useCouleurs } from '@/theme';
 
 const t = textes.historique;
 
 /** Écran 13c — Membre · Historique (bilan + événements horodatés). */
 export default function HistoriqueMembre() {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
   const { id, membreId } = useLocalSearchParams<{ id: string; membreId: string }>();
   const tontine = useTontine(id);
   const evenements = useEvenementsMembre(id, membreId);
@@ -93,7 +95,7 @@ export default function HistoriqueMembre() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   bilan: { flexDirection: 'row', gap: espacements.m },
   case: { flex: 1, borderRadius: rayons.carte, padding: espacements.l },
   ligne: {
@@ -102,4 +104,4 @@ const styles = StyleSheet.create({
     borderBottomColor: couleurs.separateur,
     gap: espacements.xs,
   },
-});
+}));

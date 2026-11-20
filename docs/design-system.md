@@ -21,6 +21,30 @@ Source : page « Natt · Composants » du fichier Figma. En cas d'écart, Figma 
 | `separateur` | `#E8E5DF` | Lignes de liste, étapes non atteintes |
 | `desactive` | `#E5E2DD` | Bouton principal désactivé |
 
+### Palette sombre (mode sombre)
+
+L'app suit le réglage du téléphone par défaut ; Profil → Apparence permet de choisir Automatique / Clair / Sombre (choix mémorisé). Mêmes jetons que la palette claire :
+
+| Jeton | Sombre | Remarque |
+|---|---|---|
+| `fond` | `#121110` | |
+| `surface` | `#1F1D1B` | Touches du pavé, cartes grises |
+| `texte` | `#F2EFEA` | |
+| `texteSecondaire` | `#B5AFA7` | Statut « En attente » |
+| `terracotta` | `#E8896A` | Texte, liens, icônes, « En retard » (éclairci) |
+| `fondAccent` | `#B5532F` | Fond des boutons principaux (texte blanc) — en clair : `#C65D3B` |
+| `terracottaClair` | `#2A201B` | Cartes d'information |
+| `terracottaPuce` | `#3D241B` | Puce « En retard » |
+| `vert` | `#6BCB9B` | « Payé » (éclairci) |
+| `vertPuce` | `#17332A` | Puce « Payé » |
+| `grisPuce` | `#2E2B28` | Puce « En attente » |
+| `bordure` / `bordureBoutonSecondaire` / `bordureChamp` | `#3A3633` / `#5A5550` / `#7A746D` | |
+| `separateur` / `desactive` | `#2E2B28` / `#2E2B28` | |
+
+Contrastes (WCAG 2.1, vérifiés par `src/theme/contraste.test.ts`) : en sombre, tous les statuts et textes sont ≥ 4,5:1 (AA). En clair (couleurs du Figma), deux écarts restent à arbitrer : « En retard » (terracotta sur sa puce) 3,67:1 et terracotta sur blanc 4,17:1 ; proposition : `#B24E2C` pour le texte terracotta (4,59:1 sur la puce, 5,23:1 sur blanc).
+
+Le PDF du rapport reste toujours en clair. Les pages web (paiement, invitation) suivent `prefers-color-scheme`.
+
 ## Typographie (Nunito, interligne 125 %)
 
 | Style | Taille | Graisse | Usage |

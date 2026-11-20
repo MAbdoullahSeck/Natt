@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { SessionProvider, useSession } from '@/lib/session';
-import { couleurs } from '@/theme';
+import { ThemeProvider, useCouleurs, useTheme } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,24 +25,30 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={clientRequetes}>
-        <SessionProvider>
-          <StatusBar style="dark" />
-          <Navigation />
-        </SessionProvider>
+        <ThemeProvider>
+          <SessionProvider>
+            <Navigation />
+          </SessionProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 }
 
 function Navigation() {
+  const couleurs = useCouleurs();
+  const { schema } = useTheme();
   const { chargement } = useSession();
   useEffect(() => {
     if (!chargement) SplashScreen.hideAsync();
   }, [chargement]);
   if (chargement) return null;
   return (
-    <Stack
-      screenOptions={{ headerShown: false, contentStyle: { backgroundColor: couleurs.fond } }}
-    />
+    <>
+      <StatusBar style={schema === 'sombre' ? 'light' : 'dark'} />
+      <Stack
+        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: couleurs.fond } }}
+      />
+    </>
   );
 }

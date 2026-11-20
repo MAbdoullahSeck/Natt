@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { Phone } from 'lucide-react-native';
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -19,7 +19,7 @@ import { prochainPaiement, tourDuMembre, versCotisation } from '@/domain/tontine
 import { formatTelephoneComplet } from '@/domain/telephone';
 import { textes } from '@/i18n';
 import { formatDate, formatMoisAnnee, formatMontant } from '@/lib/format';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.tontine.membre;
 
@@ -27,6 +27,7 @@ type Props = { donnees: DonneesTontine; complement?: ReactNode };
 
 /** Écran 16 — Tontine · Membre. */
 export function VueMembre({ donnees, complement }: Props) {
+  const styles = useStyles();
   const { tontine, membres, tours, cotisations, monMembre } = donnees;
   const gerante = membres.find((m) => m.profil_id === tontine.gerante_id);
   const prochain = monMembre ? prochainPaiement(tours, cotisations, monMembre.id) : null;
@@ -91,11 +92,11 @@ export function VueMembre({ donnees, complement }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   carte: {
     backgroundColor: couleurs.terracottaClair,
     borderRadius: rayons.carteGrande,
     padding: espacements.xl,
     gap: espacements.s,
   },
-});
+}));

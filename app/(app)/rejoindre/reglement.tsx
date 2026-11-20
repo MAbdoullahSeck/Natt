@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import {
   BoutonPrincipal,
@@ -21,12 +21,13 @@ import { textes } from '@/i18n';
 import { codeErreur, messageErreur } from '@/lib/erreurs';
 import { formatDate, formatMontant } from '@/lib/format';
 import { supabase } from '@/lib/supabase';
-import { couleurs, espacements, rayons } from '@/theme';
+import { creerStyles, espacements, rayons } from '@/theme';
 
 const t = textes.rejoindre.reglement;
 
 /** Écran 12c — aperçu + règlement ; acceptation obligatoire avant de rejoindre. */
 export default function ReglementRejoindre() {
+  const styles = useStyles();
   const { code = '' } = useLocalSearchParams<{ code: string }>();
   const client = useQueryClient();
   const [accepte, setAccepte] = useState(false);
@@ -115,11 +116,11 @@ export default function ReglementRejoindre() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = creerStyles((couleurs) => ({
   reglement: {
     gap: espacements.s,
     padding: espacements.l,
     borderRadius: rayons.carte,
     backgroundColor: couleurs.terracottaClair,
   },
-});
+}));

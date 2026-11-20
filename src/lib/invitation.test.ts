@@ -7,10 +7,6 @@ import {
 
 import { codeInvitation, lienInvitation } from './invitation';
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- mock officiel du paquet
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
-);
 jest.mock('./supabase', () => ({ supabaseUrl: 'https://projet.supabase.co' }));
 
 describe('lien d’invitation', () => {

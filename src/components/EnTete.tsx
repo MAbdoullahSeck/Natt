@@ -2,7 +2,7 @@ import { ChevronLeft } from 'lucide-react-native';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { textes } from '@/i18n';
-import { couleurs, espacements, tailles } from '@/theme';
+import { espacements, tailles, useCouleurs } from '@/theme';
 
 import { Texte } from './Texte';
 
@@ -14,6 +14,7 @@ type Props = {
 
 /** En-tête d'écran : Retour + fil d'Ariane + titre. */
 export function EnTete({ titre, filAriane, onRetour }: Props) {
+  const couleurs = useCouleurs();
   return (
     <View style={styles.entete}>
       {onRetour || filAriane ? (
