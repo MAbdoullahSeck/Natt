@@ -1,18 +1,128 @@
-import { BoutonSecondaire, Ecran, EnTete, Texte } from '@/components';
+import { router } from 'expo-router';
+import {
+  ChevronRight,
+  Crown,
+  Database,
+  Languages,
+  LogOut,
+  type LucideIcon,
+  MessageCircle,
+} from 'lucide-react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
+
+import { Ecran, EnTete, Texte } from '@/components';
+import { config } from '@/config';
+import { usePalierActif } from '@/data/abonnement';
+import { PRIX } from '@/domain/abonnement';
 import { formatTelephoneComplet } from '@/domain/telephone';
 import { textes } from '@/i18n';
+import { formatMontant } from '@/lib/format';
 import { useProfil, useSession } from '@/lib/session';
-import { LogOut } from 'lucide-react-native';
+import { couleurs, espacements, rayons, tailles } from '@/theme';
 
-/** Écran 23 — Profil (complété à l'étape 10). */
+const t = textes.profilEcran;
+
+/** Écran 23 — Profil. */
 export default function Profil() {
   const profil = useProfil();
   const { deconnecter } = useSession();
+  const { palier, data: abonnements } = usePalierActif();
+  const actif = abonnements?.find((a) => a.statut === 'actif' && a.palier === palier);
+  const abonnement = palier
+    ? `${textes.abonnement.paliers[palier]} · ${textes.abonnement.prix(
+        formatMontant(PRIX[palier][actif?.periodicite === 'annuel' ? 'annuel' : 'mensuel']),
+        actif?.periodicite === 'annuel',
+      )}`
+    : textes.abonnement.aucun;
+
   return (
     <Ecran avecOnglets>
       <EnTete titre={profil.prenom} />
-      <Texte couleur="texteSecondaire">{formatTelephoneComplet(profil.telephone)}</Texte>
-      <BoutonSecondaire libelle={textes.profil.deconnecter} icone={LogOut} onPress={deconnecter} />
+      <Texte variante="corpsGrand" couleur="texteSecondaire">
+        {formatTelephoneComplet(profil.telephone)}
+      </Texte>
+      {profil.fondatrice ? (
+        <View style={styles.badge}>
+          <Crown size={tailles.icone} color={couleurs.vert} strokeWidth={2} />
+          <Texte variante="libelle" couleur="vert">
+            {t.fondatrice}
+          </Texte>
+        </View>
+      ) : null}
+      <View>
+        <Ligne
+          icone={Crown}
+          libelle={t.abonnement}
+          valeur={abonnement}
+          onPress={() => router.push('/abonnement')}
+        />
+        <Ligne icone={Database} libelle={t.donnees} onPress={() => router.push('/mes-donnees')} />
+        <Ligne icone={Languages} libelle={t.langue} valeur={t.francais} />
+        {config.numeroAideWhatsApp ? (
+          <Ligne
+            icone={MessageCircle}
+            libelle={t.aide}
+            onPress={() => Linking.openURL(`https://wa.me/${config.numeroAideWhatsApp}`)}
+          />
+        ) : null}
+        <Ligne
+          icone={LogOut}
+          libelle={t.deconnecter}
+          onPress={deconnecter}
+          testID="bouton-deconnecter"
+        />
+      </View>
     </Ecran>
   );
 }
+
+type PropsLigne = {
+  icone: LucideIcon;
+  libelle: string;
+  valeur?: string;
+  onPress?: () => void;
+  testID?: string;
+};
+
+function Ligne({ icone: Icone, libelle, valeur, onPress, testID }: PropsLigne) {
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={!onPress}
+      style={styles.ligne}
+      accessibilityRole={onPress ? 'button' : undefined}
+      testID={testID}
+    >
+      <Icone size={tailles.icone} color={couleurs.terracotta} strokeWidth={2} />
+      <View style={styles.textes}>
+        <Texte variante="corpsFort">{libelle}</Texte>
+        {valeur ? <Texte couleur="texteSecondaire">{valeur}</Texte> : null}
+      </View>
+      {onPress ? (
+        <ChevronRight size={tailles.icone} color={couleurs.texteSecondaire} strokeWidth={2} />
+      ) : null}
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: espacements.s,
+    alignSelf: 'flex-start',
+    backgroundColor: couleurs.vertPuce,
+    borderRadius: rayons.puce,
+    paddingHorizontal: espacements.m,
+    paddingVertical: espacements.xs,
+  },
+  ligne: {
+    minHeight: 72,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: espacements.m,
+    borderBottomWidth: 1,
+    borderBottomColor: couleurs.separateur,
+  },
+  textes: { flex: 1, gap: espacements.xs },
+});

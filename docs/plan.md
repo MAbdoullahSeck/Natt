@@ -57,9 +57,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Relancer le cycle avec les mêmes membres.
 
 ## Étape 10 — Abonnement et profil (20, 21, 23)
-- [ ] Paliers mensuels et annuels, limites appliquées à la création, alerte d'upsell.
-- [ ] Indicateur « gérante fondatrice ». Encaissement selon la décision B5 (en attendant : activation manuelle).
-- [ ] Profil complet (abonnement, données, langue, aide, déconnexion, retrait du consentement).
+- [x] Paliers mensuels et annuels, limites appliquées à la création, alerte d'upsell.
+- [x] Indicateur « gérante fondatrice ». Encaissement selon la décision B5 (en attendant : activation manuelle).
+- [x] Profil complet (abonnement, données, langue, aide, déconnexion, retrait du consentement).
 
 ## Étape 11 — Finition et test terrain
 - [ ] États vides, erreurs réseau, chargements sur tous les écrans.

@@ -161,6 +161,7 @@ export const fr = {
       deja_annulee: 'Cette pénalité est déjà annulée.',
       cycle_non_termine: 'Le cycle n’est pas encore terminé.',
       cycle_deja_relance: 'Le cycle suivant est déjà créé.',
+      periodicite_invalide: 'Choisis mensuel ou annuel.',
     } as Record<string, string>,
   },
   inscription: {
@@ -202,9 +203,6 @@ export const fr = {
         'Pour toute question, écris-nous sur WhatsApp depuis Profil → Aide.',
       ],
     },
-  },
-  profil: {
-    deconnecter: 'Se déconnecter',
   },
   rejoindre: {
     titre: 'Le code de la tontine',
@@ -412,6 +410,65 @@ export const fr = {
       `${aLHeure} à l’heure · ${enRetard} en retard`,
     partager: 'Partager sur WhatsApp',
     message: (nom: string, lignes: string) => `Rapport du cycle « ${nom} » (Natt)\\n${lignes}`,
+  },
+  abonnement: {
+    titre: 'Mon abonnement',
+    mensuel: 'Mensuel',
+    annuel: 'Annuel',
+    deuxMoisOfferts: '2 mois offerts',
+    paliers: { starter: 'Starter', pro: 'Pro', illimite: 'Illimité' },
+    limites: {
+      starter: '1 à 2 tontines gérées',
+      pro: 'Jusqu’à 6 tontines gérées',
+      illimite: 'Tontines illimitées',
+    },
+    prix: (montant: string, annuel: boolean) => `${montant} / ${annuel ? 'an' : 'mois'}`,
+    actuel: 'Ton abonnement actuel',
+    enAttente: 'En attente de paiement',
+    upsell:
+      'Tu as atteint le nombre de tontines de ton abonnement. Choisis un abonnement plus grand.',
+    rejoindreGratuit: 'Rejoindre une tontine est toujours gratuit.',
+    choisir: (palier: string) => `Choisir ${palier}`,
+    fondatrice: 'Gérante fondatrice : ton prix est bloqué.',
+    expire: (date: string) => `Actif jusqu’au ${date}`,
+    demande: {
+      titre: 'Demande enregistrée',
+      texte: (montant: string, numero: string) =>
+        numero
+          ? `Envoie ${montant} par Wave au ${numero}. Ton abonnement sera activé dès réception.`
+          : `Ton abonnement sera activé dès réception de ton paiement de ${montant}. L’équipe Natt te contactera.`,
+      copier: 'Copier le numéro',
+      copie: 'Numéro copié',
+      terminer: 'Terminer',
+    },
+    aucun: 'Aucun abonnement',
+  },
+  profilEcran: {
+    fondatrice: 'Gérante fondatrice',
+    abonnement: 'Mon abonnement',
+    donnees: 'Mes données',
+    langue: 'Langue',
+    francais: 'Français',
+    aide: 'Aide sur WhatsApp',
+    deconnecter: 'Se déconnecter',
+  },
+  mesDonnees: {
+    titre: 'Mes données',
+    prenom: 'Prénom',
+    telephone: 'Numéro',
+    consentement: 'Consentement donné le',
+    version: 'Version',
+    tontines: 'Tontines',
+    texte:
+      'Natt garde ton prénom, ton numéro et l’historique de tes paiements pour faire fonctionner tes tontines.',
+    retirer: 'Retirer mon consentement',
+    retrait: {
+      titre: 'Retirer ton consentement ?',
+      texte:
+        'Ton compte sera désactivé. Ton prénom et ton numéro seront effacés. L’historique des paiements reste dans les tontines, sans ton nom, pour les autres membres.',
+      confirmer: 'Oui, je retire mon consentement',
+      case: 'Je comprends que je ne pourrai plus utiliser ce compte',
+    },
   },
   demo: {
     titre: 'Composants Natt',

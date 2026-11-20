@@ -193,14 +193,14 @@ isOneToOne: false
                   ]
                 },"profils": {
                   Row: {
-                    "consentement_at": string,"consentement_version": string,"created_at": string,"expo_push_token": string | null,"fondatrice": boolean,"id": string,"langue": string,"prenom": string,"telephone": string
+                    "consentement_at": string,"consentement_retire_at": string | null,"consentement_version": string,"created_at": string,"expo_push_token": string | null,"fondatrice": boolean,"id": string,"langue": string,"prenom": string,"telephone": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "consentement_at": string,"consentement_version": string,"created_at"?: string,"expo_push_token"?: string | null,"fondatrice"?: boolean,"id": string,"langue"?: string,"prenom": string,"telephone": string
+                    "consentement_at": string,"consentement_retire_at"?: string | null,"consentement_version": string,"created_at"?: string,"expo_push_token"?: string | null,"fondatrice"?: boolean,"id": string,"langue"?: string,"prenom": string,"telephone": string
                   }
                   Update: {
-                    "consentement_at"?: string,"consentement_version"?: string,"created_at"?: string,"expo_push_token"?: string | null,"fondatrice"?: boolean,"id"?: string,"langue"?: string,"prenom"?: string,"telephone"?: string
+                    "consentement_at"?: string,"consentement_retire_at"?: string | null,"consentement_version"?: string,"created_at"?: string,"expo_push_token"?: string | null,"fondatrice"?: boolean,"id"?: string,"langue"?: string,"prenom"?: string,"telephone"?: string
                   }
                   Relationships: [
                     
@@ -338,6 +338,22 @@ isOneToOne: false
             "accepter_reglement":
 { Args: { "p_tontine_id": string,"p_version": number }; Returns: undefined
                            },
+"activer_abonnement":
+{ Args: { "p_abonnement_id": string }; Returns: {
+              "created_at": string,
+"expire_at": string | null,
+"id": string,
+"palier": Database["public"]['Enums']["palier"],
+"periodicite": string,
+"profil_id": string,
+"statut": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "abonnements"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "ajouter_membre":
 { Args: { "p_profil_id": string,"p_tontine_id": string }; Returns: string
                            },
@@ -378,6 +394,7 @@ isOneToOne: false
 "creer_profil":
 { Args: { "p_consentement_version": string,"p_prenom": string }; Returns: {
               "consentement_at": string,
+"consentement_retire_at": string | null,
 "consentement_version": string,
 "created_at": string,
 "expo_push_token": string | null,
@@ -423,6 +440,22 @@ isOneToOne: false
 "declarer_paiement":
 { Args: { "p_capture_path"?: string,"p_cotisation_id": string,"p_moyen": string }; Returns: undefined
                            },
+"demander_abonnement":
+{ Args: { "p_palier": Database["public"]['Enums']["palier"],"p_periodicite": string }; Returns: {
+              "created_at": string,
+"expire_at": string | null,
+"id": string,
+"palier": Database["public"]['Enums']["palier"],
+"periodicite": string,
+"profil_id": string,
+"statut": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "abonnements"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "demarrer_tontines":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -440,6 +473,9 @@ isOneToOne: false
                            },
 "exiger_gerante":
 { Args: { "p_tontine_id": string }; Returns: undefined
+                           },
+"expirer_abonnements":
+{ Args: Record<PropertyKey, never>; Returns: number
                            },
 "format_montant":
 { Args: { "p_montant": number }; Returns: string
@@ -529,6 +565,9 @@ isOneToOne: false
         isOneToOne: true
         isSetofReturn: false
       } },
+"retirer_consentement":
+{ Args: Record<PropertyKey, never>; Returns: undefined
+                           },
 "suggestions_calendrier":
 { Args: { "p_date_debut": string,"p_frequence": Database["public"]['Enums']["frequence"],"p_nb_membres": number }; Returns: {
               "created_at": string,
