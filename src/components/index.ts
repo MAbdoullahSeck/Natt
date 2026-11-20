@@ -15,3 +15,7 @@ export { Notification } from './Notification';
 export { OptionSelection } from './OptionSelection';
 export { PuceStatut } from './PuceStatut';
 export { Texte } from './Texte';
+export { CaseACocher } from './CaseACocher';
+export { Ecran } from './Ecran';
+export { Lien } from './Lien';
+export { BarreOnglets } from './BarreOnglets';

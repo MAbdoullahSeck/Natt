@@ -303,7 +303,25 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "est_gerante":
+            "creer_profil":
+{ Args: { "p_consentement_version": string,"p_prenom": string }; Returns: {
+              "consentement_at": string,
+"consentement_version": string,
+"created_at": string,
+"expo_push_token": string | null,
+"fondatrice": boolean,
+"id": string,
+"langue": string,
+"prenom": string,
+"telephone": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "profils"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
+"est_gerante":
 { Args: { "p_tontine_id": string }; Returns: boolean
                            },
 "est_membre":

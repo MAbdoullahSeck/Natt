@@ -48,6 +48,58 @@ export const fr = {
   paiement: {
     directement: (gerante: string) => `Directement à ${gerante}. Natt ne garde pas l’argent.`,
   },
+  erreurs: {
+    reseau: 'Pas de connexion. Vérifie ton internet.',
+    inconnue: 'Un problème est survenu. Réessaie.',
+    reessayer: 'Réessayer',
+    codes: {
+      non_connecte: 'Reconnecte-toi pour continuer.',
+      prenom_invalide: 'Le prénom doit faire entre 2 et 30 lettres.',
+    } as Record<string, string>,
+  },
+  inscription: {
+    telephone: {
+      titre: 'Ton numéro de téléphone',
+      aide: 'Tu vas recevoir un code par SMS.',
+      prefixe: '+221',
+      bouton: 'Recevoir le code',
+      invalide: 'Ce numéro n’est pas valide.',
+    },
+    code: {
+      titre: 'Le code reçu par SMS',
+      aide: (telephone: string) => `Envoyé au ${telephone}`,
+      erreur: 'Ce code n’est pas bon. Vérifie le SMS.',
+      renvoyer: 'Renvoyer le code',
+      renvoyerDans: (secondes: number) => `Renvoyer le code dans ${secondes} s`,
+      verification: 'Vérification…',
+    },
+    prenom: {
+      titre: 'Ton prénom',
+      aide: 'Visible dans tes tontines',
+      placeholder: 'Prénom',
+      invalide: 'Entre 2 et 30 lettres.',
+    },
+    consentement: {
+      titre: 'Tes données',
+      texte:
+        'Natt garde ton prénom, ton numéro et l’historique de tes paiements pour faire fonctionner tes tontines. Ces informations sont visibles par les membres de tes tontines. Natt ne les vend jamais.',
+      caseLibelle: 'J’accepte que Natt utilise mes données',
+      mesDroits: 'Mes droits',
+      bouton: 'Créer mon compte',
+    },
+    droits: {
+      titre: 'Mes droits',
+      lignes: [
+        'Tu peux voir tes données à tout moment dans Profil → Mes données.',
+        'Tu peux retirer ton consentement : ton compte est alors désactivé et ton prénom et ton numéro sont effacés.',
+        'L’historique des paiements des tontines est gardé sans ton nom, pour les autres membres.',
+        'Pour toute question, écris-nous sur WhatsApp depuis Profil → Aide.',
+      ],
+    },
+  },
+  profil: {
+    deconnecter: 'Se déconnecter',
+  },
   demo: {
     titre: 'Composants Natt',
     filAriane: 'Démonstration interne',

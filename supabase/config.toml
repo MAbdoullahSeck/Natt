@@ -266,18 +266,39 @@ otp_expiry = 3600
 [auth.sms]
 # Allow/disallow the phone provider. When false, users can't sign up or sign in with SMS.
 # To block new signups only, set enable_signup = false under [auth] instead.
-enabled = false
+enabled = true
 # If enabled, users need to confirm their phone number before signing in.
 enable_confirmations = false
 # Template for sending OTP to users
-template = "Your code is {{ .Code }}"
+template = "Ton code Natt : {{ .Code }}"
 # Controls the minimum amount of time that must pass before sending another sms otp.
 max_frequency = "5s"
 
 # Use pre-defined map of phone number to OTP for testing.
 # Keys are the phone number with country code and without the + prefix.
-# [auth.sms.test_otp]
-# 14152127777 = "123456"
+# Numéros de test à code fixe (docs/decisions.md) : 221770000001 à 221770000020, code 123456.
+# Les 9 premiers sont les personnes du seed (Aminata = 221770000001).
+[auth.sms.test_otp]
+221770000001 = "123456"
+221770000002 = "123456"
+221770000003 = "123456"
+221770000004 = "123456"
+221770000005 = "123456"
+221770000006 = "123456"
+221770000007 = "123456"
+221770000008 = "123456"
+221770000009 = "123456"
+221770000010 = "123456"
+221770000011 = "123456"
+221770000012 = "123456"
+221770000013 = "123456"
+221770000014 = "123456"
+221770000015 = "123456"
+221770000016 = "123456"
+221770000017 = "123456"
+221770000018 = "123456"
+221770000019 = "123456"
+221770000020 = "123456"
 
 # Configure logged in session timeouts.
 # [auth.sessions]
@@ -297,12 +318,14 @@ max_frequency = "5s"
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
+# Local uniquement : fournisseur factice pour activer l'auth par téléphone.
+# Seuls les numéros de [auth.sms.test_otp] fonctionnent (aucun SMS n'est envoyé).
+# En production, configurer le vrai fournisseur dans le tableau de bord Supabase.
 [auth.sms.twilio]
-enabled = false
-account_sid = ""
-message_service_sid = ""
-# DO NOT commit your Twilio auth token to git. Use environment variable substitution instead:
-auth_token = "env(SUPABASE_AUTH_SMS_TWILIO_AUTH_TOKEN)"
+enabled = true
+account_sid = "ACtest_local_uniquement"
+message_service_sid = "MGtest_local_uniquement"
+auth_token = "factice_local_uniquement"
 
 # Multi-factor-authentication is available to Supabase Pro plan.
 [auth.mfa]
@@ -319,7 +342,7 @@ verify_enabled = false
 enroll_enabled = false
 verify_enabled = false
 otp_length = 6
-template = "Your code is {{ .Code }}"
+template = "Ton code Natt : {{ .Code }}"
 max_frequency = "5s"
 
 # Configure MFA via WebAuthn

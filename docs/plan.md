@@ -16,9 +16,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Tests SQL ou d'intégration : un membre ne voit pas une tontine dont il ne fait pas partie ; personne ne peut modifier `evenements`.
 
 ## Étape 2 — Inscription (écrans 01 à 04)
-- [ ] Connexion par téléphone + code SMS (fournisseur SMS configuré : **signaler si absent**).
-- [ ] Prénom et consentement enregistrés (date + version). Bouton désactivé sans consentement.
-- [ ] Session persistante ; déconnexion depuis le Profil.
+- [x] Connexion par téléphone + code SMS (fournisseur SMS configuré : **signaler si absent**). → numéros de test à code fixe, voir `docs/decisions.md`.
+- [x] Prénom et consentement enregistrés (date + version). Bouton désactivé sans consentement.
+- [x] Session persistante ; déconnexion depuis le Profil.
 
 ## Étape 3 — Accueil et création (05, 05b, 06 à 11, 06b)
 - [ ] Accueil avec cartes et statuts réels ; accueil vide.

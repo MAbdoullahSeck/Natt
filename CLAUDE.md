@@ -47,11 +47,12 @@ Ce fichier est le brief permanent pour Claude Code. Lis-le en entier avant toute
 
 ## Méthode de travail
 
-- Suis `docs/plan.md` **dans l'ordre**, une étape à la fois. Ne commence pas l'étape suivante tant que les critères de validation de l'étape en cours ne sont pas remplis.
-- Une étape = une branche + une pull request vers `main`, avec une description qui reprend les critères validés.
+- Suis `docs/plan.md` **dans l'ordre**. Par défaut, une étape à la fois, validée avant de passer à la suivante. **On peut enchaîner plusieurs étapes quand on te le demande** : dans ce cas, un commit par étape (« Étape N : … »), poussé après chaque étape.
+- Les choix faits sans validation (points ambigus, services externes absents) sont notés dans `docs/decisions.md`.
+- Une étape (ou un groupe d'étapes enchaînées) = une branche + une pull request vers `main`, avec une description qui reprend les critères validés.
 - Toute modification de schéma passe par une migration dans `supabase/migrations/`. Jamais de modification manuelle en production.
 - Écris des tests pour la logique métier (calcul des statuts, ordre des tours, échange, limites d'abonnement, pénalités).
-- Si une règle du cahier des charges est ambiguë ou contradictoire, **arrête-toi et pose la question** au lieu de deviner.
+- Si une règle du cahier des charges est ambiguë ou contradictoire, **arrête-toi et pose la question** au lieu de deviner — sauf pendant un enchaînement d'étapes demandé : prends alors le choix le plus simple et le plus fidèle, et note-le dans `docs/decisions.md`.
 - Signale immédiatement tout blocage technique (dépendance, service externe, accès manquant) au lieu de contourner en silence.
 
 ## Commandes
