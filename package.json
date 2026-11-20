@@ -21,7 +21,8 @@
     "db:local:start": "supabase start",
     "db:local:reset": "supabase db reset",
     "db:local:test": "supabase test db",
-    "db:local:types": "supabase gen types typescript --local > src/lib/database.types.ts"
+    "db:local:types": "supabase gen types typescript --local > src/lib/database.types.ts",
+    "fn:deploy": "supabase functions deploy --use-api"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",

@@ -129,4 +129,6 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **RLS activée par défaut** (`ensure_rls`) : compatible, car chaque migration active déjà la RLS et crée ses politiques. Vérifié : 11 tables sur 11 avec RLS, 167 tests pgTAP passés sur le projet en ligne.
 - **Connexion de test** : fournisseur Twilio factice + 20 numéros de test à code fixe, configurés par l'API de gestion. Durée de validité du code SMS portée à 5 minutes (60 s par défaut).
 - **Client** : plus de repli silencieux vers la base locale ; sans `.env`, l'app s'arrête avec un message clair.
-- **Non fait** : Edge Functions non déployées sur natt-dev, secrets Vault absents (les tâches pg_cron tournent mais leurs appels sont ignorés).
+- **Edge Functions déployées** sur natt-dev (regroupement côté serveur, `--use-api`), avec `verify_jwt = false` : le projet signe les jetons en ES256 (clés asymétriques), et chaque fonction vérifie déjà son appelant.
+- **Appels système** (`push`, `relances`) : la clé reçue est vérifiée par la base (appel à une fonction réservée à `service_role`) au lieu d'être comparée à `SUPABASE_SERVICE_ROLE_KEY` : sur natt-dev, la clé « legacy » stockée dans Vault et la clé fournie aux fonctions n'ont pas le même format.
+- **Vault** : `project_url` et `service_role_key` (clé service « legacy ») renseignés. Vérifié : `natt-push` réussit chaque minute (HTTP 200), `relances` répond via Vault, la clé publique est refusée.

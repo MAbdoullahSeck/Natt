@@ -4,7 +4,7 @@ import { reponse, rpc } from '../_shared/api.ts';
 import { appelSysteme, envoyerPushEnAttente } from '../_shared/push.ts';
 
 Deno.serve(async (req) => {
-  if (!appelSysteme(req)) return reponse({ error: 'non_autorise' }, 401);
+  if (!(await appelSysteme(req))) return reponse({ error: 'non_autorise' }, 401);
   const { data, error } = await rpc<Record<string, unknown>>('preparer_relances', {});
   if (error) return reponse({ error }, 500);
   const push = await envoyerPushEnAttente().catch((e) => ({ error: String(e) }));

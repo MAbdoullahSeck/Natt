@@ -451,12 +451,14 @@ enabled = true
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
 
-# Edge Functions de Natt. « push » et « relances » vérifient elles-mêmes la clé service_role.
+# Edge Functions de Natt. verify_jwt = false : chaque fonction vérifie elle-même l'appelant
+# (tirage-au-sort : jeton de l'utilisatrice via /auth/v1/user ; push et relances : clé service exigée),
+# ce qui fonctionne aussi avec les clés de signature asymétriques (ES256) du projet.
 [functions.tirage-au-sort]
-verify_jwt = true
+verify_jwt = false
 
 [functions.push]
-verify_jwt = true
+verify_jwt = false
 
 [functions.relances]
-verify_jwt = true
+verify_jwt = false

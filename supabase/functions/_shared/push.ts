@@ -55,8 +55,20 @@ export async function envoyerPushEnAttente(): Promise<{ envoyees: number; sansJe
   return { envoyees: avecJeton.length, sansJeton: sansJeton.length };
 }
 
-/** Les fonctions planifiées n'acceptent que la clé service_role (appel par pg_cron). */
-export function appelSysteme(req: Request): boolean {
-  const cle = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-  return !!cle && req.headers.get('Authorization') === `Bearer ${cle}`;
+/**
+ * Les fonctions planifiées n'acceptent qu'un appel système (pg_cron avec la clé service lue dans Vault).
+ * Plutôt que de comparer des chaînes (les formats de clé diffèrent selon les projets : JWT « legacy »,
+ * sb_secret_…), on fait vérifier la clé par la base : seule service_role peut exécuter
+ * notifications_a_pousser (ici en lecture seule, limite 0).
+ */
+export async function appelSysteme(req: Request): Promise<boolean> {
+  const autorisation = req.headers.get('Authorization') ?? '';
+  const cle = autorisation.replace(/^Bearer /, '');
+  if (!cle) return false;
+  const r = await fetch(`${Deno.env.get('SUPABASE_URL')}/rest/v1/rpc/notifications_a_pousser`, {
+    method: 'POST',
+    headers: { apikey: cle, Authorization: `Bearer ${cle}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_limite: 0 }),
+  });
+  return r.ok;
 }

@@ -20,25 +20,24 @@ Pour de vrais SMS :
 2. Dans Supabase : Authentication → Sign In / Providers → Phone : remplacer les identifiants factices par les vrais.
 3. Modèle du SMS (déjà configuré) : `Ton code Natt : {{ .Code }}`.
 
-## 3. Edge Functions
+## 3. Edge Functions ✅ (natt-dev)
 
-```bash
-npx supabase functions deploy tirage-au-sort
-npx supabase functions deploy push
-npx supabase functions deploy relances
-```
-Elles n'ont besoin d'aucun secret supplémentaire : `SUPABASE_URL`, `SUPABASE_ANON_KEY` et `SUPABASE_SERVICE_ROLE_KEY` sont fournis automatiquement par Supabase.
+Déployées sur natt-dev : `tirage-au-sort`, `push`, `relances` (`verify_jwt = false`, chaque fonction vérifie elle-même l'appelant).
+Redéployer après une modification : `npm run fn:deploy` (ou une fonction : `npx supabase functions deploy push --use-api`).
+Aucun secret supplémentaire : `SUPABASE_URL`, `SUPABASE_ANON_KEY` et `SUPABASE_SERVICE_ROLE_KEY` sont fournis par Supabase.
 
-## 4. Relances planifiées (pg_cron + Vault)
+## 4. Relances planifiées (pg_cron + Vault) ✅ (natt-dev)
 
-Les tâches pg_cron sont créées par les migrations (relances à 9 h, push chaque minute, expiration des abonnements chaque nuit). Pour qu'elles puissent appeler les Edge Functions, ajouter deux secrets dans **Vault** (éditeur SQL, une seule fois) :
+Sur natt-dev, les secrets Vault `project_url` et `service_role_key` sont renseignés ; les tâches pg_cron appellent les fonctions (relances à 9 h, push chaque minute, expiration des abonnements chaque nuit).
 
+Pour un autre projet (production), dans l'éditeur SQL, une seule fois :
 ```sql
 select vault.create_secret('https://<référence-du-projet>.supabase.co', 'project_url');
 select vault.create_secret('<clé service_role>', 'service_role_key');
 ```
+Si la clé service change (rotation), mettre à jour le secret : `select vault.update_secret((select id from vault.secrets where name = 'service_role_key'), '<nouvelle clé>');`
 
-Vérifier ensuite : `select * from cron.job;` et, le lendemain, `select * from cron.job_run_details order by start_time desc limit 10;`.
+Contrôles : `select * from cron.job;`, `select * from cron.job_run_details order by start_time desc limit 10;`, `select status_code, content from net._http_response order by created desc limit 5;`.
 
 ## 5. Notifications push (EAS)
 

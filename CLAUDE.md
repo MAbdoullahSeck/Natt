@@ -73,6 +73,7 @@ npm run db:push           # appliquer les nouvelles migrations
 npm run db:seed           # charger supabase/seed.sql (refusé si la base contient déjà des profils)
 npm run db:test           # tests pgTAP sur natt-dev (transactions annulées)
 npm run db:types          # régénérer src/lib/database.types.ts depuis natt-dev
+npm run fn:deploy         # déployer les Edge Functions sur natt-dev (regroupement côté serveur, sans Docker)
 
 # Sessions cloud (pas d'accès direct à Postgres, seulement HTTPS) : mêmes opérations par l'API de gestion
 npm run db:api:migrations # équivalent de db:push
@@ -117,4 +118,5 @@ Mise en production (fournisseur SMS, secrets, Edge Functions, EAS) : voir `docs/
 - Ne jamais modifier natt-dev à la main : toute modification passe par une migration.
 - Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`, code SMS de test `123456`), chargées sur natt-dev.
 - Fonctions réservées au système (`appliquer_tirage`, `preparer_relances`, `activer_abonnement`…) : `grant execute … to service_role` seulement.
-- Edge Functions (`supabase/functions`) : sans dépendance externe, accès à Supabase par `fetch` (`_shared/api.ts`).
+- Edge Functions (`supabase/functions`) : sans dépendance externe, accès à Supabase par `fetch` (`_shared/api.ts`). `verify_jwt = false` : chaque fonction vérifie elle-même l'appelant (jeton utilisateur via `/auth/v1/user`, ou clé service vérifiée par la base). Déployées sur natt-dev.
+- pg_cron appelle les Edge Functions avec l'URL et la clé service lues dans Vault (`project_url`, `service_role_key`, renseignés sur natt-dev). Contrôle : `select * from net._http_response order by created desc limit 5;`.

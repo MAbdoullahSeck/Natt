@@ -3,7 +3,7 @@ import { reponse } from '../_shared/api.ts';
 import { appelSysteme, envoyerPushEnAttente } from '../_shared/push.ts';
 
 Deno.serve(async (req) => {
-  if (!appelSysteme(req)) return reponse({ error: 'non_autorise' }, 401);
+  if (!(await appelSysteme(req))) return reponse({ error: 'non_autorise' }, 401);
   try {
     return reponse(await envoyerPushEnAttente());
   } catch (e) {
