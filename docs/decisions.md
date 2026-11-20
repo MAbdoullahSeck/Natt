@@ -40,3 +40,13 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Lien profond** `natt://rejoindre?code=…` : code prérempli et vérifié automatiquement (si la personne est connectée).
 - **Textes des notifications** : rédigés côté serveur (SQL) en français, car ils sont aussi envoyés en push. À déplacer dans des modèles traduisibles quand le wolof arrivera.
 - **Non fait** : limitation des essais de code (force brute sur 1 million de codes). À prévoir avant le lancement public (ex. 10 essais par heure et par compte).
+
+## Étape 5 — Vues tontine
+
+- **Une seule route** `tontine/[id]` : vue gérante (13) si l'utilisatrice est la gérante, vue membre (16) sinon. La gérante voit aussi son propre statut dans la liste des membres (« Aminata (Toi) »).
+- **Remise de la cagnotte** : pas d'écran dans le cahier des charges, mais nécessaire pour passer au tour suivant et clore le cycle (F1). Quand tous les membres ont payé le tour en cours, l'action principale de l'écran 13 devient « Cagnotte remise à [prénom] » (« Bien remis à… » pour un achat groupé) → `marquer_verse`. Les tours se remettent dans l'ordre. La gérante peut remettre une cagnotte même si un paiement manque, mais le bouton n'apparaît que quand tout est payé.
+- **« Marquer payé » sans déclaration** : autorisé (paiement en espèces, par exemple) ; l'événement de confirmation le note (`sans_declaration`).
+- **Code d'invitation** : rappelé sur l'écran 13 tant qu'il reste des places, avec « Partager le code ».
+- **Bilan 13c** : « à l'heure » / « en retard » selon la règle de pénalité P5 (date de déclaration), en ne comptant que les tours échus ou réglés.
+- **Prochain paiement (16)** : la plus ancienne cotisation non payée du membre. Le bouton « Payer » n'apparaît que si elle est « à payer » (pas si elle est déjà déclarée).
+- **Nouveaux types d'événements** : `versement` (cagnotte remise) et `reglement_modifie` (étape 8).

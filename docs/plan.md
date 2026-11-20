@@ -32,9 +32,9 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Aperçu + acceptation du règlement obligatoire, puis `rejoindre_tontine`.
 
 ## Étape 5 — Vues tontine (13, 13c, 14, 16)
-- [ ] Vue gérante : cagnotte, bénéficiaire, compte des paiements, liste des membres et statuts (dont « En retard » calculé).
-- [ ] « Marquer payé » via `confirmer_paiement` ; historique horodaté d'un membre.
-- [ ] Vue membre : prochain paiement, statut, son tour, bien prévu si achat groupé.
+- [x] Vue gérante : cagnotte, bénéficiaire, compte des paiements, liste des membres et statuts (dont « En retard » calculé).
+- [x] « Marquer payé » via `confirmer_paiement` ; historique horodaté d'un membre.
+- [x] Vue membre : prochain paiement, statut, son tour, bien prévu si achat groupé.
 
 ## Étape 6 — Paiement (17, 18)
 - [ ] Ouverture de Wave / Orange Money (liens profonds vérifiés, sinon copie numéro + montant).
