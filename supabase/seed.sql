@@ -184,7 +184,8 @@ where m.tontine_id = 'b0000000-0000-4000-8000-000000000001' and m.profil_id = 'a
 select pg_temp.paiement('b0000000-0000-4000-8000-000000000001', 4, 'Aminata', 'wave', '2026-11-18 10:00+00', true);
 select pg_temp.paiement('b0000000-0000-4000-8000-000000000001', 4, 'Fatou', 'wave', '2026-11-19 18:30+00', false);
 
--- Frigo Médina : tour 1 versé ; tour 2 (15 novembre) : Coumba a déclaré, Mariama en retard avec pénalité.
+-- Frigo Médina : tour 1 versé ; tour 2 (15 novembre) : Coumba a déclaré le jour de l'échéance
+-- (« En attente », pas de pénalité — P1/P5), Mariama n'a rien déclaré → « En retard » + pénalité.
 select pg_temp.paiement('b0000000-0000-4000-8000-000000000002', 1, prenom, 'orange_money', '2026-10-13 12:00+00', true)
 from unnest(array['Fatou', 'Aminata', 'Coumba', 'Mariama']) prenom;
 update public.tours set verse_at = '2026-10-15 16:00+00'

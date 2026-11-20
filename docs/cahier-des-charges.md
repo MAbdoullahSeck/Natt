@@ -100,11 +100,15 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 
 ## 2.4 Paiements et statuts
 
-- P1. Statut d'un membre pour un tour : `a_payer` → (`declare`) → `paye` ; `en_retard` si l'échéance est passée et que le statut n'est pas `paye`.
+- P1. Statut d'un membre pour un tour : `a_payer` → (`declare`) → `paye`. L'échéance est le dernier jour pour payer : une déclaration faite le jour de l'échéance est à l'heure.
+  - `paye` : « Payé ».
+  - `declare` **avant ou le jour de l'échéance** : « En attente », même une fois l'échéance passée (en attendant la confirmation de la gérante).
+  - `declare` après l'échéance, ou `a_payer` une fois l'échéance passée : « En retard ».
+  - `a_payer` avant l'échéance : « En attente ».
 - P2. Quand un membre appuie sur « Payer », l'app ouvre Wave ou Orange Money avec le numéro de la gérante (et le montant si l'application le permet ; à vérifier, sinon copie du numéro et du montant). Au retour, l'écran 18 s'affiche et la cotisation passe en `declare`. Le membre peut joindre une capture (facultatif).
 - P3. **Seule la gérante peut passer un paiement en `paye`** (écran 14). Côté gérante, un paiement `declare` s'affiche « En attente » avec le bouton « Marquer payé » mis en avant.
 - P4. **Historique horodaté** : chaque événement (déclaration, confirmation, relance, pénalité, annulation) est enregistré dans une table d'événements en ajout seul (aucune modification ni suppression possible). L'historique d'un membre (13c) se construit à partir de ces événements.
-- P5. Pénalité de retard : si un montant est défini, une pénalité est enregistrée pour chaque tour en retard. Elle est affichée au membre et à la gérante. La gérante peut l'annuler (événement enregistré).
+- P5. Pénalité de retard : si un montant est défini, une pénalité est enregistrée pour chaque tour en retard, c'est-à-dire **uniquement si la déclaration est faite après l'échéance** (ou s'il n'y a toujours pas de déclaration une fois l'échéance passée). Une déclaration faite à temps n'est jamais pénalisée, même si la gérante la confirme plus tard. Elle est affichée au membre et à la gérante. La gérante peut l'annuler (événement enregistré).
 
 ## 2.5 Ordre des tours
 

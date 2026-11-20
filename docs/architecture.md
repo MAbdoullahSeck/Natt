@@ -128,20 +128,25 @@ create table cotisations (
   paye_at timestamptz,
   unique (tour_id, membre_id)
 );
--- « en_retard » n'est pas stocké : il se calcule (statut <> 'paye' et echeance < aujourd'hui).
+-- « en_retard » n'est pas stocké : il se calcule (règle P1, src/domain/statuts.ts) :
+--   statut = 'a_payer' et echeance < aujourd'hui, ou statut = 'declare' et declare_at après l'échéance.
+--   Une déclaration faite avant ou le jour de l'échéance reste « En attente ».
 
 -- Journal en ajout seul (historique horodaté)
 create table evenements (
   id uuid primary key default gen_random_uuid(),
-  tontine_id uuid not null references tontines(id) on delete cascade,
-  membre_id uuid references membres(id),
-  auteur_id uuid references profils(id),
+  tontine_id uuid not null references tontines(id) on delete restrict,
+  membre_id uuid references membres(id) on delete restrict,
+  auteur_id uuid references profils(id) on delete restrict,
   type text not null,  -- 'declaration','confirmation','relance','penalite','penalite_annulee',
                        -- 'tirage','echange','reglement_accepte','membre_rejoint','cycle_termine'
   donnees jsonb not null default '{}',
   created_at timestamptz not null default now()
 );
 -- RLS : insert via fonctions serveur uniquement ; aucun update ni delete pour personne.
+-- Un déclencheur bloque update, delete et truncate pour tous les rôles (postgres et service_role compris).
+-- Les clés étrangères sont en « restrict » : une tontine qui a un historique ne peut pas être supprimée
+-- (l'historique ne disparaît jamais ; voir D2 pour l'anonymisation).
 
 create table evenements_calendrier (
   id uuid primary key default gen_random_uuid(),
@@ -175,7 +180,8 @@ create table notifications (
 
 ## 4. Sécurité (RLS)
 
-- `profils` : chacun lit/modifie son profil ; lecture du prénom et du téléphone des personnes qui partagent une tontine avec soi.
+- `profils` : chacun lit et crée son propre profil (avec le numéro de son compte), et ne modifie que `prenom`, `langue` et `expo_push_token` (pas `fondatrice`).
+- Vue `profils_publics` (`id`, `prenom`, `telephone`) : son propre profil et ceux des personnes qui partagent une tontine avec soi. La table `profils` n'est jamais lue pour les autres, afin de ne pas exposer le consentement ni le jeton push.
 - `tontines`, `membres`, `tours`, `cotisations`, `reglements` : lecture pour les membres de la tontine ; écriture **uniquement via les fonctions RPC** ci-dessous.
 - `evenements` : lecture pour les membres de la tontine ; aucune écriture directe.
 - Storage `captures` : bucket privé ; le membre dépose sa capture, la gérante de la tontine et le membre la lisent.
