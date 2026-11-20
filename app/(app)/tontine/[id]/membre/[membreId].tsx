@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Texte } from '@/components';
+import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Lien, Texte } from '@/components';
 import { useRelancer } from '@/data/reglages';
 import { Penalites } from '@/features/tontine/Penalites';
 import { messageErreur } from '@/lib/erreurs';
@@ -39,7 +39,7 @@ export default function HistoriqueMembre() {
 
   const d = tontine.data;
   const bilan = bilanMembre(d.tours, d.cotisations, membreId);
-  const prenom = prenomDe(d.membres, membreId);
+  const prenom = prenomDe(d.tousMembres, membreId);
   const estMoi = d.monMembre?.id === membreId;
   return (
     <Ecran
@@ -80,6 +80,15 @@ export default function HistoriqueMembre() {
           </Texte>
         </View>
       ))}
+      {d.estGerante && !estMoi && d.membres.some((m) => m.id === membreId) ? (
+        <Lien
+          libelle={textes.retrait.lien(prenom)}
+          onPress={() =>
+            router.push({ pathname: '/tontine/[id]/retirer', params: { id, membre: membreId } })
+          }
+          testID="lien-retirer"
+        />
+      ) : null}
     </Ecran>
   );
 }

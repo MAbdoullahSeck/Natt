@@ -50,7 +50,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 |---|---|---|---|
 | 13 | Tontine · Gérante | `6:240` | Cagnotte du tour, bénéficiaire du tour, « X F reçus · N sur M payés ». Accès « Tours » et « Réglages ». Liste des membres avec statut ; bouton « Marquer payé » sur les membres non payés. Appui sur un membre → historique (13c). Bouton « Relancer les retardataires ». **L'abonnement n'apparaît pas ici** (il est dans le Profil). |
 | 13b | Tontine · Réglages | `12:565` | Rappels automatiques (3 jours avant, jour même, 1 jour après) activables un par un. Montant de la pénalité de retard (0 = aucune). Accès au règlement (voir / modifier). |
-| 13c | Membre · Historique | `12:661` | Bilan (« 6 à l'heure », « 1 en retard ») + liste horodatée de tous les paiements avec statut et capture jointe. Bouton « Relancer [prénom] ». |
+| 13c | Membre · Historique | `12:661` | Bilan (« 6 à l'heure », « 1 en retard ») + liste horodatée de tous les paiements avec statut et capture jointe. Bouton « Relancer [prénom] ». Lien « Retirer [prénom] » (gérante) → confirmation « Retirer Moussa ? » (règle M1). |
 | 14 | Membre · Marquer payé | `6:247` | « As-tu reçu ce paiement ? Vérifie sur Wave ou Orange Money. » Bouton « Marquer payé ». |
 | 15 | Ordre des tours | `6:254` | Liste numérotée tour → membre → mois. Bouton « Tirage au sort » (si pas encore fait). Appui long sur un membre → échange de tour (15b). |
 | 15b | Tours · Échanger | `12:762` | Tour à déplacer + liste des autres membres (tours non encore versés uniquement). Bouton « Échanger les tours ». Les deux membres sont notifiés. |
@@ -116,6 +116,14 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 - O1. Trois façons de fixer l'ordre : manuelle (par défaut, ordre d'arrivée modifiable), tirage au sort, ou échange ponctuel.
 - O2. **Tirage au sort** : exécuté côté serveur (Edge Function), une seule fois par cycle, enregistré avec la date, l'heure et l'algorithme ; résultat visible par tous les membres et non modifiable par tirage. Les échanges restent possibles ensuite.
 - O3. **Échange de tour** : réservé à la gérante. Seuls des tours non encore versés peuvent être échangés. Les deux membres concernés sont notifiés. L'échange est enregistré dans l'historique.
+
+## 2.5 bis Retirer un membre
+
+- M1. Seule la gérante retire un membre, après une confirmation obligatoire (« Retirer Moussa ? »). La gérante ne peut pas être retirée.
+  - Avant le démarrage : retrait libre, la place se libère (une autre personne peut rejoindre avec le code).
+  - Pendant le cycle, si le membre n'a pas encore reçu la cagnotte : au choix, son tour est **gardé pour une remplaçante** (qui rejoint avec le code et ne doit que les tours non versés) ou **supprimé** (les membres suivants avancent d'un tour, le dernier tour disparaît, la tontine passe à N-1 membres, cagnotte = montant × (N-1), nouveau règlement à accepter).
+  - S'il a déjà reçu la cagnotte : retrait impossible (il doit encore ses cotisations) ; une explication s'affiche, les relances et le statut « En retard » continuent.
+  - Dans tous les cas : notification au membre retiré, événement « membre retiré » dans l'historique. Les paiements déjà faits pour des tours à venir sont rendus par la gérante en dehors de Natt.
 
 ## 2.6 Relances automatiques
 

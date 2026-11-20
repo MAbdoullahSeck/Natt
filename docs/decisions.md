@@ -182,3 +182,13 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
   2. Dans `app.json` : `android.intentFilters` avec `autoVerify: true`, `scheme: https`, `host: natt.sn`, `pathPrefix: /i/` ; `ios.associatedDomains: ["applinks:natt.sn"]`.
   3. Faire pointer les liens vers `https://natt.sn/i/XXXXXX` (route expo-router `app/i/[code].tsx` qui redirige vers `/rejoindre/reglement`), et publier le contenu de `web/` sur ce domaine (pages d'invitation et de paiement).
   4. Optionnel : Play Install Referrer pour retrouver le code après une installation depuis le lien.
+
+## Point 6 — Retirer un membre
+
+- **Retrait logique** : le journal des événements (en ajout seul) référence le membre ; la ligne `membres` est donc gardée avec `retire_at` et `rang = null`. 14 fonctions SQL ont été reprises à l'identique avec le filtre `retire_at is null` (visibilité, comptages, relances, tirage, notifications…). Un membre retiré ne voit plus la tontine ; s'il revient avec le code, il retrouve sa ligne (historique conservé).
+- **Pendant le cycle, mode « supprimer »** : plutôt que de supprimer le tour du membre et d'avancer les dates (ce qui aurait donné au tour en cours une échéance déjà passée et effacé les paiements déjà faits pour ce tour), **les membres suivants avancent d'un rang et c'est le dernier tour qui disparaît**. Les tours gardent leurs dates et leurs paiements ; la tontine passe à N-1 membres ; la cagnotte devient montant × (N-1) ; le règlement est régénéré (nouvelle version à accepter).
+- **Mode « remplacer »** : le tour reste sans bénéficiaire ; la remplaçante rejoint avec le code, prend le premier rang libre (celui du membre retiré) et ne doit que les tours non encore versés (`ajouter_membre` ne crée plus de cotisation pour les tours versés). Tant qu'il n'y a pas de remplaçante, la cagnotte de ce tour ne peut pas être remise (`sans_beneficiaire`).
+- **Avant le démarrage** : le mode est toujours « remplacer » (la place se libère).
+- **Argent déjà payé pour des tours à venir** : la cotisation est supprimée et le montant est noté dans l'événement (`a_rembourser`) ; la gérante le rend en dehors de Natt (Natt ne détient jamais l'argent). Les cotisations des tours déjà versés restent dans l'historique.
+- **Interface** : lien « Retirer [prénom] » en bas de l'historique du membre (13c, action secondaire), puis écran de confirmation avec, pendant le cycle, les deux choix et la cagnotte recalculée. Si le retrait est impossible, l'écran explique pourquoi, sans bouton.
+- **Accord** : les textes de retrait sont au féminin (« retirée », « elle »), comme le reste de l'app destinée en majorité à des femmes ; à revoir avec le wolof et les prénoms masculins (Moussa).

@@ -20,6 +20,7 @@ export function libelleEvenement(e: Tables<'evenements'>): string {
     case 'relance':
     case 'penalite_annulee':
     case 'echange':
+    case 'membre_retire':
     case 'membre_rejoint':
     case 'versement':
     case 'tirage':

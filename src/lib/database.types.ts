@@ -223,6 +223,7 @@ export type Database = {
           rang: number | null
           reglement_accepte_at: string | null
           reglement_version_acceptee: number | null
+          retire_at: string | null
           tontine_id: string
         }
         Insert: {
@@ -232,6 +233,7 @@ export type Database = {
           rang?: number | null
           reglement_accepte_at?: string | null
           reglement_version_acceptee?: number | null
+          retire_at?: string | null
           tontine_id: string
         }
         Update: {
@@ -241,6 +243,7 @@ export type Database = {
           rang?: number | null
           reglement_accepte_at?: string | null
           reglement_version_acceptee?: number | null
+          retire_at?: string | null
           tontine_id?: string
         }
         Relationships: [
@@ -982,6 +985,10 @@ export type Database = {
         }
         Returns: number
       }
+      prix_plein_annuel: {
+        Args: { p_palier: Database["public"]["Enums"]["palier"] }
+        Returns: number
+      }
       rejoindre_tontine: {
         Args: { p_code: string; p_version_reglement: number }
         Returns: string
@@ -1020,6 +1027,10 @@ export type Database = {
         }
       }
       retirer_consentement: { Args: never; Returns: undefined }
+      retirer_membre: {
+        Args: { p_membre_id: string; p_mode?: string }
+        Returns: string
+      }
       signature_lien_paiement: {
         Args: {
           p_expire: number

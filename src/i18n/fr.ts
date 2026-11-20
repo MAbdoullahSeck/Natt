@@ -161,6 +161,11 @@ export const fr = {
       deja_annulee: 'Cette pénalité est déjà annulée.',
       cycle_non_termine: 'Le cycle n’est pas encore terminé.',
       cycle_deja_relance: 'Le cycle suivant est déjà créé.',
+      deja_retire: 'Ce membre a déjà été retiré.',
+      retrait_gerante_impossible: 'La gérante ne peut pas être retirée.',
+      deja_servi: 'Ce membre a déjà reçu la cagnotte : il ne peut pas être retiré.',
+      trop_peu_de_membres: 'Une tontine doit garder au moins 2 membres.',
+      mode_invalide: 'Choisis ce que devient son tour.',
     } as Record<string, string>,
   },
   inscription: {
@@ -259,6 +264,28 @@ export const fr = {
       payer: 'Payer',
     },
   },
+  retrait: {
+    lien: (prenom: string) => `Retirer ${prenom}`,
+    titre: (prenom: string) => `Retirer ${prenom} ?`,
+    preparation: (prenom: string) =>
+      `${prenom} ne fera plus partie de la tontine. Sa place se libère : une autre personne pourra rejoindre avec le code.`,
+    cycle: (prenom: string) =>
+      `${prenom} n’a pas encore reçu la cagnotte. Choisis ce que devient son tour :`,
+    remplacer: 'Garder son tour pour une remplaçante',
+    remplacerDetail: 'Une nouvelle personne rejoint avec le code et prend ce tour.',
+    supprimer: 'Supprimer son tour',
+    supprimerDetail: (n: number, cagnotte: string) =>
+      `La tontine passe à ${n} membres. Les suivantes avancent d’un tour. Cagnotte : ${cagnotte}.`,
+    remboursement:
+      'Si elle a déjà payé pour des tours à venir, rends-lui cet argent en dehors de Natt.',
+    bouton: (prenom: string) => `Retirer ${prenom}`,
+    impossible: {
+      deja_servi: (prenom: string) =>
+        `${prenom} a déjà reçu la cagnotte : elle doit encore ses cotisations et ne peut pas être retirée. Les rappels et le statut « En retard » continuent de s’appliquer.`,
+      gerante: () => 'La gérante ne peut pas être retirée de sa tontine.',
+      terminee: () => 'Cette tontine est terminée : personne ne peut plus être retiré.',
+    },
+  },
   confirmer: {
     titre: 'As-tu reçu ce paiement ?',
     aide: 'Vérifie sur Wave ou Orange Money.',
@@ -282,6 +309,7 @@ export const fr = {
       penalite: (montant: string) => `Pénalité de ${montant}`,
       penalite_annulee: 'Pénalité annulée',
       echange: 'Tour échangé',
+      membre_retire: 'Retirée de la tontine',
       reglement_accepte: (version: number) => `Règlement accepté (version ${version})`,
       membre_rejoint: 'A rejoint la tontine',
       versement: 'A reçu la cagnotte',

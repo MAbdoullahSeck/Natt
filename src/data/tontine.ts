@@ -12,7 +12,10 @@ export type MembreAvecProfil = Tables<'membres'> & {
 
 export type DonneesTontine = {
   tontine: Tables<'tontines'>;
+  /** Membres actifs (les membres retirés sont exclus). */
   membres: MembreAvecProfil[];
+  /** Tous les membres, y compris retirés (noms dans l'historique). */
+  tousMembres: MembreAvecProfil[];
   tours: Tables<'tours'>[];
   cotisations: Tables<'cotisations'>[];
   reglement: Tables<'reglements'> | null;
@@ -51,10 +54,12 @@ export async function chargerTontine(id: string, uid: string): Promise<DonneesTo
       tours.map((x) => x.id),
     );
   if (c.error) throw c.error;
-  const membres = (m.data ?? []) as unknown as MembreAvecProfil[];
+  const tousMembres = (m.data ?? []) as unknown as MembreAvecProfil[];
+  const membres = tousMembres.filter((x) => !x.retire_at);
   return {
     tontine: t.data!,
     membres,
+    tousMembres,
     tours,
     cotisations: c.data ?? [],
     reglement: r.data ?? null,

@@ -98,7 +98,8 @@ create table membres (
   id uuid primary key default gen_random_uuid(),
   tontine_id uuid not null references tontines(id) on delete cascade,
   profil_id uuid not null references profils(id),
-  rang integer,                           -- position dans l'ordre des tours (1..N)
+  rang integer,                           -- position dans l'ordre des tours (1..N) ; null si retiré
+  retire_at timestamptz,                  -- membre retiré (jamais supprimé : l'historique reste attaché)
   reglement_version_acceptee integer,
   reglement_accepte_at timestamptz,
   created_at timestamptz default now(),
@@ -199,6 +200,7 @@ create table notifications (
 | `tirage-au-sort` (Edge) | gérante | Une fois par cycle ; mélange cryptographiquement sûr ; enregistre l'ordre, la date et la graine ; notifie tous les membres. |
 | `relancer(tontine_id, membre_id?)` | gérante | Relance immédiate, au plus une par membre et par jour. |
 | `relances` (Edge + pg_cron 9 h) | système | J-3 / J / J+1 selon les réglages ; récapitulatif des retards à la gérante à J+1 ; applique les pénalités. |
+| `retirer_membre(membre_id, mode)` | gérante | Règle M1 : place libérée (`remplacer`) ou tour supprimé (`supprimer`) ; refus si déjà servi ; événement + notification. Toutes les fonctions ignorent les membres retirés (`retire_at is null`). |
 | `relancer_cycle(tontine_id)` | gérante | Crée le cycle suivant (mêmes paramètres, nouveau code, `cycle_precedent_id`) et invite les mêmes membres. |
 | `suggestions_calendrier(date_debut, frequence, nb_membres)` | utilisatrice | Retourne les événements qui tombent pendant le cycle et une date de début ajustée proposée. |
 

@@ -31,6 +31,7 @@ const SCENARIOS = [
   ['fin', 'fin.sql'],
   ['abonnement'],
   ['invitation'],
+  ['retrait'],
   ['profil'],
 ];
 
