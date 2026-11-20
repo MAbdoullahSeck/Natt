@@ -3,11 +3,11 @@
 Une étape = une branche + une pull request. Ne passer à l'étape suivante que lorsque tous les critères sont cochés.
 
 ## Étape 0 — Socle du projet
-- [ ] Projet Expo TypeScript strict avec expo-router, ESLint, Prettier, Jest (`jest-expo`).
-- [ ] Police Nunito chargée, jetons du thème (`src/theme`) conformes à `design-system.md`.
-- [ ] `src/i18n/fr.ts` et utilitaires `formatMontant` (« 10 000 F ») et `formatDate` (français), testés.
-- [ ] Composants de base de `design-system.md` + une page de démonstration interne.
-- [ ] Commandes réelles renseignées dans `CLAUDE.md`.
+- [x] Projet Expo TypeScript strict avec expo-router, ESLint, Prettier, Jest (`jest-expo`).
+- [x] Police Nunito chargée, jetons du thème (`src/theme`) conformes à `design-system.md`.
+- [x] `src/i18n/fr.ts` et utilitaires `formatMontant` (« 10 000 F ») et `formatDate` (français), testés.
+- [x] Composants de base de `design-system.md` + une page de démonstration interne.
+- [x] Commandes réelles renseignées dans `CLAUDE.md`.
 
 ## Étape 1 — Supabase
 - [ ] `supabase init`, migrations du schéma de `architecture.md`, RLS sur toutes les tables.

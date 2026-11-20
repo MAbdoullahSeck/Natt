@@ -54,14 +54,27 @@ Ce fichier est le brief permanent pour Claude Code. Lis-le en entier avant toute
 - Si une règle du cahier des charges est ambiguë ou contradictoire, **arrête-toi et pose la question** au lieu de deviner.
 - Signale immédiatement tout blocage technique (dépendance, service externe, accès manquant) au lieu de contourner en silence.
 
-## Commandes (à compléter à l'étape 0)
+## Commandes
 
 ```bash
 npm install
-npx expo start            # lancer l'app
-npm test                  # tests
-npm run lint              # lint + typecheck
-supabase start            # Supabase local
+npx expo start            # lancer l'app (Expo Go ou build de développement)
+npm test                  # tests Jest (jest-expo)
+npm run lint              # ESLint (expo lint) + typecheck (tsc --noEmit)
+npm run format            # Prettier
+npx expo install <paquet> # ajouter une dépendance (versions compatibles avec le SDK)
+supabase start            # Supabase local (à partir de l'étape 1)
 supabase db reset         # rejouer les migrations
 supabase gen types typescript --local > src/lib/database.types.ts
 ```
+
+## Conventions de code (étape 0)
+
+- Écrans dans `app/` (expo-router), tout le reste dans `src/`. Alias d'import `@/` → `src/`.
+- Thème : `src/theme` (`couleurs`, `typographie`, `espacements`, `rayons`, `tailles`). Jamais de couleur ou de taille en dur dans un écran.
+- Textes : `src/i18n/fr.ts`, importés via `textes` depuis `@/i18n`.
+- Formats : `formatMontant`, `formatDate`, `formatMoisAnnee`, `formatHeure` dans `src/lib/format.ts`.
+- Composants de base : `src/components` (importer depuis `@/components`). Toujours utiliser `Texte` plutôt que `Text`.
+- Icônes : `lucide-react-native`, taille 24, `strokeWidth={2}`.
+- Logique métier pure et testée : `src/domain`.
+- Démonstration interne des composants : route `/demo`.
