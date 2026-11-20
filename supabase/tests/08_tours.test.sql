@@ -54,12 +54,12 @@ select is((select p.prenom from public.tours tr join public.membres mm on mm.id 
            where tr.tontine_id = (select id from t) and tr.numero = 1), 'Trois', 'bénéficiaires mis à jour');
 select throws_ok($$select public.appliquer_tirage((select id from t), 'aaaa0000-0000-4000-8000-000000000001', (select array_agg(id) from m), 'g', 'test')$$,
   'tirage_deja_fait', 'un seul tirage par cycle');
-select is((select count(*)::int from public.notifications where type = 'tirage'), 2, 'les membres sont notifiés');
+select is((select count(*)::int from public.notifications where type = 'tirage' and tontine_id = (select id from t)), 2, 'les membres sont notifiés');
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"aaaa0000-0000-4000-8000-000000000002","role":"authenticated"}', true);
 select public.marquer_tirage_vu((select id from t));
-select is((select count(*)::int from public.vues_tirage), 2, 'vu par 2 membres');
+select is((select count(*)::int from public.vues_tirage v join public.evenements e on e.id = v.evenement_id where e.tontine_id = (select id from t)), 2, 'vu par 2 membres');
 select throws_ok($$select public.echanger_tours((select id from m where rang = 1), (select id from m where rang = 2))$$,
   'reserve_gerante', 'seule la gérante peut échanger');
 
@@ -72,7 +72,7 @@ select lives_ok($$select public.echanger_tours(
 select results_eq($$select rang from public.membres where tontine_id = (select id from t) order by profil_id$$,
   $$values (3), (2), (1)$$, 'rangs échangés');
 reset role;
-select is((select count(*)::int from public.notifications where type = 'echange'), 1,
+select is((select count(*)::int from public.notifications where type = 'echange' and tontine_id = (select id from t)), 1,
   'le membre concerné est notifié (pas la gérante elle-même)');
 
 select * from finish();
