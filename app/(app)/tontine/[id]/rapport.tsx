@@ -1,8 +1,11 @@
+import { useMutation } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
+import { FileDown } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 
 import {
   BoutonPrincipal,
+  BoutonSecondaire,
   Chargement,
   Ecran,
   EnTete,
@@ -13,6 +16,8 @@ import {
 import { useEvenementsPenalites } from '@/data/reglages';
 import { prenomDe, useTontine } from '@/data/tontine';
 import { calculerRapport } from '@/domain/rapport';
+import { htmlRapport } from '@/features/rapport/htmlRapport';
+import { partagerPdf } from '@/features/rapport/pdf';
 import { textes } from '@/i18n';
 import { formatMoisAnnee, formatMontant } from '@/lib/format';
 import { partagerWhatsApp } from '@/lib/partage';
@@ -25,6 +30,9 @@ export default function RapportDuCycle() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const tontine = useTontine(id);
   const evenements = useEvenementsPenalites(id);
+  const pdf = useMutation({
+    mutationFn: (p: { html: string; titre: string }) => partagerPdf(p.html, p.titre),
+  });
 
   if (tontine.isLoading || evenements.isLoading) return <Chargement />;
   if (tontine.error || !tontine.data)
@@ -68,7 +76,29 @@ export default function RapportDuCycle() {
 
   return (
     <Ecran
-      pied={<BoutonPrincipal libelle={t.partager} onPress={() => partagerWhatsApp(message)} />}
+      pied={
+        <>
+          <BoutonSecondaire
+            libelle={pdf.isPending ? t.pdfEnCours : t.pdf}
+            icone={FileDown}
+            desactive={pdf.isPending}
+            onPress={() =>
+              pdf.mutate({
+                titre: t.pdfTitreFichier(d.tontine.nom),
+                html: htmlRapport({
+                  nomTontine: d.tontine.nom,
+                  rapport: r,
+                  prenoms: Object.fromEntries(
+                    d.membres.map((m) => [m.id, m.profil?.prenom ?? '—']),
+                  ),
+                }),
+              })
+            }
+            testID="bouton-pdf"
+          />
+          <BoutonPrincipal libelle={t.partager} onPress={() => partagerWhatsApp(message)} />
+        </>
+      }
     >
       <EnTete titre={t.titre} filAriane={d.tontine.nom} onRetour={() => router.back()} />
       <View style={styles.carte}>

@@ -69,7 +69,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | # | Écran | Nœud | Comportement |
 |---|---|---|---|
 | 19 | Fin de cycle | `6:282` | Bilan du cycle. Bouton secondaire « Voir le rapport du cycle ». Bouton principal « Relancer le cycle avec les mêmes membres ». |
-| 19b | Rapport du cycle | `13:455` | Total versé, nb de tours, période, % de paiements à l'heure, nb de retards, total des pénalités, ponctualité par membre. « Partager sur WhatsApp » (image ou PDF). |
+| 19b | Rapport du cycle | `13:455` | Total versé, nb de tours, période, % de paiements à l'heure, nb de retards, total des pénalités, ponctualité par membre. « Partager sur WhatsApp » (texte) et « Télécharger en PDF » (rapport complet aux couleurs de Natt, puis partage du téléphone : WhatsApp, enregistrement…). |
 | 20 | Abonnement · Mensuel | `6:289` | Paliers Starter / Pro / Illimité avec prix, palier actuel et statut (« Pro, actif jusqu'au 12 mars 2027 »). **Aucun bouton de paiement** : le paiement se fait hors de l'app (B5). |
 | 21 | Abonnement · Annuel | `6:296` | Même écran en annuel : prix plein barré puis prix réel (~~12 000 F~~ 10 000 F, ~~30 000 F~~ 25 000 F, ~~60 000 F~~ 50 000 F) et mention « 2 mois offerts », partout où un prix annuel apparaît. |
 | — | Pages web de paiement | — | Pages simples (hors de l'app) de retour de PayTech : « Paiement reçu », « Paiement annulé », « Lien plus valable », en français, aux couleurs de Natt. |

@@ -19,3 +19,6 @@ export const couleurs = {
 } as const;
 
 export type Couleur = keyof typeof couleurs;
+
+/** Palettes disponibles (la palette sombre est ajoutée au point « mode sombre »). */
+export const palettes = { clair: couleurs } as const;

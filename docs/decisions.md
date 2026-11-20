@@ -91,7 +91,7 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 
 - **Clôture** : au moment où la gérante remet la dernière cagnotte (`marquer_verse`), la tontine passe en « terminée », un événement `cycle_termine` est enregistré, les membres sont notifiés et la gérante arrive sur l'écran 19.
 - **Rapport (19b)** : calculé dans l'app (`src/domain/rapport.ts`) à partir des cotisations et des événements : total versé, nombre de tours, période (premier et dernier tour), % de paiements à l'heure (règle P5), nombre de retards, pénalités non annulées, ponctualité par membre.
-- **Partage du rapport** : en **texte** sur WhatsApp (pas d'image ni de PDF en V1 : cela demanderait une bibliothèque de capture ou de génération de PDF ; à ajouter si besoin).
+- **Partage du rapport** : en texte sur WhatsApp, et en PDF depuis l'amélioration V1.1 (point 4).
 - **Relancer le cycle (F3)** : la gérante choisit la date de début (pas de suggestion de calendrier sur cet écran pour l'instant), puis `relancer_cycle` crée une nouvelle tontine avec les mêmes paramètres et réglages (pénalité, rappels, règles libres), un nouveau code, `cycle_precedent_id`, la gérante au rang 1. La limite du palier s'applique. Les anciens membres reçoivent une notification avec le nouveau code ; un appui ouvre l'écran Rejoindre avec le code prérempli, pour reconfirmer participation et règlement. Le nouvel ordre suit l'ordre d'arrivée ; un tirage reste possible.
 - **Notifications** : nouvelle colonne `donnees` (ex. le code du nouveau cycle).
 
@@ -162,3 +162,11 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Affichage** (composant `PrixAbonnement`) : prix plein barré en gris, prix réel en gras, puis « 2 mois offerts » en vert. Le prix barré est lu « au lieu de 30 000 F » par les lecteurs d'écran.
 - **Notifications** (texte simple, sans barré possible) : « 25 000 F par an, au lieu de 30 000 F : 2 mois offerts ».
 - Les écrans 20 et 21 restent un seul écran avec le choix Mensuel / Annuel.
+
+## Point 4 — Rapport du cycle en PDF
+
+- **Génération** : `expo-print` (`printToFileAsync`) à partir d'un modèle HTML pur et testé (`src/features/rapport/htmlRapport.ts`), puis `expo-sharing` ouvre le partage du téléphone. Sur le web : fenêtre d'impression du navigateur.
+- **Contenu** : total versé, nombre de tours, période, % à l'heure, retards, pénalités, tableau par membre (à l'heure en vert, en retard en terracotta), date de génération et rappel « Natt ne garde jamais l'argent ».
+- **Toujours en clair** (palette claire), quel que soit le mode de l'app. La police Nunito est chargée depuis Google Fonts si le téléphone est en ligne, sinon une police système la remplace.
+- **Écran 19b** : « Partager sur WhatsApp » reste l'action principale ; « Télécharger en PDF » est un bouton secondaire.
+- **Bug corrigé au passage** : les messages partagés (code d'invitation, tirage, rapport) contenaient « \n » au lieu d'un retour à la ligne.
