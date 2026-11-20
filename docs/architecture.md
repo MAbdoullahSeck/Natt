@@ -212,6 +212,35 @@ create table notifications (
 
 `appeler_fonction(nom, corps)` lit `project_url` et `service_role_key` dans Vault et appelle l'Edge Function avec pg_net. Les fonctions `push` et `relances` n'acceptent que la clé service (vérifiée par la base). `relances` accepte un corps `{ "jour": "AAAA-MM-JJ" }` (date simulée) pour les tests de bout en bout : `python3 scripts/supabase_api.py relance-e2e [jour]`.
 
+## 5 ter. Abonnements payés avec PayTech
+
+```
+lien signé (push, hors de l'app)
+  └─► Edge Function paytech-checkout ?g=<gérante>&p=<palier>&d=<mensuel|annuel>&e=<expiration>&s=<HMAC>
+        ├─ creer_paiement_abonnement (SQL, service_role) : signature HMAC-SHA256 (secret Vault « lien_paiement_secret »),
+        │   expiration, montant selon le tarif, ref_command unique « NATT-AAAAMMJJ-XXXXXXXXXX »
+        ├─ POST https://paytech.sn/api/payment/request-payment (clés dans les secrets des Edge Functions)
+        └─ 302 vers la page de paiement PayTech
+PayTech ──IPN──► Edge Function paytech-ipn
+        ├─ authenticité : SHA-256(PAYTECH_API_KEY) = api_key_sha256 et SHA-256(PAYTECH_API_SECRET) = api_secret_sha256, sinon 401
+        └─ traiter_ipn_paytech (SQL) : doublon ignoré ; paiement « réussi » ; abonnement activé ou prolongé
+           (fin actuelle ou maintenant + 1 ou 12 mois) ; événement « abonnement_paye » ; notification
+PayTech ──success_url / cancel_url──► pages web statiques (web/, NATT_SITE_URL) ou natt://abonnement?paiement=…
+```
+
+```sql
+create table paiements_abonnement (
+  id uuid primary key, profil_id uuid references profils, palier palier, periodicite text,
+  montant integer, ref_command text unique, statut text,  -- en_attente | reussi | annule
+  moyen text, token_paytech text, abonnement_id uuid references abonnements, donnees_ipn jsonb,
+  created_at timestamptz, paye_at timestamptz, annule_at timestamptz
+);  -- RLS : lecture de ses propres paiements ; écriture par les fonctions système uniquement.
+```
+
+Envoi des liens (`envoyer_lien_paiement`, notification `abonnement_lien` avec `donnees.url`) : à l'inscription (`creer_profil`), à la limite du palier (`demander_lien_palier_superieur`, au plus une fois par jour) et à J-5 avant l'expiration (`envoyer_liens_expiration`, appelée chaque matin avec les relances). Un appui sur la notification **push** ouvre le lien dans le navigateur ; l'écran Notifications de l'app ne l'ouvre pas.
+
+Le journal `evenements` accepte désormais des événements sans tontine (abonnements), avec un auteur obligatoire.
+
 ## 6. Paiement (rappel de la règle n°1)
 
 Natt ne reçoit, ne garde et ne transfère jamais l'argent des cotisations. « Payer » ouvre l'application Wave ou Orange Money du téléphone avec les informations de la gérante. Points à vérifier pendant le développement : liens profonds disponibles (schéma d'URL de chaque application), possibilité de préremplir le numéro et le montant ; à défaut, afficher et copier en un geste le numéro et le montant.

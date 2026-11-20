@@ -58,18 +58,15 @@ Dans `.env` / `eas.json` :
 - `EXPO_PUBLIC_NUMERO_AIDE` : numéro WhatsApp de l'aide (sans « + ») — la ligne « Aide sur WhatsApp » du profil est masquée tant qu'il est vide.
 - `EXPO_PUBLIC_NUMERO_WAVE_NATT` : numéro Wave de Natt pour les abonnements (B5).
 
-## 8. Activation manuelle des abonnements (en attendant la décision B5)
+## 8. Abonnements : PayTech
 
-Quand une gérante a payé :
-```sql
--- Trouver la demande
-select a.id, p.prenom, p.telephone, a.palier, a.periodicite, a.created_at
-from abonnements a join profils p on p.id = a.profil_id
-where a.statut = 'en_attente' order by a.created_at;
--- L'activer (1 mois ou 1 an selon la périodicité)
-select public.activer_abonnement('<id>');
-```
-Gérante fondatrice : `update profils set fondatrice = true where telephone = '2217…';`
+- Secrets des Edge Functions (déjà sur natt-dev) : `PAYTECH_API_KEY`, `PAYTECH_API_SECRET`, `PAYTECH_ENV` (`test` ; `prod` pour encaisser réellement).
+- Fonctions : `paytech-checkout` (ouverte par le lien de paiement) et `paytech-ipn` (appelée par PayTech) — `npm run fn:deploy`.
+- **Pages de retour** : publier `web/` (voir `web/README.md`) puis `npx supabase secrets set NATT_SITE_URL=https://… --project-ref <réf>`.
+- Dans le tableau de bord PayTech : vérifier que l'URL IPN `https://<réf>.supabase.co/functions/v1/paytech-ipn` est acceptée.
+- Suivi : `select * from paiements_abonnement order by created_at desc;`.
+- Support (paiement reçu autrement) : `select public.activer_abonnement('<id d'un abonnement « en_attente »>');`.
+- Gérante fondatrice : `update profils set fondatrice = true where telephone = '2217…';`
 
 ## 9. Avant le lancement public
 

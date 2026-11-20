@@ -13,10 +13,9 @@ import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import { Ecran, EnTete, Texte } from '@/components';
 import { config } from '@/config';
 import { usePalierActif } from '@/data/abonnement';
-import { PRIX } from '@/domain/abonnement';
 import { formatTelephoneComplet } from '@/domain/telephone';
 import { textes } from '@/i18n';
-import { formatMontant } from '@/lib/format';
+import { formatDate } from '@/lib/format';
 import { useProfil, useSession } from '@/lib/session';
 import { couleurs, espacements, rayons, tailles } from '@/theme';
 
@@ -28,12 +27,15 @@ export default function Profil() {
   const { deconnecter } = useSession();
   const { palier, data: abonnements } = usePalierActif();
   const actif = abonnements?.find((a) => a.statut === 'actif' && a.palier === palier);
-  const abonnement = palier
-    ? `${textes.abonnement.paliers[palier]} · ${textes.abonnement.prix(
-        formatMontant(PRIX[palier][actif?.periodicite === 'annuel' ? 'annuel' : 'mensuel']),
-        actif?.periodicite === 'annuel',
-      )}`
-    : textes.abonnement.aucun;
+  const abonnement =
+    palier && actif?.expire_at
+      ? textes.abonnement.actifJusquau(
+          textes.abonnement.paliers[palier],
+          formatDate(actif.expire_at, { annee: true }),
+        )
+      : palier
+        ? textes.abonnement.paliers[palier]
+        : textes.abonnement.aucun;
 
   return (
     <Ecran avecOnglets>

@@ -139,7 +139,7 @@ export type Database = {
           donnees: Json
           id: string
           membre_id: string | null
-          tontine_id: string
+          tontine_id: string | null
           type: string
         }
         Insert: {
@@ -148,7 +148,7 @@ export type Database = {
           donnees?: Json
           id?: string
           membre_id?: string | null
-          tontine_id: string
+          tontine_id?: string | null
           type: string
         }
         Update: {
@@ -157,7 +157,7 @@ export type Database = {
           donnees?: Json
           id?: string
           membre_id?: string | null
-          tontine_id?: string
+          tontine_id?: string | null
           type?: string
         }
         Relationships: [
@@ -324,6 +324,79 @@ export type Database = {
             columns: ["tontine_id"]
             isOneToOne: false
             referencedRelation: "tontines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paiements_abonnement: {
+        Row: {
+          abonnement_id: string | null
+          annule_at: string | null
+          created_at: string
+          donnees_ipn: Json | null
+          id: string
+          montant: number
+          moyen: string | null
+          palier: Database["public"]["Enums"]["palier"]
+          paye_at: string | null
+          periodicite: string
+          profil_id: string
+          ref_command: string
+          statut: string
+          token_paytech: string | null
+        }
+        Insert: {
+          abonnement_id?: string | null
+          annule_at?: string | null
+          created_at?: string
+          donnees_ipn?: Json | null
+          id?: string
+          montant: number
+          moyen?: string | null
+          palier: Database["public"]["Enums"]["palier"]
+          paye_at?: string | null
+          periodicite: string
+          profil_id: string
+          ref_command: string
+          statut?: string
+          token_paytech?: string | null
+        }
+        Update: {
+          abonnement_id?: string | null
+          annule_at?: string | null
+          created_at?: string
+          donnees_ipn?: Json | null
+          id?: string
+          montant?: number
+          moyen?: string | null
+          palier?: Database["public"]["Enums"]["palier"]
+          paye_at?: string | null
+          periodicite?: string
+          profil_id?: string
+          ref_command?: string
+          statut?: string
+          token_paytech?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paiements_abonnement_abonnement_id_fkey"
+            columns: ["abonnement_id"]
+            isOneToOne: false
+            referencedRelation: "abonnements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paiements_abonnement_profil_id_fkey"
+            columns: ["profil_id"]
+            isOneToOne: false
+            referencedRelation: "profils"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paiements_abonnement_profil_id_fkey"
+            columns: ["profil_id"]
+            isOneToOne: false
+            referencedRelation: "profils_publics"
             referencedColumns: ["id"]
           },
         ]
@@ -633,7 +706,10 @@ export type Database = {
           type: Database["public"]["Enums"]["type_tontine"]
         }[]
       }
-      appeler_fonction: { Args: { p_nom: string }; Returns: undefined }
+      appeler_fonction: {
+        Args: { p_corps?: Json; p_nom: string }
+        Returns: number
+      }
       appliquer_ordre: {
         Args: { p_ordre: string[]; p_tontine_id: string }
         Returns: undefined
@@ -665,6 +741,37 @@ export type Database = {
           statut: Database["public"]["Enums"]["statut_cotisation"]
           tour_id: string
         }[]
+      }
+      creer_paiement_abonnement: {
+        Args: {
+          p_expire: number
+          p_palier: string
+          p_periodicite: string
+          p_profil_id: string
+          p_signature: string
+        }
+        Returns: {
+          abonnement_id: string | null
+          annule_at: string | null
+          created_at: string
+          donnees_ipn: Json | null
+          id: string
+          montant: number
+          moyen: string | null
+          palier: Database["public"]["Enums"]["palier"]
+          paye_at: string | null
+          periodicite: string
+          profil_id: string
+          ref_command: string
+          statut: string
+          token_paytech: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "paiements_abonnement"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       creer_profil: {
         Args: { p_consentement_version: string; p_prenom: string }
@@ -732,27 +839,7 @@ export type Database = {
         }
         Returns: undefined
       }
-      demander_abonnement: {
-        Args: {
-          p_palier: Database["public"]["Enums"]["palier"]
-          p_periodicite: string
-        }
-        Returns: {
-          created_at: string
-          expire_at: string | null
-          id: string
-          palier: Database["public"]["Enums"]["palier"]
-          periodicite: string
-          profil_id: string
-          statut: string
-        }
-        SetofOptions: {
-          from: "*"
-          to: "abonnements"
-          isOneToOne: true
-          isSetofReturn: false
-        }
-      }
+      demander_lien_palier_superieur: { Args: never; Returns: boolean }
       demarrer_tontines: { Args: never; Returns: number }
       echanger_tours: {
         Args: { p_membre_a: string; p_membre_b: string }
@@ -766,6 +853,20 @@ export type Database = {
         }
         Returns: string
       }
+      enregistrer_token_paytech: {
+        Args: { p_paiement_id: string; p_token: string }
+        Returns: undefined
+      }
+      envoyer_lien_paiement: {
+        Args: {
+          p_palier: Database["public"]["Enums"]["palier"]
+          p_periodicite: string
+          p_profil_id: string
+          p_raison: string
+        }
+        Returns: string
+      }
+      envoyer_liens_expiration: { Args: { p_jour?: string }; Returns: number }
       est_gerante: { Args: { p_tontine_id: string }; Returns: boolean }
       est_membre: { Args: { p_tontine_id: string }; Returns: boolean }
       exiger_gerante: { Args: { p_tontine_id: string }; Returns: undefined }
@@ -781,6 +882,15 @@ export type Database = {
         Returns: undefined
       }
       jour_dakar: { Args: { p: string }; Returns: string }
+      lien_paiement: {
+        Args: {
+          p_palier: Database["public"]["Enums"]["palier"]
+          p_periodicite: string
+          p_profil_id: string
+          p_validite?: string
+        }
+        Returns: string
+      }
       limite_tontines: { Args: { p_profil_id: string }; Returns: number }
       marquer_pousses: { Args: { p_ids: string[] }; Returns: undefined }
       marquer_tirage_vu: { Args: { p_tontine_id: string }; Returns: undefined }
@@ -828,6 +938,7 @@ export type Database = {
         Args: { p_limite?: number }
         Returns: {
           corps: string
+          created_at: string
           donnees: Json
           id: string
           jeton: string
@@ -846,12 +957,31 @@ export type Database = {
         }
         Returns: string
       }
+      nouvelle_expiration: {
+        Args: {
+          p_fin_actuelle: string
+          p_maintenant?: string
+          p_periodicite: string
+        }
+        Returns: string
+      }
       nouvelle_version_reglement: {
         Args: { p_tontine_id: string }
         Returns: number
       }
       partage_une_tontine: { Args: { p_profil_id: string }; Returns: boolean }
       preparer_relances: { Args: { p_jour?: string }; Returns: Json }
+      preparer_relances_et_abonnements: {
+        Args: { p_jour?: string }
+        Returns: Json
+      }
+      prix_abonnement: {
+        Args: {
+          p_palier: Database["public"]["Enums"]["palier"]
+          p_periodicite: string
+        }
+        Returns: number
+      }
       rejoindre_tontine: {
         Args: { p_code: string; p_version_reglement: number }
         Returns: string
@@ -890,6 +1020,15 @@ export type Database = {
         }
       }
       retirer_consentement: { Args: never; Returns: undefined }
+      signature_lien_paiement: {
+        Args: {
+          p_expire: number
+          p_palier: string
+          p_periodicite: string
+          p_profil_id: string
+        }
+        Returns: string
+      }
       suggestions_calendrier: {
         Args: {
           p_date_debut: string
@@ -939,6 +1078,16 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      traiter_ipn_paytech: {
+        Args: {
+          p_donnees: Json
+          p_evenement: string
+          p_moyen: string
+          p_ref_command: string
+        }
+        Returns: string
+      }
+      url_projet: { Args: never; Returns: string }
     }
     Enums: {
       frequence: "jour" | "semaine" | "mois"

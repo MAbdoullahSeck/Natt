@@ -161,7 +161,6 @@ export const fr = {
       deja_annulee: 'Cette pénalité est déjà annulée.',
       cycle_non_termine: 'Le cycle n’est pas encore terminé.',
       cycle_deja_relance: 'Le cycle suivant est déjà créé.',
-      periodicite_invalide: 'Choisis mensuel ou annuel.',
     } as Record<string, string>,
   },
   inscription: {
@@ -422,26 +421,23 @@ export const fr = {
       pro: 'Jusqu’à 6 tontines gérées',
       illimite: 'Tontines illimitées',
     },
-    prix: (montant: string, annuel: boolean) => `${montant} / ${annuel ? 'an' : 'mois'}`,
-    actuel: 'Ton abonnement actuel',
-    enAttente: 'En attente de paiement',
-    upsell:
-      'Tu as atteint le nombre de tontines de ton abonnement. Choisis un abonnement plus grand.',
-    rejoindreGratuit: 'Rejoindre une tontine est toujours gratuit.',
-    choisir: (palier: string) => `Choisir ${palier}`,
-    fondatrice: 'Gérante fondatrice : ton prix est bloqué.',
-    expire: (date: string) => `Actif jusqu’au ${date}`,
-    demande: {
-      titre: 'Demande enregistrée',
-      texte: (montant: string, numero: string) =>
-        numero
-          ? `Envoie ${montant} par Wave au ${numero}. Ton abonnement sera activé dès réception.`
-          : `Ton abonnement sera activé dès réception de ton paiement de ${montant}. L’équipe Natt te contactera.`,
-      copier: 'Copier le numéro',
-      copie: 'Numéro copié',
-      terminer: 'Terminer',
-    },
+    parPeriode: (annuel: boolean) => (annuel ? '/ an' : '/ mois'),
+    actifJusquau: (palier: string, date: string) => `${palier}, actif jusqu’au ${date}`,
+    actuel: 'Ton abonnement',
     aucun: 'Aucun abonnement',
+    aucunTexte:
+      'Rejoindre une tontine est toujours gratuit. Pour gérer une tontine, il faut un abonnement.',
+    commentPayer:
+      'Le paiement se fait en dehors de l’application : tu reçois un lien de paiement par notification à l’inscription et 5 jours avant la fin de ton abonnement.',
+    upsell: (palier: string) =>
+      `Tu as atteint le nombre de tontines de ton abonnement. Nous t’avons envoyé par notification le lien pour passer à ${palier}.`,
+    upsellMax: 'Tu as atteint le nombre de tontines de ton abonnement.',
+    fondatrice: 'Gérante fondatrice : ton prix est bloqué.',
+    retourPaiement: {
+      succes: 'Paiement reçu. Ton abonnement sera actif dans quelques instants.',
+      annule: 'Paiement annulé. Tu peux réessayer avec le lien reçu par notification.',
+      erreur: 'Le lien de paiement n’est plus valable. Un nouveau lien te sera envoyé.',
+    },
   },
   profilEcran: {
     fondatrice: 'Gérante fondatrice',

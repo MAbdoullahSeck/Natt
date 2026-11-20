@@ -26,3 +26,4 @@ export { EnTeteEtape } from './EnTeteEtape';
 export { SaisieNombre } from './SaisieNombre';
 export { LigneInfo } from './LigneInfo';
 export { ApercuCapture } from './ApercuCapture';
+export { PrixAbonnement } from './PrixAbonnement';

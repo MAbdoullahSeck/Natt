@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
-import { Platform } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 import { couleurs } from '@/theme';
 
@@ -59,7 +59,10 @@ export function ecouterOuvertureNotifications(): () => void {
   const abonnement = Notifications.addNotificationResponseReceivedListener((reponse) => {
     const donnees = reponse.notification.request.content.data ?? {};
     // Nouveau cycle : la membre n'en fait pas encore partie → écran Rejoindre avec le code.
-    if (donnees.type === 'nouveau_cycle' && typeof donnees.code === 'string') {
+    // Lien de paiement de l'abonnement : ouvert dans le navigateur (le paiement se fait hors de l'app).
+    if (donnees.type === 'abonnement_lien' && typeof donnees.url === 'string') {
+      Linking.openURL(donnees.url);
+    } else if (donnees.type === 'nouveau_cycle' && typeof donnees.code === 'string') {
       router.push({ pathname: '/rejoindre', params: { code: donnees.code } });
     } else if (typeof donnees.tontine_id === 'string') {
       router.push({ pathname: '/tontine/[id]', params: { id: donnees.tontine_id } });

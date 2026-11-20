@@ -1,0 +1,58 @@
+/* Pages web de Natt (hors de l'app) : couleurs du design system, mode sombre automatique. */
+:root {
+  --fond: #ffffff;
+  --carte: #faf4f0;
+  --texte: #1c1c1c;
+  --texte-secondaire: #68645f;
+  --terracotta: #c65d3b;
+  --bouton: #c65d3b;
+  --texte-bouton: #ffffff;
+  --vert: #1f6b4f;
+  --vert-puce: #eaf3ee;
+  --terracotta-puce: #faeee8;
+  --bordure: #dcd8d2;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #121110;
+    --carte: #241c18;
+    --texte: #f2efea;
+    --texte-secondaire: #b5afa7;
+    --terracotta: #e8896a;
+    --bouton: #b5532f;
+    --texte-bouton: #ffffff;
+    --vert: #6bcb9b;
+    --vert-puce: #17332a;
+    --terracotta-puce: #3d241b;
+    --bordure: #3a3633;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  background: var(--fond);
+  color: var(--texte);
+  display: flex;
+  justify-content: center;
+}
+main { width: 100%; max-width: 440px; padding: 32px 24px; display: flex; flex-direction: column; gap: 20px; }
+.logo { font-size: 28px; font-weight: 700; color: var(--terracotta); letter-spacing: 1px; }
+h1 { font-size: 30px; margin: 0; line-height: 1.25; }
+p { margin: 0; }
+.secondaire { color: var(--texte-secondaire); }
+.rond { width: 96px; height: 96px; border-radius: 48px; display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto; }
+.rond.vert { background: var(--vert-puce); color: var(--vert); }
+.rond.terracotta { background: var(--terracotta-puce); color: var(--terracotta); }
+.carte { background: var(--carte); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.code { font-size: 44px; font-weight: 700; letter-spacing: 8px; text-align: center; }
+.bouton {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 56px; border-radius: 16px; padding: 0 16px;
+  font-size: 20px; font-weight: 700; text-decoration: none;
+  background: var(--bouton); color: var(--texte-bouton);
+}
+.bouton.secondaire-btn { background: transparent; color: var(--texte); border: 1px solid var(--bordure); font-size: 18px; }

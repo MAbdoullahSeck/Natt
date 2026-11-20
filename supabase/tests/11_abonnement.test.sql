@@ -1,25 +1,25 @@
--- Étape 10 : abonnement et retrait du consentement.
+-- Étape 10 : limite d'abonnement, activation manuelle (support) et retrait du consentement.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(11);
+select plan(7);
 
 insert into auth.users (id, aud, role, phone) values
   ('dddd0000-0000-4000-8000-000000000001', 'authenticated', 'authenticated', '221784000001');
 insert into public.profils (id, prenom, telephone, consentement_at, consentement_version) values
   ('dddd0000-0000-4000-8000-000000000001', 'Nouvelle', '221784000001', now(), 'v1');
+insert into public.abonnements (profil_id, palier, periodicite, statut)
+values ('dddd0000-0000-4000-8000-000000000001', 'pro', 'annuel', 'en_attente');
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"dddd0000-0000-4000-8000-000000000001","role":"authenticated"}', true);
-select throws_ok($$select public.creer_tontine('Test', 'classique', null, 1000, 'mois', 2, current_date)$$, 'limite_atteinte', 'sans abonnement : upsell');
-select is((select statut from public.demander_abonnement('starter', 'mensuel')), 'en_attente', 'demande en attente');
-select is((select palier::text from public.demander_abonnement('pro', 'annuel')), 'pro', 'la demande en attente est remplacée');
-select is((select count(*)::int from public.abonnements), 1, 'une seule demande en attente');
-select throws_ok($$select public.activer_abonnement((select id from public.abonnements where profil_id = 'dddd0000-0000-4000-8000-000000000001'))$$, '42501', null, 'une gérante ne peut pas s''activer elle-même');
-select throws_ok($$select public.creer_tontine('Test', 'classique', null, 1000, 'mois', 2, current_date)$$, 'limite_atteinte', 'en attente : toujours bloquée');
+select throws_ok($$select public.creer_tontine('Test', 'classique', null, 1000, 'mois', 2, current_date)$$, 'limite_atteinte', 'sans abonnement actif : upsell');
+select throws_ok($$select public.activer_abonnement((select id from public.abonnements where profil_id = 'dddd0000-0000-4000-8000-000000000001'))$$,
+  '42501', null, 'une gérante ne peut pas s''activer elle-même');
 
 reset role;
 set local role service_role;
-select is((select statut from public.activer_abonnement((select id from public.abonnements where profil_id = 'dddd0000-0000-4000-8000-000000000001'))), 'actif', 'activation manuelle');
+select is((select statut from public.activer_abonnement((select id from public.abonnements where profil_id = 'dddd0000-0000-4000-8000-000000000001'))), 'actif',
+  'activation manuelle (support)');
 reset role;
 select ok((select expire_at > now() + interval '360 days' from public.abonnements where profil_id = 'dddd0000-0000-4000-8000-000000000001'), 'annuel : un an');
 

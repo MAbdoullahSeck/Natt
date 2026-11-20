@@ -16,7 +16,11 @@ type ANotifier = {
   tontine_id: string | null;
   type: string;
   donnees: Record<string, unknown> | null;
+  created_at: string;
 };
+
+/** Sans jeton, on réessaie pendant 10 minutes (le jeton est enregistré juste après l'inscription). */
+const DELAI_SANS_JETON_MS = 10 * 60 * 1000;
 
 export function estJetonExpo(jeton: string | null): jeton is string {
   return !!jeton && /^Expo(nent)?PushToken\[.+\]$/.test(jeton);
@@ -28,7 +32,10 @@ export async function envoyerPushEnAttente(): Promise<{ envoyees: number; sansJe
 
   const avecJeton = data.filter((n) => estJetonExpo(n.jeton));
   const sansJeton = data.filter((n) => !estJetonExpo(n.jeton));
-  const traitees: string[] = sansJeton.map((n) => n.id);
+  const maintenant = Date.now();
+  const traitees: string[] = sansJeton
+    .filter((n) => maintenant - new Date(n.created_at).getTime() > DELAI_SANS_JETON_MS)
+    .map((n) => n.id);
 
   for (let i = 0; i < avecJeton.length; i += TAILLE_LOT) {
     const lot = avecJeton.slice(i, i + TAILLE_LOT);

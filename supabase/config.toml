@@ -462,3 +462,10 @@ verify_jwt = false
 
 [functions.relances]
 verify_jwt = false
+
+# PayTech : ouvertes depuis un navigateur (lien de paiement) ou appelées par PayTech (IPN).
+[functions.paytech-checkout]
+verify_jwt = false
+
+[functions.paytech-ipn]
+verify_jwt = false

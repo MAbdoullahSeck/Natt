@@ -68,7 +68,7 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 
 ## Améliorations V1.1 (après l'étape 11)
 - [x] 1. Edge Functions déployées sur natt-dev, Vault configuré, relance planifiée vérifiée de bout en bout (`python3 scripts/supabase_api.py relance-e2e`).
-- [ ] 2. Paiement des abonnements avec PayTech (paiements_abonnement, paytech-checkout, paytech-ipn, lien envoyé hors de l'app).
+- [x] 2. Paiement des abonnements avec PayTech (paiements_abonnement, paytech-checkout, paytech-ipn, lien envoyé hors de l'app), déployé en mode test.
 - [ ] 3. Prix barré sur l'abonnement annuel.
 - [ ] 4. Export du rapport du cycle en PDF.
 - [ ] 5. Rejoindre une tontine avec un lien d'invitation.

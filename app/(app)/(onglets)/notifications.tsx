@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { router, useFocusEffect } from 'expo-router';
 import {
   ArrowLeftRight,
+  Crown,
   Bell,
   CircleCheck,
   FileText,
@@ -39,13 +40,23 @@ const ICONES: Record<string, LucideIcon> = {
   reglement: FileText,
   cycle_termine: CircleCheck,
   nouveau_cycle: UserPlus,
+  abonnement_lien: Crown,
+  abonnement: CircleCheck,
 };
-const CONFIRMATIONS = new Set(['confirmation', 'versement', 'penalite_annulee', 'cycle_termine']);
+const CONFIRMATIONS = new Set([
+  'confirmation',
+  'versement',
+  'penalite_annulee',
+  'cycle_termine',
+  'abonnement',
+]);
 
 type Notif = { type: string; tontine_id: string | null; donnees: unknown };
 
 /** Appui sur une notification : la tontine, ou l'écran Rejoindre pour un nouveau cycle. */
 function ouvrir(n: Notif) {
+  // Les liens de paiement ne s'ouvrent jamais depuis l'app (règles du Play Store) : seulement depuis le push.
+  if (n.type === 'abonnement_lien') return;
   const code = (n.donnees as { code?: string } | null)?.code;
   if (n.type === 'nouveau_cycle' && code) {
     router.push({ pathname: '/rejoindre', params: { code } });
@@ -93,7 +104,7 @@ export default function Notifications() {
           {groupe.elements.map((n) => (
             <Pressable
               key={n.id}
-              disabled={!n.tontine_id}
+              disabled={!n.tontine_id && n.type !== 'nouveau_cycle'}
               onPress={() => ouvrir(n)}
               accessibilityRole="button"
             >
