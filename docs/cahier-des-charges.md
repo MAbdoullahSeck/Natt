@@ -34,13 +34,13 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | 08 | Créer · Fréquence (4/6) | `2:116` | Jour, Semaine ou Mois. |
 | 09 | Créer · Membres (5/6) | `2:123` | Nombre de membres, gérante comprise (2 à 50). Détermine le nombre de tours. |
 | 10 | Créer · Date (6/6) | `2:130` | Date du premier tour (aujourd'hui ou plus tard). **Suggestion de calendrier** : si un événement (Tabaski, Korité, rentrée scolaire…) tombe pendant le cycle, une carte propose « Ajuster » pour caler un tour juste avant. La gérante décide ; rien n'est automatique. Bouton « Créer la tontine ». Vérifie la limite du palier d'abonnement avant création. |
-| 11 | Tontine créée | `2:137` | Code d'invitation à 6 chiffres, récapitulatif, bouton « Partager sur WhatsApp » (message prérempli avec le code et un lien). |
+| 11 | Tontine créée | `2:137` | Code d'invitation à 6 chiffres, récapitulatif, bouton « Partager sur WhatsApp » (message prérempli avec le **lien d'invitation** et le code). Le lien ouvre l'app directement sur l'écran 12c ; si l'app n'est pas installée, il mène à une page web simple avec le code et le téléchargement. |
 
 ## 1.4 Rejoindre
 
 | # | Écran | Nœud | Comportement |
 |---|---|---|---|
-| 12 | Rejoindre | `2:144` | Saisie du code à 6 chiffres au pavé numérique. |
+| 12 | Rejoindre | `2:144` | Saisie du code à 6 chiffres au pavé numérique (toujours possible, même après avoir reçu un lien). Un lien d'invitation ouvert avant la connexion est gardé : après l'inscription, l'app ouvre directement l'écran 12c. |
 | 12b | Rejoindre · Code invalide | `12:469` | Cases en terracotta + « Ce code n'existe pas. Vérifie-le avec ta gérante. » Aussi utilisé si la tontine est complète ou terminée (message adapté). |
 | 12c | Rejoindre · Règlement | `12:513` | Aperçu (montant, fréquence, nb membres, gérante, mode d'attribution des tours) + règlement de la tontine. Case « J'accepte le règlement » obligatoire avant « Rejoindre la tontine ». |
 

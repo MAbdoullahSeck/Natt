@@ -469,3 +469,7 @@ verify_jwt = false
 
 [functions.paytech-ipn]
 verify_jwt = false
+
+# Invitation : lien https partagé sur WhatsApp, ouvert dans un navigateur.
+[functions.invitation]
+verify_jwt = false

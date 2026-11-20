@@ -87,7 +87,7 @@ export const fr = {
       recapMembres: (n: number) => `${n} membres`,
       recapDebut: (date: string) => `Premier tour : ${date}`,
       message: (nom: string, code: string, lien: string) =>
-        `Rejoins ma tontine « ${nom} » sur Natt avec le code ${code}.\n${lien}`,
+        `Rejoins ma tontine « ${nom} » sur Natt.\nCode : ${code}\nLien : ${lien}`,
     },
   },
   membre: {
@@ -228,6 +228,7 @@ export const fr = {
       regles: 'Le règlement',
       accepter: 'J’accepte le règlement',
       bouton: 'Rejoindre la tontine',
+      saisirCode: 'Saisir un code',
     },
   },
   tontine: {

@@ -5,7 +5,9 @@ import { StyleSheet, View } from 'react-native';
 
 import {
   BoutonPrincipal,
+  BoutonSecondaire,
   CaseACocher,
+  CaseCode,
   Chargement,
   Ecran,
   EnTete,
@@ -16,7 +18,7 @@ import {
 import { cles } from '@/data/cles';
 import { chargerApercu } from '@/data/rejoindre';
 import { textes } from '@/i18n';
-import { messageErreur } from '@/lib/erreurs';
+import { codeErreur, messageErreur } from '@/lib/erreurs';
 import { formatDate, formatMontant } from '@/lib/format';
 import { supabase } from '@/lib/supabase';
 import { couleurs, espacements, rayons } from '@/theme';
@@ -48,6 +50,22 @@ export default function ReglementRejoindre() {
   });
 
   if (apercu.isLoading) return <Chargement />;
+  const codeMetier = codeErreur(apercu.error);
+  if (codeMetier && textes.rejoindre.erreurs[codeMetier])
+    // Écran 12b : code inconnu, tontine complète ou terminée, déjà membre.
+    return (
+      <Ecran
+        pied={
+          <BoutonSecondaire libelle={t.saisirCode} onPress={() => router.replace('/rejoindre')} />
+        }
+      >
+        <EnTete titre={t.titre} onRetour={() => router.back()} />
+        <CaseCode valeur={code} erreur />
+        <Texte variante="corpsFort" couleur="terracotta" testID="erreur-code">
+          {textes.rejoindre.erreurs[codeMetier]}
+        </Texte>
+      </Ecran>
+    );
   if (apercu.error || !apercu.data)
     return (
       <Ecran>

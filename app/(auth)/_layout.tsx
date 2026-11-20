@@ -5,7 +5,7 @@ import { couleurs } from '@/theme';
 
 export default function LayoutInscription() {
   const { session, profil } = useSession();
-  if (session && profil) return <Redirect href="/accueil" />;
+  if (session && profil) return <Redirect href="/" />;
   return (
     <Stack
       screenOptions={{ headerShown: false, contentStyle: { backgroundColor: couleurs.fond } }}

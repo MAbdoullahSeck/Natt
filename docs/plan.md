@@ -71,6 +71,6 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] 2. Paiement des abonnements avec PayTech (paiements_abonnement, paytech-checkout, paytech-ipn, lien envoyé hors de l'app), déployé en mode test.
 - [x] 3. Prix barré sur l'abonnement annuel.
 - [x] 4. Export du rapport du cycle en PDF.
-- [ ] 5. Rejoindre une tontine avec un lien d'invitation.
+- [x] 5. Rejoindre une tontine avec un lien d'invitation.
 - [ ] 6. Retirer un membre (gérante).
 - [ ] 7. Mode sombre.

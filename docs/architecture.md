@@ -241,6 +241,12 @@ Envoi des liens (`envoyer_lien_paiement`, notification `abonnement_lien` avec `d
 
 Le journal `evenements` accepte désormais des événements sans tontine (abonnements), avec un auteur obligatoire.
 
+## 5 quater. Lien d'invitation
+
+- Message WhatsApp (écran 11, « Partager le code » de l'écran 13) : code + lien `https://<réf>.supabase.co/functions/v1/invitation?code=XXXXXX` (WhatsApp ne rend cliquables que les liens http(s)).
+- Edge Function `invitation` : redirige vers `NATT_SITE_URL/invitation.html?code=…` (page statique de `web/` qui ouvre `natt://rejoindre?code=…` ou propose le téléchargement) si le site est configuré, sinon renvoie une page en texte simple (code + lien Play Store + marche à suivre).
+- Dans l'app, `natt://rejoindre?code=…` ouvre directement l'écran 12c (`/rejoindre/reglement`), qui affiche les erreurs de l'écran 12b. Si la personne n'est pas connectée, le code est gardé (AsyncStorage) et repris après l'inscription.
+
 ## 6. Paiement (rappel de la règle n°1)
 
 Natt ne reçoit, ne garde et ne transfère jamais l'argent des cotisations. « Payer » ouvre l'application Wave ou Orange Money du téléphone avec les informations de la gérante. Points à vérifier pendant le développement : liens profonds disponibles (schéma d'URL de chaque application), possibilité de préremplir le numéro et le montant ; à défaut, afficher et copier en un geste le numéro et le montant.

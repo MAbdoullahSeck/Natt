@@ -20,7 +20,8 @@ import { resumeTour, statutMembre, tourEnCours } from '@/domain/tontine';
 import { textes } from '@/i18n';
 import { messageErreur } from '@/lib/erreurs';
 import { formatDate, formatMontant } from '@/lib/format';
-import { lienRejoindre, partagerWhatsApp } from '@/lib/partage';
+import { lienInvitation } from '@/lib/invitation';
+import { partagerWhatsApp } from '@/lib/partage';
 import { espacements } from '@/theme';
 
 import { CarteCagnotte } from './CarteCagnotte';
@@ -105,7 +106,7 @@ export function VueGerante({ donnees }: Props) {
                 textes.creation.cree.message(
                   tontine.nom,
                   tontine.code,
-                  lienRejoindre(tontine.code),
+                  lienInvitation(tontine.code),
                 ),
               )
             }

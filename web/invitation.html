@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Natt — Rejoindre une tontine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="natt.css" />
+</head>
+<body>
+  <main>
+    <div class="logo">Natt</div>
+    <h1>Tu es invitée à rejoindre une tontine</h1>
+    <div class="carte">
+      <p class="secondaire">Code de la tontine</p>
+      <p class="code" id="code">— — —</p>
+    </div>
+    <a class="bouton" id="ouvrir" href="natt://rejoindre">Ouvrir dans Natt</a>
+    <a class="bouton secondaire-btn" href="https://play.google.com/store/apps/details?id=sn.natt.app">Télécharger Natt</a>
+    <p class="secondaire">
+      Après l’installation, inscris-toi avec ton numéro, puis touche « Rejoindre avec un code » et tape ce code.
+    </p>
+    <p class="secondaire">Natt ne garde jamais l’argent : tu paies directement ta gérante par Wave ou Orange Money.</p>
+  </main>
+  <script>
+    (function () {
+      var code = (new URLSearchParams(location.search).get('code') || '').replace(/\D/g, '').slice(0, 6);
+      if (code.length !== 6) return;
+      document.getElementById('code').textContent = code.slice(0, 3) + ' ' + code.slice(3);
+      var lien = 'natt://rejoindre?code=' + code;
+      document.getElementById('ouvrir').href = lien;
+      // Essai d'ouverture automatique de l'app (sans effet si elle n'est pas installée).
+      setTimeout(function () { location.href = lien; }, 300);
+    })();
+  </script>
+</body>
+</html>

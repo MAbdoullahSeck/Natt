@@ -170,3 +170,15 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Toujours en clair** (palette claire), quel que soit le mode de l'app. La police Nunito est chargée depuis Google Fonts si le téléphone est en ligne, sinon une police système la remplace.
 - **Écran 19b** : « Partager sur WhatsApp » reste l'action principale ; « Télécharger en PDF » est un bouton secondaire.
 - **Bug corrigé au passage** : les messages partagés (code d'invitation, tirage, rapport) contenaient « \n » au lieu d'un retour à la ligne.
+
+## Point 5 — Lien d'invitation
+
+- **Lien partagé** : `https://<réf>.supabase.co/functions/v1/invitation?code=XXXXXX`, avec le code dans le message (« Code : … / Lien : … »). Un lien `natt://` seul ne serait pas cliquable dans WhatsApp.
+- **Page web de secours** : comme pour PayTech, Supabase n'affiche pas de HTML sur `*.supabase.co`. L'Edge Function `invitation` renvoie donc une **page en texte simple** (code, lien Play Store, marche à suivre), ou redirige vers `web/invitation.html` dès que `NATT_SITE_URL` est configuré. Cette page HTML essaie d'ouvrir l'app (`natt://rejoindre?code=…`) et propose « Ouvrir dans Natt » et « Télécharger Natt ».
+- **Dans l'app** : `natt://rejoindre?code=…` mène directement à l'écran 12c ; un code inconnu, une tontine complète ou terminée affichent le message de l'écran 12b avec « Saisir un code ». Lien ouvert sans être connectée : le code est mémorisé et repris après l'inscription. La saisie manuelle du code reste toujours possible.
+- **Lien Play Store** : `https://play.google.com/store/apps/details?id=sn.natt.app` (paquet de `app.json`) ; il ne fonctionnera qu'une fois l'app publiée.
+- **Liens universels, le jour où Natt aura un domaine** (ex. `natt.sn`) :
+  1. Servir `https://natt.sn/.well-known/assetlinks.json` (Android App Links : paquet `sn.natt.app` + empreinte SHA-256 du certificat de signature, fournie par EAS / Play Console) et `https://natt.sn/.well-known/apple-app-site-association` (iOS Universal Links : Team ID + bundle `sn.natt.app`, chemins `/i/*`).
+  2. Dans `app.json` : `android.intentFilters` avec `autoVerify: true`, `scheme: https`, `host: natt.sn`, `pathPrefix: /i/` ; `ios.associatedDomains: ["applinks:natt.sn"]`.
+  3. Faire pointer les liens vers `https://natt.sn/i/XXXXXX` (route expo-router `app/i/[code].tsx` qui redirige vers `/rejoindre/reglement`), et publier le contenu de `web/` sur ce domaine (pages d'invitation et de paiement).
+  4. Optionnel : Play Install Referrer pour retrouver le code après une installation depuis le lien.

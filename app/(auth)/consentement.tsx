@@ -31,7 +31,7 @@ export default function EcranConsentement() {
       return;
     }
     await rafraichirProfil();
-    router.replace('/accueil');
+    router.replace('/');
   }
 
   return (

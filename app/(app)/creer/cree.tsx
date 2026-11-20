@@ -6,7 +6,8 @@ import { StyleSheet, View } from 'react-native';
 import { BoutonPrincipal, Chargement, Ecran, EnTete, EtatErreur, Lien, Texte } from '@/components';
 import { textes } from '@/i18n';
 import { formatDate, formatMontant } from '@/lib/format';
-import { lienRejoindre, partagerWhatsApp } from '@/lib/partage';
+import { lienInvitation } from '@/lib/invitation';
+import { partagerWhatsApp } from '@/lib/partage';
 import { supabase } from '@/lib/supabase';
 import { couleurs, espacements, rayons, tailles } from '@/theme';
 
@@ -39,7 +40,7 @@ export default function TontineCreee() {
           <BoutonPrincipal
             libelle={t.partager}
             onPress={() =>
-              partagerWhatsApp(t.message(data.nom, data.code, lienRejoindre(data.code)))
+              partagerWhatsApp(t.message(data.nom, data.code, lienInvitation(data.code)))
             }
             testID="bouton-partager"
           />

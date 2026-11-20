@@ -5,6 +5,7 @@ import { CaseCode, ClavierNumerique, Ecran, EnTete, Texte } from '@/components';
 import { chargerApercu } from '@/data/rejoindre';
 import { textes } from '@/i18n';
 import { codeErreur, messageErreur } from '@/lib/erreurs';
+import { codeInvitation } from '@/lib/invitation';
 
 const t = textes.rejoindre;
 
@@ -29,13 +30,12 @@ export default function Rejoindre() {
     }
   }
 
-  // Lien profond natt://rejoindre?code=123456 : code prérempli et vérifié.
+  // Lien d'invitation (natt://rejoindre?code=123456) : directement l'aperçu et le règlement (écran 12c).
   useEffect(() => {
-    const prerempli = (params.code ?? '').replace(/\D/g, '').slice(0, 6);
-    if (prerempli.length === 6 && !dejaVerifie.current) {
+    const code = codeInvitation(params.code);
+    if (code && !dejaVerifie.current) {
       dejaVerifie.current = true;
-      setCode(prerempli);
-      verifier(prerempli);
+      router.replace({ pathname: '/rejoindre/reglement', params: { code } });
     }
   }, [params.code]);
 

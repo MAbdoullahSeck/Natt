@@ -30,6 +30,7 @@ const SCENARIOS = [
   ['notifs_membre', null, { pasDeReset: true }],
   ['fin', 'fin.sql'],
   ['abonnement'],
+  ['invitation'],
   ['profil'],
 ];
 
