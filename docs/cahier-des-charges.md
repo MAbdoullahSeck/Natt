@@ -34,13 +34,13 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | 08 | Créer · Fréquence (4/6) | `2:116` | Jour, Semaine ou Mois. |
 | 09 | Créer · Membres (5/6) | `2:123` | Nombre de membres, gérante comprise (2 à 50). Détermine le nombre de tours. |
 | 10 | Créer · Date (6/6) | `2:130` | Date du premier tour (aujourd'hui ou plus tard). **Suggestion de calendrier** : si un événement (Tabaski, Korité, rentrée scolaire…) tombe pendant le cycle, une carte propose « Ajuster » pour caler un tour juste avant. La gérante décide ; rien n'est automatique. Bouton « Créer la tontine ». Vérifie la limite du palier d'abonnement avant création. |
-| 11 | Tontine créée | `2:137` | Code d'invitation à 6 chiffres, récapitulatif, bouton « Partager sur WhatsApp » (message prérempli avec le code et un lien). |
+| 11 | Tontine créée | `2:137` | Code d'invitation à 6 chiffres, récapitulatif, bouton « Partager sur WhatsApp » (message prérempli avec le **lien d'invitation** et le code). Le lien ouvre l'app directement sur l'écran 12c ; si l'app n'est pas installée, il mène à une page web simple avec le code et le téléchargement. |
 
 ## 1.4 Rejoindre
 
 | # | Écran | Nœud | Comportement |
 |---|---|---|---|
-| 12 | Rejoindre | `2:144` | Saisie du code à 6 chiffres au pavé numérique. |
+| 12 | Rejoindre | `2:144` | Saisie du code à 6 chiffres au pavé numérique (toujours possible, même après avoir reçu un lien). Un lien d'invitation ouvert avant la connexion est gardé : après l'inscription, l'app ouvre directement l'écran 12c. |
 | 12b | Rejoindre · Code invalide | `12:469` | Cases en terracotta + « Ce code n'existe pas. Vérifie-le avec ta gérante. » Aussi utilisé si la tontine est complète ou terminée (message adapté). |
 | 12c | Rejoindre · Règlement | `12:513` | Aperçu (montant, fréquence, nb membres, gérante, mode d'attribution des tours) + règlement de la tontine. Case « J'accepte le règlement » obligatoire avant « Rejoindre la tontine ». |
 
@@ -50,7 +50,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 |---|---|---|---|
 | 13 | Tontine · Gérante | `6:240` | Cagnotte du tour, bénéficiaire du tour, « X F reçus · N sur M payés ». Accès « Tours » et « Réglages ». Liste des membres avec statut ; bouton « Marquer payé » sur les membres non payés. Appui sur un membre → historique (13c). Bouton « Relancer les retardataires ». **L'abonnement n'apparaît pas ici** (il est dans le Profil). |
 | 13b | Tontine · Réglages | `12:565` | Rappels automatiques (3 jours avant, jour même, 1 jour après) activables un par un. Montant de la pénalité de retard (0 = aucune). Accès au règlement (voir / modifier). |
-| 13c | Membre · Historique | `12:661` | Bilan (« 6 à l'heure », « 1 en retard ») + liste horodatée de tous les paiements avec statut et capture jointe. Bouton « Relancer [prénom] ». |
+| 13c | Membre · Historique | `12:661` | Bilan (« 6 à l'heure », « 1 en retard ») + liste horodatée de tous les paiements avec statut et capture jointe. Bouton « Relancer [prénom] ». Lien « Retirer [prénom] » (gérante) → confirmation « Retirer Moussa ? » (règle M1). |
 | 14 | Membre · Marquer payé | `6:247` | « As-tu reçu ce paiement ? Vérifie sur Wave ou Orange Money. » Bouton « Marquer payé ». |
 | 15 | Ordre des tours | `6:254` | Liste numérotée tour → membre → mois. Bouton « Tirage au sort » (si pas encore fait). Appui long sur un membre → échange de tour (15b). |
 | 15b | Tours · Échanger | `12:762` | Tour à déplacer + liste des autres membres (tours non encore versés uniquement). Bouton « Échanger les tours ». Les deux membres sont notifiés. |
@@ -69,11 +69,12 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | # | Écran | Nœud | Comportement |
 |---|---|---|---|
 | 19 | Fin de cycle | `6:282` | Bilan du cycle. Bouton secondaire « Voir le rapport du cycle ». Bouton principal « Relancer le cycle avec les mêmes membres ». |
-| 19b | Rapport du cycle | `13:455` | Total versé, nb de tours, période, % de paiements à l'heure, nb de retards, total des pénalités, ponctualité par membre. « Partager sur WhatsApp » (image ou PDF). |
-| 20 | Abonnement · Mensuel | `6:289` | Paliers Starter / Pro / Illimité, palier actuel coché. |
-| 21 | Abonnement · Annuel | `6:296` | Même écran en annuel, mention « 2 mois offerts ». |
+| 19b | Rapport du cycle | `13:455` | Total versé, nb de tours, période, % de paiements à l'heure, nb de retards, total des pénalités, ponctualité par membre. « Partager sur WhatsApp » (texte) et « Télécharger en PDF » (rapport complet aux couleurs de Natt, puis partage du téléphone : WhatsApp, enregistrement…). |
+| 20 | Abonnement · Mensuel | `6:289` | Paliers Starter / Pro / Illimité avec prix, palier actuel et statut (« Pro, actif jusqu'au 12 mars 2027 »). **Aucun bouton de paiement** : le paiement se fait hors de l'app (B5). |
+| 21 | Abonnement · Annuel | `6:296` | Même écran en annuel : prix plein barré puis prix réel (~~12 000 F~~ 10 000 F, ~~30 000 F~~ 25 000 F, ~~60 000 F~~ 50 000 F) et mention « 2 mois offerts », partout où un prix annuel apparaît. |
+| — | Pages web de paiement | — | Pages simples (hors de l'app) de retour de PayTech : « Paiement reçu », « Paiement annulé », « Lien plus valable », en français, aux couleurs de Natt. |
 | 22 | Notifications | `6:303` | Liste par jour : rappels de paiement, paiements reçus, tours à venir, échanges, tirage. |
-| 23 | Profil | `13:523` | Prénom, numéro. Mon abonnement (palier + prix → écrans 20/21), Mes données, Langue, Aide sur WhatsApp, Se déconnecter. |
+| 23 | Profil | `13:523` | Prénom, numéro. Mon abonnement (statut → écrans 20/21), Mes données, Langue, **Apparence** (Automatique / Clair / Sombre, mémorisée ; par défaut, l'app suit le réglage du téléphone), Aide sur WhatsApp, Se déconnecter. |
 
 ---
 
@@ -100,17 +101,29 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 
 ## 2.4 Paiements et statuts
 
-- P1. Statut d'un membre pour un tour : `a_payer` → (`declare`) → `paye` ; `en_retard` si l'échéance est passée et que le statut n'est pas `paye`.
+- P1. Statut d'un membre pour un tour : `a_payer` → (`declare`) → `paye`. L'échéance est le dernier jour pour payer : une déclaration faite le jour de l'échéance est à l'heure.
+  - `paye` : « Payé ».
+  - `declare` **avant ou le jour de l'échéance** : « En attente », même une fois l'échéance passée (en attendant la confirmation de la gérante).
+  - `declare` après l'échéance, ou `a_payer` une fois l'échéance passée : « En retard ».
+  - `a_payer` avant l'échéance : « En attente ».
 - P2. Quand un membre appuie sur « Payer », l'app ouvre Wave ou Orange Money avec le numéro de la gérante (et le montant si l'application le permet ; à vérifier, sinon copie du numéro et du montant). Au retour, l'écran 18 s'affiche et la cotisation passe en `declare`. Le membre peut joindre une capture (facultatif).
 - P3. **Seule la gérante peut passer un paiement en `paye`** (écran 14). Côté gérante, un paiement `declare` s'affiche « En attente » avec le bouton « Marquer payé » mis en avant.
 - P4. **Historique horodaté** : chaque événement (déclaration, confirmation, relance, pénalité, annulation) est enregistré dans une table d'événements en ajout seul (aucune modification ni suppression possible). L'historique d'un membre (13c) se construit à partir de ces événements.
-- P5. Pénalité de retard : si un montant est défini, une pénalité est enregistrée pour chaque tour en retard. Elle est affichée au membre et à la gérante. La gérante peut l'annuler (événement enregistré).
+- P5. Pénalité de retard : si un montant est défini, une pénalité est enregistrée pour chaque tour en retard, c'est-à-dire **uniquement si la déclaration est faite après l'échéance** (ou s'il n'y a toujours pas de déclaration une fois l'échéance passée). Une déclaration faite à temps n'est jamais pénalisée, même si la gérante la confirme plus tard. Elle est affichée au membre et à la gérante. La gérante peut l'annuler (événement enregistré).
 
 ## 2.5 Ordre des tours
 
 - O1. Trois façons de fixer l'ordre : manuelle (par défaut, ordre d'arrivée modifiable), tirage au sort, ou échange ponctuel.
 - O2. **Tirage au sort** : exécuté côté serveur (Edge Function), une seule fois par cycle, enregistré avec la date, l'heure et l'algorithme ; résultat visible par tous les membres et non modifiable par tirage. Les échanges restent possibles ensuite.
 - O3. **Échange de tour** : réservé à la gérante. Seuls des tours non encore versés peuvent être échangés. Les deux membres concernés sont notifiés. L'échange est enregistré dans l'historique.
+
+## 2.5 bis Retirer un membre
+
+- M1. Seule la gérante retire un membre, après une confirmation obligatoire (« Retirer Moussa ? »). La gérante ne peut pas être retirée.
+  - Avant le démarrage : retrait libre, la place se libère (une autre personne peut rejoindre avec le code).
+  - Pendant le cycle, si le membre n'a pas encore reçu la cagnotte : au choix, son tour est **gardé pour une remplaçante** (qui rejoint avec le code et ne doit que les tours non versés) ou **supprimé** (les membres suivants avancent d'un tour, le dernier tour disparaît, la tontine passe à N-1 membres, cagnotte = montant × (N-1), nouveau règlement à accepter).
+  - S'il a déjà reçu la cagnotte : retrait impossible (il doit encore ses cotisations) ; une explication s'affiche, les relances et le statut « En retard » continuent.
+  - Dans tous les cas : notification au membre retiré, événement « membre retiré » dans l'historique. Les paiements déjà faits pour des tours à venir sont rendus par la gérante en dehors de Natt.
 
 ## 2.6 Relances automatiques
 
@@ -132,11 +145,11 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 
 ## 2.9 Abonnement de la gérante
 
-- B1. Paliers : Starter 1 000 F/mois (1 à 2 tontines gérées en cours), Pro 2 500 F/mois (jusqu'à 6), Illimité 5 000 F/mois. Annuel : 10 000 / 25 000 / 50 000 F (« 2 mois offerts »).
+- B1. Paliers : Starter 1 000 F/mois (1 à 2 tontines gérées en cours), Pro 2 500 F/mois (jusqu'à 6), Illimité 5 000 F/mois. Annuel : 10 000 / 25 000 / 50 000 F (« 2 mois offerts »), affiché à côté du prix plein barré (12 000 / 30 000 / 60 000 F).
 - B2. Seules les tontines **gérées** et non terminées comptent dans la limite. Rejoindre une tontine est toujours gratuit.
 - B3. Si la limite est atteinte, la création (écran 10) mène aux écrans 20/21 avec le palier supérieur présélectionné (alerte d'upsell).
 - B4. Programme « gérantes fondatrices » : un indicateur par compte permet d'offrir une période gratuite et un prix bloqué.
-- B5. Encaissement des abonnements en V1 : **décision en attente** (lien de paiement Wave Business / agrégateur, ou activation manuelle après paiement Wave). Prévoir une table d'abonnements avec statut et date d'expiration, activable manuellement depuis le tableau de bord Supabase en attendant.
+- B5. Encaissement des abonnements avec **PayTech** (Wave, Orange Money, cartes…), **hors de l'application** (règles du Play Store : aucun bouton ni lien de paiement dans l'app). La gérante reçoit un lien de paiement signé et limité dans le temps (7 jours) par notification push : à l'inscription (Starter mensuel), quand elle atteint la limite de son palier (palier supérieur) et 5 jours avant l'expiration (même palier). Le lien ouvre la page de paiement PayTech ; la confirmation de PayTech (IPN) active ou prolonge l'abonnement de 1 ou 12 mois. L'activation manuelle reste possible pour le support.
 
 ## 2.10 Données personnelles
 

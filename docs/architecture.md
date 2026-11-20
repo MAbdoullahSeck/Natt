@@ -98,7 +98,8 @@ create table membres (
   id uuid primary key default gen_random_uuid(),
   tontine_id uuid not null references tontines(id) on delete cascade,
   profil_id uuid not null references profils(id),
-  rang integer,                           -- position dans l'ordre des tours (1..N)
+  rang integer,                           -- position dans l'ordre des tours (1..N) ; null si retiré
+  retire_at timestamptz,                  -- membre retiré (jamais supprimé : l'historique reste attaché)
   reglement_version_acceptee integer,
   reglement_accepte_at timestamptz,
   created_at timestamptz default now(),
@@ -128,20 +129,25 @@ create table cotisations (
   paye_at timestamptz,
   unique (tour_id, membre_id)
 );
--- « en_retard » n'est pas stocké : il se calcule (statut <> 'paye' et echeance < aujourd'hui).
+-- « en_retard » n'est pas stocké : il se calcule (règle P1, src/domain/statuts.ts) :
+--   statut = 'a_payer' et echeance < aujourd'hui, ou statut = 'declare' et declare_at après l'échéance.
+--   Une déclaration faite avant ou le jour de l'échéance reste « En attente ».
 
 -- Journal en ajout seul (historique horodaté)
 create table evenements (
   id uuid primary key default gen_random_uuid(),
-  tontine_id uuid not null references tontines(id) on delete cascade,
-  membre_id uuid references membres(id),
-  auteur_id uuid references profils(id),
+  tontine_id uuid not null references tontines(id) on delete restrict,
+  membre_id uuid references membres(id) on delete restrict,
+  auteur_id uuid references profils(id) on delete restrict,
   type text not null,  -- 'declaration','confirmation','relance','penalite','penalite_annulee',
                        -- 'tirage','echange','reglement_accepte','membre_rejoint','cycle_termine'
   donnees jsonb not null default '{}',
   created_at timestamptz not null default now()
 );
 -- RLS : insert via fonctions serveur uniquement ; aucun update ni delete pour personne.
+-- Un déclencheur bloque update, delete et truncate pour tous les rôles (postgres et service_role compris).
+-- Les clés étrangères sont en « restrict » : une tontine qui a un historique ne peut pas être supprimée
+-- (l'historique ne disparaît jamais ; voir D2 pour l'anonymisation).
 
 create table evenements_calendrier (
   id uuid primary key default gen_random_uuid(),
@@ -175,7 +181,8 @@ create table notifications (
 
 ## 4. Sécurité (RLS)
 
-- `profils` : chacun lit/modifie son profil ; lecture du prénom et du téléphone des personnes qui partagent une tontine avec soi.
+- `profils` : chacun lit et crée son propre profil (avec le numéro de son compte), et ne modifie que `prenom`, `langue` et `expo_push_token` (pas `fondatrice`).
+- Vue `profils_publics` (`id`, `prenom`, `telephone`) : son propre profil et ceux des personnes qui partagent une tontine avec soi. La table `profils` n'est jamais lue pour les autres, afin de ne pas exposer le consentement ni le jeton push.
 - `tontines`, `membres`, `tours`, `cotisations`, `reglements` : lecture pour les membres de la tontine ; écriture **uniquement via les fonctions RPC** ci-dessous.
 - `evenements` : lecture pour les membres de la tontine ; aucune écriture directe.
 - Storage `captures` : bucket privé ; le membre dépose sa capture, la gérante de la tontine et le membre la lisent.
@@ -193,8 +200,54 @@ create table notifications (
 | `tirage-au-sort` (Edge) | gérante | Une fois par cycle ; mélange cryptographiquement sûr ; enregistre l'ordre, la date et la graine ; notifie tous les membres. |
 | `relancer(tontine_id, membre_id?)` | gérante | Relance immédiate, au plus une par membre et par jour. |
 | `relances` (Edge + pg_cron 9 h) | système | J-3 / J / J+1 selon les réglages ; récapitulatif des retards à la gérante à J+1 ; applique les pénalités. |
+| `retirer_membre(membre_id, mode)` | gérante | Règle M1 : place libérée (`remplacer`) ou tour supprimé (`supprimer`) ; refus si déjà servi ; événement + notification. Toutes les fonctions ignorent les membres retirés (`retire_at is null`). |
 | `relancer_cycle(tontine_id)` | gérante | Crée le cycle suivant (mêmes paramètres, nouveau code, `cycle_precedent_id`) et invite les mêmes membres. |
 | `suggestions_calendrier(date_debut, frequence, nb_membres)` | utilisatrice | Retourne les événements qui tombent pendant le cycle et une date de début ajustée proposée. |
+
+## 5 bis. Planification (pg_cron → Vault → Edge Functions)
+
+| Tâche pg_cron | Horaire (UTC = heure de Dakar) | Appel |
+|---|---|---|
+| `natt-relances-9h` | `0 9 * * *` | `appeler_fonction('relances')` → `preparer_relances()` puis envoi des push |
+| `natt-push` | chaque minute | `appeler_fonction('push')` → notifications en attente vers l'API Expo |
+| `natt-expiration-abonnements` | `5 0 * * *` | `expirer_abonnements()` |
+
+`appeler_fonction(nom, corps)` lit `project_url` et `service_role_key` dans Vault et appelle l'Edge Function avec pg_net. Les fonctions `push` et `relances` n'acceptent que la clé service (vérifiée par la base). `relances` accepte un corps `{ "jour": "AAAA-MM-JJ" }` (date simulée) pour les tests de bout en bout : `python3 scripts/supabase_api.py relance-e2e [jour]`.
+
+## 5 ter. Abonnements payés avec PayTech
+
+```
+lien signé (push, hors de l'app)
+  └─► Edge Function paytech-checkout ?g=<gérante>&p=<palier>&d=<mensuel|annuel>&e=<expiration>&s=<HMAC>
+        ├─ creer_paiement_abonnement (SQL, service_role) : signature HMAC-SHA256 (secret Vault « lien_paiement_secret »),
+        │   expiration, montant selon le tarif, ref_command unique « NATT-AAAAMMJJ-XXXXXXXXXX »
+        ├─ POST https://paytech.sn/api/payment/request-payment (clés dans les secrets des Edge Functions)
+        └─ 302 vers la page de paiement PayTech
+PayTech ──IPN──► Edge Function paytech-ipn
+        ├─ authenticité : SHA-256(PAYTECH_API_KEY) = api_key_sha256 et SHA-256(PAYTECH_API_SECRET) = api_secret_sha256, sinon 401
+        └─ traiter_ipn_paytech (SQL) : doublon ignoré ; paiement « réussi » ; abonnement activé ou prolongé
+           (fin actuelle ou maintenant + 1 ou 12 mois) ; événement « abonnement_paye » ; notification
+PayTech ──success_url / cancel_url──► pages web statiques (web/, NATT_SITE_URL) ou natt://abonnement?paiement=…
+```
+
+```sql
+create table paiements_abonnement (
+  id uuid primary key, profil_id uuid references profils, palier palier, periodicite text,
+  montant integer, ref_command text unique, statut text,  -- en_attente | reussi | annule
+  moyen text, token_paytech text, abonnement_id uuid references abonnements, donnees_ipn jsonb,
+  created_at timestamptz, paye_at timestamptz, annule_at timestamptz
+);  -- RLS : lecture de ses propres paiements ; écriture par les fonctions système uniquement.
+```
+
+Envoi des liens (`envoyer_lien_paiement`, notification `abonnement_lien` avec `donnees.url`) : à l'inscription (`creer_profil`), à la limite du palier (`demander_lien_palier_superieur`, au plus une fois par jour) et à J-5 avant l'expiration (`envoyer_liens_expiration`, appelée chaque matin avec les relances). Un appui sur la notification **push** ouvre le lien dans le navigateur ; l'écran Notifications de l'app ne l'ouvre pas.
+
+Le journal `evenements` accepte désormais des événements sans tontine (abonnements), avec un auteur obligatoire.
+
+## 5 quater. Lien d'invitation
+
+- Message WhatsApp (écran 11, « Partager le code » de l'écran 13) : code + lien `https://<réf>.supabase.co/functions/v1/invitation?code=XXXXXX` (WhatsApp ne rend cliquables que les liens http(s)).
+- Edge Function `invitation` : redirige vers `NATT_SITE_URL/invitation.html?code=…` (page statique de `web/` qui ouvre `natt://rejoindre?code=…` ou propose le téléchargement) si le site est configuré, sinon renvoie une page en texte simple (code + lien Play Store + marche à suivre).
+- Dans l'app, `natt://rejoindre?code=…` ouvre directement l'écran 12c (`/rejoindre/reglement`), qui affiche les erreurs de l'écran 12b. Si la personne n'est pas connectée, le code est gardé (AsyncStorage) et repris après l'inscription.
 
 ## 6. Paiement (rappel de la règle n°1)
 

@@ -1,0 +1,35 @@
+import type { LucideIcon } from 'lucide-react-native';
+import type { ReactNode } from 'react';
+import { View } from 'react-native';
+
+import { creerStyles, espacements, rayons, tailles, useCouleurs } from '@/theme';
+
+import { Texte } from './Texte';
+
+type Props = { icone?: LucideIcon; children: ReactNode };
+
+/** Carte d'information sur fond terracotta clair. */
+export function CarteInfo({ icone: Icone, children }: Props) {
+  const styles = useStyles();
+  const couleurs = useCouleurs();
+  return (
+    <View style={styles.carte}>
+      {Icone ? <Icone size={tailles.icone} color={couleurs.terracotta} strokeWidth={2} /> : null}
+      <View style={styles.contenu}>
+        {typeof children === 'string' ? <Texte>{children}</Texte> : children}
+      </View>
+    </View>
+  );
+}
+
+const useStyles = creerStyles((couleurs) => ({
+  carte: {
+    backgroundColor: couleurs.terracottaClair,
+    borderRadius: rayons.carte,
+    padding: espacements.l,
+    flexDirection: 'row',
+    gap: espacements.m,
+    alignItems: 'flex-start',
+  },
+  contenu: { flex: 1 },
+}));

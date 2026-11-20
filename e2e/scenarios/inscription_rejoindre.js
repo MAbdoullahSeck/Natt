@@ -1,0 +1,25 @@
+module.exports = async (p, { connexion, chiffres, S }) => {
+  const vis = (sel) => p.locator(sel + ':visible');
+  await connexion(p, '770000015');
+  await vis('input').waitFor({ timeout: 15000 });
+  await vis('input').fill('Rokhaya');
+  await p.getByRole('button', { name: 'Continuer' }).locator('visible=true').click();
+  const bouton = vis('[data-testid="bouton-creer-compte"]');
+  await bouton.waitFor();
+  console.log('bouton désactivé sans consentement :', await bouton.getAttribute('aria-disabled'));
+  await vis('[data-testid="case-consentement"]').click();
+  await bouton.click();
+  await p.getByText('Pas encore de tontine').waitFor({ timeout: 15000 });
+  await p.screenshot({ path: `${S}/e2e-accueil-vide.png` });
+  await vis('[data-testid="bouton-rejoindre"]').click();
+  await chiffres(p, '000000');
+  await vis('[data-testid="erreur-code"]').waitFor();
+  await p.screenshot({ path: `${S}/e2e-code-invalide.png` });
+  await chiffres(p, '903318');
+  await vis('[data-testid="case-reglement"]').waitFor({ timeout: 15000 });
+  await p.screenshot({ path: `${S}/e2e-reglement.png`, fullPage: true });
+  await vis('[data-testid="case-reglement"]').click();
+  await vis('[data-testid="bouton-rejoindre-tontine"]').click();
+  await p.waitForURL(/tontine/, { timeout: 15000 });
+  console.log('OK inscription + rejoindre', p.url());
+};
