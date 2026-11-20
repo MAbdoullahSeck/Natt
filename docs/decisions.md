@@ -121,3 +121,12 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **pg_cron** : les tâches sont créées, mais leurs appels HTTP sont ignorés tant que les secrets Vault ne sont pas renseignés (production).
 - **Notification push « nouveau cycle »** : corrigé à l'étape 11 (le push transporte le code ; un appui ouvre « Rejoindre » avec le code prérempli).
 - **Écrans non comparés au Figma** (accès MCP bloqué) : textes, mises en page et composants « Offre d'abonnement », « Moyen de paiement », « Notification », « Membre · Statut et validation » à vérifier.
+
+## Base en ligne natt-dev (après l'étape 11)
+
+- **Projet** : `natt-dev` (réf. `vzvtuthjxyjaitesnvih`, eu-west-1) remplace Docker pour le développement courant. La stack locale reste utilisée par les tests e2e, qui réinitialisent la base.
+- **Migrations appliquées par l'API de gestion** : la session cloud ne peut pas joindre Postgres directement (seulement HTTPS), donc `supabase db push` y est impossible. `scripts/supabase_api.py` applique les migrations par l'endpoint SQL de l'API et les enregistre dans `supabase_migrations.schema_migrations` : un `supabase db push` lancé ensuite depuis un poste les voit comme déjà appliquées.
+- **RLS activée par défaut** (`ensure_rls`) : compatible, car chaque migration active déjà la RLS et crée ses politiques. Vérifié : 11 tables sur 11 avec RLS, 167 tests pgTAP passés sur le projet en ligne.
+- **Connexion de test** : fournisseur Twilio factice + 20 numéros de test à code fixe, configurés par l'API de gestion. Durée de validité du code SMS portée à 5 minutes (60 s par défaut).
+- **Client** : plus de repli silencieux vers la base locale ; sans `.env`, l'app s'arrête avec un message clair.
+- **Non fait** : Edge Functions non déployées sur natt-dev, secrets Vault absents (les tâches pg_cron tournent mais leurs appels sont ignorés).

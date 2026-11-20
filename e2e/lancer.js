@@ -1,6 +1,7 @@
 /**
  * Tests de bout en bout sur l'export web de l'app, contre la base Supabase locale.
- * Prérequis : `npm run db:start`, `npx supabase functions serve` (pour le tirage), Playwright installé.
+ * Prérequis : stack locale Docker (`npm run db:local:start`), `npx supabase functions serve` (pour le tirage),
+ * Playwright installé. Les scénarios modifient la base : ils ne tournent jamais sur natt-dev.
  * Usage : npm run e2e              (tous les scénarios)
  *         npm run e2e -- tours     (un scénario)
  * Chaque scénario repart d'une base réinitialisée (seed) et, si besoin, d'une préparation SQL.
@@ -51,7 +52,14 @@ async function main() {
   execSync(`npx expo export --platform web --output-dir ${DIST}`, {
     cwd: RACINE,
     stdio: 'ignore',
-    env: { ...process.env, CI: '1', EXPO_OFFLINE: '1' },
+    env: {
+      ...process.env,
+      CI: '1',
+      EXPO_OFFLINE: '1',
+      // Toujours la stack locale (clé publique de démonstration de la CLI Supabase).
+      EXPO_PUBLIC_SUPABASE_URL: 'http://127.0.0.1:54321',
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH',
+    },
   });
   const serveur = spawn('node', [path.join(__dirname, 'serveur.js'), DIST, '8099'], { stdio: 'ignore' });
   const navigateur = await chromium.launch();

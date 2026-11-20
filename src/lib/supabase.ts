@@ -6,14 +6,17 @@ import type { Database } from './database.types';
 
 /**
  * Client Supabase typé.
- * Variables : EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_ANON_KEY (voir .env.example).
- * Sans variables, on vise la stack locale (`npm run db:start`) — clé publique de démonstration.
+ * Variables EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_ANON_KEY : fichier .env (voir .env.example),
+ * projet natt-dev par défaut ; les tests e2e les remplacent par la stack locale.
  */
-const URL_LOCALE = 'http://127.0.0.1:54321';
-const CLE_LOCALE = 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH';
+export const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
+const supabaseCle = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
-export const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? URL_LOCALE;
-const supabaseCle = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? CLE_LOCALE;
+if (!supabaseUrl || !supabaseCle) {
+  throw new Error(
+    'Configuration Supabase manquante : copie .env.example en .env (EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY).',
+  );
+}
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseCle, {
   auth: {

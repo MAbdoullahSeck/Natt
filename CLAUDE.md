@@ -59,20 +59,35 @@ Ce fichier est le brief permanent pour Claude Code. Lis-le en entier avant toute
 
 ```bash
 npm install
+cp .env.example .env      # URL et clé publique du projet Supabase natt-dev
 npx expo start            # lancer l'app (Expo Go ou build de développement)
 npm test                  # tests Jest (jest-expo)
 npm run lint              # ESLint (expo lint) + typecheck (tsc --noEmit)
 npm run format            # Prettier
 npx expo install <paquet> # ajouter une dépendance (versions compatibles avec le SDK)
-npm run db:start          # Supabase local (Docker requis)
-npm run db:reset          # rejouer les migrations + supabase/seed.sql
-npm run db:test           # tests SQL pgTAP (supabase/tests)
-npm run db:types          # régénérer src/lib/database.types.ts
-npx supabase functions serve  # Edge Functions en local (tirage au sort, push, relances)
-npm run e2e               # tests de bout en bout (export web + Playwright, base locale)
+
+# Base de données en ligne : projet natt-dev (réf. vzvtuthjxyjaitesnvih, eu-west-1)
+# Le CLI lit SUPABASE_ACCESS_TOKEN et SUPABASE_DB_PASSWORD dans l'environnement (jamais dans un fichier).
+npm run db:link           # relier le dépôt au projet (une fois)
+npm run db:push           # appliquer les nouvelles migrations
+npm run db:seed           # charger supabase/seed.sql (refusé si la base contient déjà des profils)
+npm run db:test           # tests pgTAP sur natt-dev (transactions annulées)
+npm run db:types          # régénérer src/lib/database.types.ts depuis natt-dev
+
+# Sessions cloud (pas d'accès direct à Postgres, seulement HTTPS) : mêmes opérations par l'API de gestion
+npm run db:api:migrations # équivalent de db:push
+npm run db:api:tests      # équivalent de db:test
+python3 scripts/supabase_api.py sql "select …"   # requête ponctuelle
+
+# Stack locale Docker (facultative, utilisée par les tests e2e)
+npm run db:local:start | db:local:reset | db:local:test | db:local:types
+npx supabase functions serve  # Edge Functions en local
+npm run e2e               # tests de bout en bout (export web + Playwright, stack locale uniquement)
 ```
 
-Mise en production (projet Supabase, SMS, secrets, Edge Functions, EAS) : voir `docs/deploiement.md`.
+Connexion de test (natt-dev et local) : numéros `77 000 00 01` à `77 000 00 20`, code `123456` (aucun SMS envoyé). Aminata (gérante) = `77 000 00 01`.
+
+Mise en production (fournisseur SMS, secrets, Edge Functions, EAS) : voir `docs/deploiement.md`.
 
 ## Conventions de code (étape 0)
 
@@ -97,7 +112,9 @@ Mise en production (projet Supabase, SMS, secrets, Edge Functions, EAS) : voir `
 - Appartenance : utiliser `public.est_membre(tontine_id)` / `public.est_gerante(tontine_id)` dans les politiques.
 - Prénom et téléphone des autres membres : vue `profils_publics` (la table `profils` ne montre que son propre profil).
 - `evenements` est en ajout seul : un déclencheur bloque update, delete et truncate pour tout le monde.
-- Après chaque migration : `npm run db:reset && npm run db:test && npm run db:types`.
-- Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`, code SMS de test `123456`).
+- Après chaque migration : vérifier en local si possible (`npm run db:local:reset && npm run db:local:test`), puis `npm run db:push` (ou `db:api:migrations`), `npm run db:test` (ou `db:api:tests`) et `npm run db:types`.
+- **RLS activée par défaut** : sur natt-dev, le déclencheur `ensure_rls` active la RLS sur toute nouvelle table de `public`. Chaque migration doit quand même l'activer explicitement et créer ses politiques (sinon la table est illisible pour l'app). Ne jamais compter sur une table sans RLS.
+- Ne jamais modifier natt-dev à la main : toute modification passe par une migration.
+- Données de démonstration : `supabase/seed.sql` (Aminata, Fatou, Moussa… ; Aminata = `221770000001`, code SMS de test `123456`), chargées sur natt-dev.
 - Fonctions réservées au système (`appliquer_tirage`, `preparer_relances`, `activer_abonnement`…) : `grant execute … to service_role` seulement.
 - Edge Functions (`supabase/functions`) : sans dépendance externe, accès à Supabase par `fetch` (`_shared/api.ts`).

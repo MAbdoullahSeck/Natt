@@ -3,25 +3,22 @@
 Tout ce qui suit demande un compte ou un secret que seule la propriétaire du projet possède.
 Rien de tout cela ne doit être commité dans le dépôt.
 
-## 1. Projet Supabase
+## 1. Projet Supabase de développement : natt-dev ✅
 
-1. Créer un projet Supabase (région la plus proche de Dakar, ex. `eu-west` ou `eu-central`).
-2. Lier le dépôt et pousser les migrations :
-   ```bash
-   npx supabase login
-   npx supabase link --project-ref <référence-du-projet>
-   npx supabase db push
-   ```
-   Ne **pas** pousser `supabase/seed.sql` en production (données de démonstration).
-3. Récupérer l'URL et la clé publique (Settings → API) et les mettre dans `.env` (voir `.env.example`) et dans `eas.json` (profil `preview`) :
-   `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`.
+Fait : projet `natt-dev` (réf. `vzvtuthjxyjaitesnvih`, eu-west-1) relié, 11 migrations appliquées, seed chargé, tests pgTAP passés sur le projet.
+
+- URL et clé publique : dans `.env.example` (à copier en `.env`).
+- Nouvelles migrations : `npm run db:push` (poste de développement, avec `SUPABASE_ACCESS_TOKEN` et `SUPABASE_DB_PASSWORD` dans l'environnement) ou `npm run db:api:migrations` (session cloud).
+- Pour la **production**, créer un second projet (ex. `natt-prod`) et refaire `supabase link` + `db push`, **sans** le seed.
 
 ## 2. Fournisseur SMS (bloquant pour l'inscription réelle)
 
+Sur natt-dev, l'authentification par téléphone est activée avec un fournisseur Twilio **factice** et 20 numéros de test (`221770000001` à `221770000020`, code `123456`, valables jusqu'au 20 novembre 2027). Aucun autre numéro ne peut recevoir de code.
+
+Pour de vrais SMS :
 1. Choisir un fournisseur (Twilio, MessageBird, Vonage…) et **vérifier la délivrabilité vers Orange, Free et Expresso** et le coût par SMS.
-2. Dans Supabase : Authentication → Providers → Phone : activer, choisir le fournisseur, renseigner ses identifiants.
-3. Modèle du SMS : `Ton code Natt : {{ .Code }}`.
-4. En local, les numéros de test `221770000001` à `221770000020` acceptent le code `123456` (aucun SMS). Des numéros de test peuvent aussi être déclarés dans le tableau de bord pour les testeuses.
+2. Dans Supabase : Authentication → Sign In / Providers → Phone : remplacer les identifiants factices par les vrais.
+3. Modèle du SMS (déjà configuré) : `Ton code Natt : {{ .Code }}`.
 
 ## 3. Edge Functions
 
