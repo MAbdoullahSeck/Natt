@@ -21,11 +21,11 @@ Une étape = une branche + une pull request. Ne passer à l'étape suivante que 
 - [x] Session persistante ; déconnexion depuis le Profil.
 
 ## Étape 3 — Accueil et création (05, 05b, 06 à 11, 06b)
-- [ ] Accueil avec cartes et statuts réels ; accueil vide.
-- [ ] Parcours de création en 6 étapes, type « achat groupé » avec bien prévu.
-- [ ] Suggestion de calendrier sur l'écran 10.
-- [ ] `creer_tontine` côté serveur : code unique, tours, échéances, règlement v1, limite du palier.
-- [ ] Partage WhatsApp du code.
+- [x] Accueil avec cartes et statuts réels ; accueil vide.
+- [x] Parcours de création en 6 étapes, type « achat groupé » avec bien prévu.
+- [x] Suggestion de calendrier sur l'écran 10.
+- [x] `creer_tontine` côté serveur : code unique, tours, échéances, règlement v1, limite du palier.
+- [x] Partage WhatsApp du code.
 
 ## Étape 4 — Rejoindre (12, 12b, 12c)
 - [ ] Saisie du code, erreurs (code inconnu, tontine complète ou terminée).

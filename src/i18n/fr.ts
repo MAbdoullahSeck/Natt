@@ -25,9 +25,70 @@ export const fr = {
     mois: 'Chaque mois',
   },
   accueil: {
+    titre: 'Mes tontines',
     creerTontine: 'Créer une tontine',
     rejoindreAvecCode: 'Rejoindre avec un code',
     membres: (n: number) => (n > 1 ? `${n} membres` : `${n} membre`),
+    details: (gerante: string, membres: string, frequence: string) =>
+      `${gerante} · ${membres} · ${frequence}`,
+    toi: 'Toi',
+    vide: {
+      titre: 'Pas encore de tontine',
+      texte: 'Crée ta tontine ou rejoins celle d’une amie avec son code.',
+    },
+  },
+  creation: {
+    filAriane: 'Créer une tontine',
+    nom: {
+      titre: 'Comment s’appelle ta tontine ?',
+      placeholder: 'Ex. Tontine des sœurs',
+      aide: 'Entre 2 et 40 lettres.',
+    },
+    type: {
+      titre: 'Quel type de tontine ?',
+      classique: 'Classique',
+      classiqueDetail: 'Chacun reçoit la cagnotte',
+      achat: 'Achat groupé',
+      achatDetail: 'Chacun reçoit un bien',
+      bienQuestion: 'Quel bien chacun reçoit ?',
+      bienPlaceholder: 'Ex. Réfrigérateur',
+    },
+    montant: {
+      titre: 'Combien chaque membre paie ?',
+      aide: 'Par membre et par tour.',
+      minimum: (min: string) => `Minimum ${min}.`,
+    },
+    frequence: {
+      titre: 'Tous les combien ?',
+    },
+    membres: {
+      titre: 'Combien de membres ?',
+      aide: 'Toi comprise. Un tour par membre.',
+      bornes: 'Entre 2 et 50 membres.',
+      tours: (n: number) => (n > 1 ? `${n} tours` : `${n} tour`),
+      cagnotte: (montant: string) => `Cagnotte de chaque tour : ${montant}`,
+    },
+    date: {
+      titre: 'Quand commence le premier tour ?',
+      changer: 'Changer la date',
+      dernierTour: (date: string) => `Dernier tour : ${date}`,
+      suggestion: (evenement: string, date: string) =>
+        `${evenement} tombe pendant ta tontine (${date}). Tu peux décaler le début pour qu’un tour tombe juste avant.`,
+      ajuster: 'Ajuster',
+      ajuste: (date: string) => `Début décalé au ${date}.`,
+      bouton: 'Créer la tontine',
+    },
+    cree: {
+      titre: 'Ta tontine est créée',
+      codeAide: 'Donne ce code aux membres pour qu’elles rejoignent ta tontine.',
+      partager: 'Partager sur WhatsApp',
+      voir: 'Voir ma tontine',
+      recapMontant: (montant: string, frequence: string) => `${montant} · ${frequence}`,
+      recapMembres: (n: number) => `${n} membres`,
+      recapDebut: (date: string) => `Premier tour : ${date}`,
+      message: (nom: string, code: string, lien: string) =>
+        `Rejoins ma tontine « ${nom} » sur Natt avec le code ${code}.\n${lien}`,
+    },
   },
   membre: {
     marquerPaye: 'Marquer payé',
@@ -55,6 +116,12 @@ export const fr = {
     codes: {
       non_connecte: 'Reconnecte-toi pour continuer.',
       prenom_invalide: 'Le prénom doit faire entre 2 et 30 lettres.',
+      nom_invalide: 'Le nom doit faire entre 2 et 40 lettres.',
+      bien_prevu_requis: 'Indique le bien que chacun reçoit.',
+      montant_invalide: 'Le montant minimum est de 500 F.',
+      nb_membres_invalide: 'Entre 2 et 50 membres.',
+      date_passee: 'Choisis aujourd’hui ou une date plus tard.',
+      limite_atteinte: 'Tu as atteint le nombre de tontines de ton abonnement.',
     } as Record<string, string>,
   },
   inscription: {
