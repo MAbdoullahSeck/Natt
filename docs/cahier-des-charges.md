@@ -71,7 +71,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 | 19 | Fin de cycle | `6:282` | Bilan du cycle. Bouton secondaire « Voir le rapport du cycle ». Bouton principal « Relancer le cycle avec les mêmes membres ». |
 | 19b | Rapport du cycle | `13:455` | Total versé, nb de tours, période, % de paiements à l'heure, nb de retards, total des pénalités, ponctualité par membre. « Partager sur WhatsApp » (image ou PDF). |
 | 20 | Abonnement · Mensuel | `6:289` | Paliers Starter / Pro / Illimité avec prix, palier actuel et statut (« Pro, actif jusqu'au 12 mars 2027 »). **Aucun bouton de paiement** : le paiement se fait hors de l'app (B5). |
-| 21 | Abonnement · Annuel | `6:296` | Même écran en annuel, mention « 2 mois offerts ». |
+| 21 | Abonnement · Annuel | `6:296` | Même écran en annuel : prix plein barré puis prix réel (~~12 000 F~~ 10 000 F, ~~30 000 F~~ 25 000 F, ~~60 000 F~~ 50 000 F) et mention « 2 mois offerts », partout où un prix annuel apparaît. |
 | — | Pages web de paiement | — | Pages simples (hors de l'app) de retour de PayTech : « Paiement reçu », « Paiement annulé », « Lien plus valable », en français, aux couleurs de Natt. |
 | 22 | Notifications | `6:303` | Liste par jour : rappels de paiement, paiements reçus, tours à venir, échanges, tirage. |
 | 23 | Profil | `13:523` | Prénom, numéro. Mon abonnement (palier + prix → écrans 20/21), Mes données, Langue, Aide sur WhatsApp, Se déconnecter. |
@@ -137,7 +137,7 @@ Les identifiants entre crochets sont les nœuds Figma (fichier `dVf0o3jlgmFcFAtz
 
 ## 2.9 Abonnement de la gérante
 
-- B1. Paliers : Starter 1 000 F/mois (1 à 2 tontines gérées en cours), Pro 2 500 F/mois (jusqu'à 6), Illimité 5 000 F/mois. Annuel : 10 000 / 25 000 / 50 000 F (« 2 mois offerts »).
+- B1. Paliers : Starter 1 000 F/mois (1 à 2 tontines gérées en cours), Pro 2 500 F/mois (jusqu'à 6), Illimité 5 000 F/mois. Annuel : 10 000 / 25 000 / 50 000 F (« 2 mois offerts »), affiché à côté du prix plein barré (12 000 / 30 000 / 60 000 F).
 - B2. Seules les tontines **gérées** et non terminées comptent dans la limite. Rejoindre une tontine est toujours gratuit.
 - B3. Si la limite est atteinte, la création (écran 10) mène aux écrans 20/21 avec le palier supérieur présélectionné (alerte d'upsell).
 - B4. Programme « gérantes fondatrices » : un indicateur par compte permet d'offrir une période gratuite et un prix bloqué.

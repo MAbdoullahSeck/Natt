@@ -11,6 +11,16 @@ export const PRIX: Record<Palier, Record<Periodicite, number>> = {
   illimite: { mensuel: 5000, annuel: 50000 },
 };
 
+/** Prix plein d'un an (12 mois), affiché barré à côté du prix annuel réel. */
+export function prixPleinAnnuel(palier: Palier): number {
+  return PRIX[palier].mensuel * 12;
+}
+
+/** Nombre de mois offerts par l'abonnement annuel. */
+export function moisOfferts(palier: Palier): number {
+  return Math.round((prixPleinAnnuel(palier) - PRIX[palier].annuel) / PRIX[palier].mensuel);
+}
+
 /** Nombre maximal de tontines gérées non terminées. `null` = illimité. */
 export const LIMITES: Record<Palier, number | null> = {
   starter: 2,

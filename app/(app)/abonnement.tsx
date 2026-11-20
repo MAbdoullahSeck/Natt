@@ -65,7 +65,11 @@ export default function Abonnement() {
       ) : null}
       {params.palier ? (
         <CarteInfo icone={Info}>
-          {actuel === 'illimite' ? t.upsellMax : t.upsell(t.paliers[palierSuperieur(actuel)])}
+          {!actuel
+            ? t.upsellSansAbonnement
+            : actuel === 'illimite'
+              ? t.upsellMax
+              : t.upsell(t.paliers[palierSuperieur(actuel)])}
         </CarteInfo>
       ) : null}
 

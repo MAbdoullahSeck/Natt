@@ -155,3 +155,10 @@ Chaque ligne indique l'étape, la décision et où la changer si besoin.
 - **Pages de succès / annulation** : Supabase sert le HTML en texte brut (`content-type: text/plain` et CSP `sandbox`) sur `*.supabase.co`, pour les Edge Functions comme pour Storage — vérifié sur natt-dev. Les pages sont donc **statiques** dans `web/` (à publier sur GitHub Pages, Netlify, Cloudflare Pages ou un futur domaine), et l'adresse est donnée aux fonctions par le secret `NATT_SITE_URL`. En attendant, PayTech renvoie vers l'app (`natt://abonnement?paiement=succes|annule|erreur`), qui affiche un message.
 - **Notifications push sans jeton** : réessayées pendant 10 minutes (le jeton est enregistré juste après l'inscription, après l'envoi du lien de bienvenue).
 - **Mode test** : `PAYTECH_ENV=test` (secret des Edge Functions). Vérifié sur natt-dev : lien valide → page PayTech ; lien falsifié → refus ; IPN non authentique → 401. Le chemin IPN valide (activation, prolongation, doublon) a été vérifié en local avec des clés factices, faute d'accès (voulu) aux clés de natt-dev.
+
+## Point 3 — Prix barré
+
+- **Prix plein** = 12 fois le prix mensuel (12 000 / 30 000 / 60 000 F), calculé (`prixPleinAnnuel`, `prix_plein_annuel`) plutôt que saisi : il suit automatiquement un changement de tarif.
+- **Affichage** (composant `PrixAbonnement`) : prix plein barré en gris, prix réel en gras, puis « 2 mois offerts » en vert. Le prix barré est lu « au lieu de 30 000 F » par les lecteurs d'écran.
+- **Notifications** (texte simple, sans barré possible) : « 25 000 F par an, au lieu de 30 000 F : 2 mois offerts ».
+- Les écrans 20 et 21 restent un seul écran avec le choix Mensuel / Annuel.

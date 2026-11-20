@@ -1,4 +1,12 @@
-import { limiteAtteinte, limiteTontines, palierActif, palierSuperieur, PRIX } from './abonnement';
+import {
+  limiteAtteinte,
+  limiteTontines,
+  moisOfferts,
+  palierActif,
+  palierSuperieur,
+  PRIX,
+  prixPleinAnnuel,
+} from './abonnement';
 
 describe('abonnement (B1–B4)', () => {
   it('limites par palier', () => {
@@ -23,6 +31,12 @@ describe('abonnement (B1–B4)', () => {
     for (const p of ['starter', 'pro', 'illimite'] as const) {
       expect(PRIX[p].annuel).toBe(PRIX[p].mensuel * 10);
     }
+  });
+  it('prix plein annuel barré : 12 000 / 30 000 / 60 000 F, 2 mois offerts', () => {
+    expect(prixPleinAnnuel('starter')).toBe(12000);
+    expect(prixPleinAnnuel('pro')).toBe(30000);
+    expect(prixPleinAnnuel('illimite')).toBe(60000);
+    for (const p of ['starter', 'pro', 'illimite'] as const) expect(moisOfferts(p)).toBe(2);
   });
   it('palier actif : meilleur abonnement actif non expiré', () => {
     const maintenant = new Date('2026-11-20T10:00:00Z');

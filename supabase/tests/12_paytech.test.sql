@@ -1,7 +1,7 @@
 -- Point 2 : liens de paiement signés, commandes et IPN PayTech.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(24);
+select plan(26);
 
 insert into auth.users (id, aud, role, phone) values
   ('eeee0000-0000-4000-8000-000000000001', 'authenticated', 'authenticated', '221785000001');
@@ -21,6 +21,12 @@ select ok((select donnees ->> 'url' like '%/functions/v1/paytech-checkout?g=eeee
 select is(public.prix_abonnement('starter', 'mensuel'), 1000, 'Starter mensuel 1 000 F');
 select is(public.prix_abonnement('pro', 'annuel'), 25000, 'Pro annuel 25 000 F');
 select is(public.prix_abonnement('illimite', 'annuel'), 50000, 'Illimité annuel 50 000 F');
+select is(public.prix_plein_annuel('pro'), 30000, 'prix plein annuel Pro (barré) : 30 000 F');
+create temp table notif_annuelle as
+  select public.envoyer_lien_paiement('eeee0000-0000-4000-8000-000000000001', 'pro', 'annuel', 'limite') as id;
+select ok((select corps like '%25' || U&'\202F' || '000' || U&'\00A0' || 'F par an, au lieu de 30' || U&'\202F' || '000' || U&'\00A0' || 'F : 2 mois offerts%'
+           from public.notifications where id = (select id from notif_annuelle)),
+  'notification annuelle : prix plein et 2 mois offerts');
 
 -- Calcul des dates d'expiration.
 select is(public.nouvelle_expiration(null, 'mensuel', '2026-11-21 10:00+00'), '2026-12-21 10:00+00'::timestamptz, 'mensuel : +1 mois');

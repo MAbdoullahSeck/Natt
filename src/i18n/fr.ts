@@ -422,6 +422,8 @@ export const fr = {
       illimite: 'Tontines illimitées',
     },
     parPeriode: (annuel: boolean) => (annuel ? '/ an' : '/ mois'),
+    auLieuDe: (prixPlein: string) => `au lieu de ${prixPlein}`,
+    moisOfferts: (n: number) => `${n} mois offerts`,
     actifJusquau: (palier: string, date: string) => `${palier}, actif jusqu’au ${date}`,
     actuel: 'Ton abonnement',
     aucun: 'Aucun abonnement',
@@ -432,6 +434,8 @@ export const fr = {
     upsell: (palier: string) =>
       `Tu as atteint le nombre de tontines de ton abonnement. Nous t’avons envoyé par notification le lien pour passer à ${palier}.`,
     upsellMax: 'Tu as atteint le nombre de tontines de ton abonnement.',
+    upsellSansAbonnement:
+      'Pour gérer une tontine, il faut un abonnement. Nous t’avons envoyé par notification le lien pour activer Starter.',
     fondatrice: 'Gérante fondatrice : ton prix est bloqué.',
     retourPaiement: {
       succes: 'Paiement reçu. Ton abonnement sera actif dans quelques instants.',
